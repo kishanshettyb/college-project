@@ -31,117 +31,156 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-const data: Payment[] = [
+const data: Student[] = [
 	{
-		id: "m5gr84i9",
-		amount: 316,
-		status: "success",
-		email: "ken99@example.com"
+		id: 1,
+		name: "Krishna",
+		usn: "1RV21CS001",
+		gender: "Female",
+		category: "ST",
+		sem: 5,
+		Bec601: 82,
+		Bec602: 67,
+		Bec603: 68,
+		Bec604: 77,
+		Bec605: 50,
+		Result: "Pass",
+		Percentage: 68.8,
+		SGPA: 6.88,
+		CGPA: 6.04
 	},
 	{
-		id: "3u1reuv4",
-		amount: 242,
-		status: "success",
-		email: "Abe45@example.com"
+		id: 2,
+		name: "Diya",
+		usn: "1RV21CS002",
+		gender: "Female",
+		category: "ST",
+		sem: 5,
+		Bec601: 39,
+		Bec602: 64,
+		Bec603: 59,
+		Bec604: 84,
+		Bec605: 72,
+		Result: "Pass",
+		Percentage: 63.6,
+		SGPA: 6.36,
+		CGPA: 5.7
 	},
 	{
-		id: "derv1ws0",
-		amount: 837,
-		status: "processing",
-		email: "Monserrat44@example.com"
+		id: 3,
+		name: "Kabir",
+		usn: "1RV18CS003",
+		gender: "Female",
+		category: "ST",
+		sem: 6,
+		Bec601: 45,
+		Bec602: 75,
+		Bec603: 63,
+		Bec604: 30,
+		Bec605: 97,
+		Result: "Fail",
+		Percentage: 62.0,
+		SGPA: 6.2,
+		CGPA: 5.97
 	},
 	{
-		id: "5kma53ae",
-		amount: 874,
-		status: "success",
-		email: "Silas22@example.com"
-	},
-	{
-		id: "bhqecj4p",
-		amount: 721,
-		status: "failed",
-		email: "carmella@example.com"
+		id: 4,
+		name: "Diya",
+		usn: "1RV20CS004",
+		gender: "Female",
+		category: "OBC",
+		sem: 5,
+		Bec601: 87,
+		Bec602: 66,
+		Bec603: 40,
+		Bec604: 89,
+		Bec605: 91,
+		Result: "Pass",
+		Percentage: 74.6,
+		SGPA: 7.46,
+		CGPA: 7.11
 	}
+	// ... add remaining 46 items
 ];
 
-export type Payment = {
-	id: string;
-	amount: number;
-	status: "pending" | "processing" | "success" | "failed";
-	email: string;
+export type Student = {
+	id: number;
+	name: string;
+	usn: string;
+	gender: string;
+	category: string;
+	sem: number;
+	Bec601: number;
+	Bec602: number;
+	Bec603: number;
+	Bec604: number;
+	Bec605: number;
+	Result: string;
+	Percentage: number;
+	SGPA: number;
+	CGPA: number;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Student>[] = [
 	{
-		id: "select",
-		header: ({ table }) => (
-			<Checkbox
-				checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-				aria-label="Select all"
-			/>
-		),
-		cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />,
-		enableSorting: false,
-		enableHiding: false
+		accessorKey: "id",
+		header: "ID"
 	},
 	{
-		accessorKey: "status",
-		header: "Status",
-		cell: ({ row }) => <div className="capitalize">{row.getValue("status")}</div>
+		accessorKey: "name",
+		header: "Name"
 	},
 	{
-		accessorKey: "email",
-		header: ({ column }) => {
-			return (
-				<Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-					Email
-					<ArrowUpDown />
-				</Button>
-			);
-		},
-		cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>
+		accessorKey: "usn",
+		header: "USN"
 	},
 	{
-		accessorKey: "amount",
-		header: () => <div className="text-right">Amount</div>,
-		cell: ({ row }) => {
-			const amount = parseFloat(row.getValue("amount"));
-
-			// Format the amount as a dollar amount
-			const formatted = new Intl.NumberFormat("en-US", {
-				style: "currency",
-				currency: "USD"
-			}).format(amount);
-
-			return <div className="text-right font-medium">{formatted}</div>;
-		}
+		accessorKey: "gender",
+		header: "Gender"
 	},
 	{
-		id: "actions",
-		enableHiding: false,
-		cell: ({ row }) => {
-			const payment = row.original;
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="h-8 w-8 p-0">
-							<span className="sr-only">Open menu</span>
-							<MoreHorizontal />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>Copy payment ID</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>View customer</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
-		}
+		accessorKey: "category",
+		header: "Category"
+	},
+	{
+		accessorKey: "sem",
+		header: "Semester"
+	},
+	{
+		accessorKey: "Bec601",
+		header: "Bec601"
+	},
+	{
+		accessorKey: "Bec602",
+		header: "Bec602"
+	},
+	{
+		accessorKey: "Bec603",
+		header: "Bec603"
+	},
+	{
+		accessorKey: "Bec604",
+		header: "Bec604"
+	},
+	{
+		accessorKey: "Bec605",
+		header: "Bec605"
+	},
+	{
+		accessorKey: "Result",
+		header: "Result"
+	},
+	{
+		accessorKey: "Percentage",
+		header: "Percentage"
+	},
+	{
+		accessorKey: "SGPA",
+		header: "SGPA"
+	},
+	{
+		accessorKey: "CGPA",
+		header: "CGPA"
 	}
 ];
 
