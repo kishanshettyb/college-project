@@ -21,53 +21,21 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Student, columns } from "./column";
-
-const data: Student[] = [
-	{
-		id: 1,
-		name: "Krishna",
-		usn: "1RV21CS001",
-		gender: "Female",
-		category: "ST",
-		sem: 5,
-		Bec601: 82,
-		Bec602: 67,
-		Bec603: 68,
-		Bec604: 77,
-		Bec605: 50,
-		Result: "Pass",
-		Percentage: 68.8,
-		SGPA: 6.88,
-		CGPA: 6.04
-	},
-	{
-		id: 2,
-		name: "Diya",
-		usn: "1RV21CS002",
-		gender: "Female",
-		category: "ST",
-		sem: 5,
-		Bec601: 39,
-		Bec602: 64,
-		Bec603: 59,
-		Bec604: 84,
-		Bec605: 72,
-		Result: "Pass",
-		Percentage: 63.6,
-		SGPA: 6.36,
-		CGPA: 5.7
-	}
-	// ... add more
-];
+import { useGetAllGoogleSheet } from "@/services/queries/googlesheet/googlesheet";
 
 export default function Page() {
+	const { data, isLoading, isError } = useGetAllGoogleSheet();
+
+	// ✅ Make sure the path matches your API response
+	const statusesData: Student[] = data?.data?.data ?? [];
+
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = React.useState({});
 
 	const table = useReactTable({
-		data,
+		data: statusesData,
 		columns,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
@@ -104,6 +72,7 @@ export default function Page() {
 			</header>
 
 			<div className="w-full px-10">
+				{/* 🔎 Search & Column Toggle */}
 				<div className="flex items-center py-4">
 					<Input
 						placeholder="Filter by name..."
@@ -121,17 +90,16 @@ export default function Page() {
 							{table
 								.getAllColumns()
 								.filter((column) => column.getCanHide())
-								.map((column) => {
-									return (
-										<DropdownMenuCheckboxItem key={column.id} className="capitalize" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
-											{column.id}
-										</DropdownMenuCheckboxItem>
-									);
-								})}
+								.map((column) => (
+									<DropdownMenuCheckboxItem key={column.id} className="capitalize" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								))}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
 
+				{/* 🔎 Table */}
 				<div className="overflow-hidden rounded-md border">
 					<Table>
 						<TableHeader>
@@ -144,7 +112,19 @@ export default function Page() {
 							))}
 						</TableHeader>
 						<TableBody>
-							{table.getRowModel().rows?.length ? (
+							{isLoading ? (
+								<TableRow>
+									<TableCell colSpan={columns.length} className="h-24 text-center">
+										Loading...
+									</TableCell>
+								</TableRow>
+							) : isError ? (
+								<TableRow>
+									<TableCell colSpan={columns.length} className="h-24 text-center text-red-500">
+										Error loading data.
+									</TableCell>
+								</TableRow>
+							) : table.getRowModel().rows?.length ? (
 								table.getRowModel().rows.map((row) => (
 									<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
 										{row.getVisibleCells().map((cell) => (
@@ -163,6 +143,7 @@ export default function Page() {
 					</Table>
 				</div>
 
+				{/* 🔎 Pagination */}
 				<div className="flex items-center justify-end space-x-2 py-4">
 					<div className="text-muted-foreground flex-1 text-sm">
 						{table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
