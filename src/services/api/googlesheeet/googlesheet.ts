@@ -3,7 +3,7 @@ import axios from "axios";
 
 const token = process.env.NEXT_PUBLIC_TOKEN;
 const axiosInstance = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+	baseURL: "https://makemystatus-strapi.onrender.com/api/",
 
 	headers: {
 		Authorization: `Bearer ${token}`
