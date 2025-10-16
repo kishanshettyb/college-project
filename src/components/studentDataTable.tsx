@@ -12,14 +12,15 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, File } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Student, columns } from "@/app/dashboard/google-form/column";
 import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 interface DataTableProps {
 	data: Student[];
 	isLoading: boolean;
@@ -34,6 +35,13 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	const [globalFilter, setGlobalFilter] = React.useState("");
 	const [semesterFilter, setSemesterFilter] = React.useState<string | null>(null);
 	const [pageSize, setPageSize] = React.useState(500);
+	const [exportFileName, setExportFileName] = React.useState("student_data");
+
+	// Utility function to get timestamp string
+	const getTimeStamp = () => {
+		const now = new Date();
+		return now.toISOString().replace(/[:-]/g, "").replace(/\..+/, "");
+	};
 
 	// Apply semester filter first
 	const semesterFilteredData = React.useMemo(() => {
@@ -72,8 +80,12 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 		}
 	});
 
-	const handleExport = () => {
-		// Prepare data for export: only visible columns and filtered data
+	const handleExport = async () => {
+		if (!exportFileName.trim()) {
+			alert("Please enter a file name.");
+			return;
+		}
+
 		const visibleColumns = table.getAllColumns().filter((col) => col.getIsVisible());
 		const headers = visibleColumns.map((col) => col.columnDef.header ?? col.id);
 
@@ -86,29 +98,67 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			return rowData;
 		});
 
-		// Create a worksheet
 		const worksheet = XLSX.utils.json_to_sheet(exportData, { header: visibleColumns.map((c) => c.id) });
-		// Add headers row
 		XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
-
-		// Create a workbook and append the worksheet
 		const workbook = XLSX.utils.book_new();
 		XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
 
-		// Generate buffer
 		const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
 
-		// Create Blob and trigger download
-		const blob = new Blob([wbout], { type: "application/octet-stream" });
-		saveAs(blob, "student_data.xlsx");
+		const uint8Array = new Uint8Array(wbout);
+		let binary = "";
+		for (let i = 0; i < uint8Array.byteLength; i++) {
+			binary += String.fromCharCode(uint8Array[i]);
+		}
+		const base64Data = btoa(binary);
+
+		// Append timestamp to filename before sending
+		const filenameWithTimestamp = `${exportFileName.trim()}_${getTimeStamp()}.xlsx`;
+
+		try {
+			const response = await fetch("/api/save-excel", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ fileName: filenameWithTimestamp, fileData: base64Data })
+			});
+			const json = await response.json();
+			if (response.ok) {
+				alert("File saved to server public folder as: " + json.path);
+			} else {
+				alert("Failed to save file: " + json.message);
+			}
+		} catch (error: any) {
+			alert("Error uploading file: " + error.message);
+		}
 	};
+
 	return (
 		<div className="p-4 border rounded-xl my-10">
 			<div className="flex justify-between items-center mb-5">
 				<h2 className="font-semibold text-2xl">Student Data</h2>
-				<Button onClick={handleExport} variant="outline" size="sm">
-					Export Excel
-				</Button>
+				<Dialog>
+					<form>
+						<DialogTrigger asChild>
+							<Button variant="default">
+								<File />
+								Export Data
+							</Button>
+						</DialogTrigger>
+						<DialogContent className="sm:max-w-[425px]">
+							<DialogHeader>
+								<DialogTitle>Export data to excel file</DialogTitle>
+							</DialogHeader>
+							<div className="grid gap-4">
+								<Input type="text" placeholder="Enter filename" value={exportFileName} onChange={(e) => setExportFileName(e.target.value)} className="max-w-xs" />
+								<DialogClose asChild>
+									<Button size="lg" onClick={handleExport} variant="default">
+										Export Excel
+									</Button>
+								</DialogClose>
+							</div>
+						</DialogContent>
+					</form>
+				</Dialog>
 			</div>
 
 			{/* Filters */}
