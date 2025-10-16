@@ -32,6 +32,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [globalFilter, setGlobalFilter] = React.useState("");
 	const [semesterFilter, setSemesterFilter] = React.useState<string | null>(null);
+	const [pageSize, setPageSize] = React.useState(500);
 
 	// Apply semester filter first
 	const semesterFilteredData = React.useMemo(() => {
@@ -61,7 +62,12 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			sorting,
 			columnFilters,
 			columnVisibility,
-			rowSelection
+			rowSelection,
+			pagination: { pageIndex: 0, pageSize } // Set default page size to 500
+		},
+		onPaginationChange: (updater) => {
+			const newState = typeof updater === "function" ? updater({ pageIndex: 0, pageSize }) : updater;
+			setPageSize(newState.pageSize);
 		}
 	});
 
