@@ -19,7 +19,7 @@ export function VersionSwitcher({ versions, defaultVersion }: { versions: string
 								<GalleryVerticalEnd className="size-4" />
 							</div>
 							<div className="flex flex-col gap-0.5 leading-none">
-								<span className="font-medium">College Result Analysis</span>
+								<span className="font-medium">GEC Chamarajnagar</span>
 							</div>
 							<ChevronsUpDown className="ml-auto" />
 						</SidebarMenuButton>
