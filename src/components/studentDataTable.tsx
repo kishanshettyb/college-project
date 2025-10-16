@@ -21,6 +21,7 @@ import { Student, columns } from "@/app/dashboard/google-form/column";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+
 interface DataTableProps {
 	data: Student[];
 	isLoading: boolean;
@@ -34,6 +35,9 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [globalFilter, setGlobalFilter] = React.useState("");
 	const [semesterFilter, setSemesterFilter] = React.useState<string | null>(null);
+	const [categoryFilter, setCategoryFilter] = React.useState<string | null>(null);
+	const [branchFilter, setBranchFilter] = React.useState<string | null>(null);
+	const [resultFilter, setResultFilter] = React.useState<string | null>(null); // "pass", "fail", or null
 	const [pageSize, setPageSize] = React.useState(500);
 	const [exportFileName, setExportFileName] = React.useState("student_data");
 
@@ -43,18 +47,41 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 		return now.toISOString().replace(/[:-]/g, "").replace(/\..+/, "");
 	};
 
-	// Apply semester filter first
-	const semesterFilteredData = React.useMemo(() => {
-		if (!semesterFilter) return data;
-		return data.filter((student) => student.sem === semesterFilter);
-	}, [data, semesterFilter]);
-
-	// Apply global filter (search by name or usn) on semesterFilteredData
+	// Combine all filters including category, branch, semester, result, and global search
 	const filteredData = React.useMemo(() => {
-		if (!globalFilter) return semesterFilteredData;
-		const lowercasedFilter = globalFilter.toLowerCase();
-		return semesterFilteredData.filter((student) => student.name.toLowerCase().includes(lowercasedFilter) || student.usn.toLowerCase().includes(lowercasedFilter));
-	}, [semesterFilteredData, globalFilter]);
+		let tempData = data;
+
+		if (categoryFilter) {
+			tempData = tempData.filter((student) => student.category === categoryFilter);
+		}
+
+		if (branchFilter) {
+			tempData = tempData.filter((student) => student.branch === branchFilter);
+		}
+
+		if (semesterFilter) {
+			const semNumber = Number(semesterFilter);
+			if (!isNaN(semNumber)) {
+				tempData = tempData.filter((student) => student.sem === semNumber);
+			}
+		}
+
+		if (resultFilter) {
+			tempData = tempData.filter((student) => {
+				const res = (student.result ?? "").toLowerCase();
+				if (resultFilter === "pass") return res === "pass";
+				if (resultFilter === "fail") return res === "fail";
+				return true;
+			});
+		}
+
+		if (globalFilter) {
+			const lowercasedFilter = globalFilter.toLowerCase();
+			tempData = tempData.filter((student) => student.name.toLowerCase().includes(lowercasedFilter) || student.usn.toLowerCase().includes(lowercasedFilter));
+		}
+
+		return tempData;
+	}, [data, categoryFilter, branchFilter, semesterFilter, resultFilter, globalFilter]);
 
 	const table = useReactTable({
 		data: filteredData,
@@ -98,7 +125,9 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			return rowData;
 		});
 
-		const worksheet = XLSX.utils.json_to_sheet(exportData, { header: visibleColumns.map((c) => c.id) });
+		const worksheet = XLSX.utils.json_to_sheet(exportData, {
+			header: visibleColumns.map((c) => c.id)
+		});
 		XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
 		const workbook = XLSX.utils.book_new();
 		XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
@@ -163,8 +192,30 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 
 			{/* Filters */}
 			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
+				{/* Global Search */}
 				<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
 
+				{/* Category Filter */}
+				<select className="border rounded-md px-3 py-2" value={categoryFilter ?? ""} onChange={(e) => setCategoryFilter(e.target.value || null)}>
+					<option value="">All Categories</option>
+					{[...new Set(data.map((d) => d.category))].map((cat) => (
+						<option key={cat} value={cat}>
+							{cat}
+						</option>
+					))}
+				</select>
+
+				{/* Branch Filter */}
+				<select className="border rounded-md px-3 py-2" value={branchFilter ?? ""} onChange={(e) => setBranchFilter(e.target.value || null)}>
+					<option value="">All Branches</option>
+					{[...new Set(data.map((d) => d.branch))].map((branch) => (
+						<option key={branch} value={branch}>
+							{branch}
+						</option>
+					))}
+				</select>
+
+				{/* Semester Filter */}
 				<select className="border rounded-md px-3 py-2" value={semesterFilter ?? ""} onChange={(e) => setSemesterFilter(e.target.value || null)}>
 					<option value="">All Semesters</option>
 					{Array.from({ length: 8 }, (_, i) => (
@@ -172,6 +223,13 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 							{i + 1} Semester
 						</option>
 					))}
+				</select>
+
+				{/* Result Filter */}
+				<select className="border rounded-md px-3 py-2" value={resultFilter ?? ""} onChange={(e) => setResultFilter(e.target.value || null)}>
+					<option value="">All Results</option>
+					<option value="pass">Pass</option>
+					<option value="fail">Fail</option>
 				</select>
 
 				<DropdownMenu>
