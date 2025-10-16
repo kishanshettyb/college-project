@@ -18,7 +18,8 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Student, columns } from "@/app/dashboard/google-form/column";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 interface DataTableProps {
 	data: Student[];
 	isLoading: boolean;
@@ -71,10 +72,43 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 		}
 	});
 
+	const handleExport = () => {
+		// Prepare data for export: only visible columns and filtered data
+		const visibleColumns = table.getAllColumns().filter((col) => col.getIsVisible());
+		const headers = visibleColumns.map((col) => col.columnDef.header ?? col.id);
+
+		const exportData = table.getRowModel().rows.map((row) => {
+			const rowData: Record<string, any> = {};
+			visibleColumns.forEach((col) => {
+				const val = row.getValue(col.id);
+				rowData[col.id] = typeof val === "object" ? JSON.stringify(val) : val;
+			});
+			return rowData;
+		});
+
+		// Create a worksheet
+		const worksheet = XLSX.utils.json_to_sheet(exportData, { header: visibleColumns.map((c) => c.id) });
+		// Add headers row
+		XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
+
+		// Create a workbook and append the worksheet
+		const workbook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+
+		// Generate buffer
+		const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+
+		// Create Blob and trigger download
+		const blob = new Blob([wbout], { type: "application/octet-stream" });
+		saveAs(blob, "student_data.xlsx");
+	};
 	return (
 		<div className="p-4 border rounded-xl my-10">
 			<div className="flex justify-between items-center mb-5">
 				<h2 className="font-semibold text-2xl">Student Data</h2>
+				<Button onClick={handleExport} variant="outline" size="sm">
+					Export Excel
+				</Button>
 			</div>
 
 			{/* Filters */}
