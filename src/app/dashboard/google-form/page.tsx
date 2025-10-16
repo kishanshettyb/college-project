@@ -5,21 +5,15 @@ import {
 	ColumnFiltersState,
 	SortingState,
 	VisibilityState,
-	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Student, columns } from "./column";
 import { useGetAllGoogleSheet } from "@/services/queries/googlesheet/googlesheet";
 import { StudentDataTable } from "@/components/studentDataTable";
