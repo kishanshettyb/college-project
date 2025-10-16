@@ -41,13 +41,13 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	const [pageSize, setPageSize] = React.useState(500);
 	const [exportFileName, setExportFileName] = React.useState("student_data");
 
-	// Utility function to get timestamp string
+	// Utility to get timestamp string for export filename
 	const getTimeStamp = () => {
 		const now = new Date();
 		return now.toISOString().replace(/[:-]/g, "").replace(/\..+/, "");
 	};
 
-	// Combine all filters including category, branch, semester, result, and global search
+	// Filtering logic with debug-friendly semester filter
 	const filteredData = React.useMemo(() => {
 		let tempData = data;
 
@@ -60,9 +60,14 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 		}
 
 		if (semesterFilter) {
-			const semNumber = Number(semesterFilter);
+			const semNumber = parseInt(semesterFilter, 10);
 			if (!isNaN(semNumber)) {
-				tempData = tempData.filter((student) => student.sem === semNumber);
+				tempData = tempData.filter((student) => {
+					// Debug log to trace matches
+					// console.log('Checking student.sem=', student.sem, 'against', semNumber);
+					// return match
+					return parseInt(String(student.sem), 10) === semNumber;
+				});
 			}
 		}
 
@@ -99,7 +104,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			columnFilters,
 			columnVisibility,
 			rowSelection,
-			pagination: { pageIndex: 0, pageSize } // Set default page size to 500
+			pagination: { pageIndex: 0, pageSize }
 		},
 		onPaginationChange: (updater) => {
 			const newState = typeof updater === "function" ? updater({ pageIndex: 0, pageSize }) : updater;
@@ -166,7 +171,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			<div className="flex justify-between items-center mb-5">
 				<h2 className="font-semibold text-2xl">Student Data</h2>
 				<Dialog>
-					<form>
+					<form onSubmit={(e) => e.preventDefault()}>
 						<DialogTrigger asChild>
 							<Button variant="default">
 								<File />
@@ -192,10 +197,8 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 
 			{/* Filters */}
 			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
-				{/* Global Search */}
 				<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
 
-				{/* Category Filter */}
 				<select className="border rounded-md px-3 py-2" value={categoryFilter ?? ""} onChange={(e) => setCategoryFilter(e.target.value || null)}>
 					<option value="">All Categories</option>
 					{[...new Set(data.map((d) => d.category))].map((cat) => (
@@ -205,7 +208,6 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 					))}
 				</select>
 
-				{/* Branch Filter */}
 				<select className="border rounded-md px-3 py-2" value={branchFilter ?? ""} onChange={(e) => setBranchFilter(e.target.value || null)}>
 					<option value="">All Branches</option>
 					{[...new Set(data.map((d) => d.branch))].map((branch) => (
@@ -215,17 +217,22 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 					))}
 				</select>
 
-				{/* Semester Filter */}
-				<select className="border rounded-md px-3 py-2" value={semesterFilter ?? ""} onChange={(e) => setSemesterFilter(e.target.value || null)}>
-					<option value="">All Semesters</option>
+				<select
+					className="border rounded-md px-3 py-2"
+					value={semesterFilter ?? ""}
+					onChange={(e) => {
+						const val = e.target.value;
+						setSemesterFilter(val === "" ? null : val);
+					}}
+				>
+					<option value="">All Semesters.</option>
 					{Array.from({ length: 8 }, (_, i) => (
-						<option key={i + 1} value={`${i + 1}`}>
+						<option key={i + 1} value={(i + 1).toString()}>
 							{i + 1} Semester
 						</option>
 					))}
 				</select>
 
-				{/* Result Filter */}
 				<select className="border rounded-md px-3 py-2" value={resultFilter ?? ""} onChange={(e) => setResultFilter(e.target.value || null)}>
 					<option value="">All Results</option>
 					<option value="pass">Pass</option>
@@ -276,7 +283,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 									Error loading data.
 								</TableCell>
 							</TableRow>
-						) : table.getRowModel().rows?.length ? (
+						) : table.getRowModel().rows.length ? (
 							table.getRowModel().rows.map((row) => (
 								<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
 									{row.getVisibleCells().map((cell) => (
