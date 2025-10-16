@@ -12,7 +12,7 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from "@tanstack/react-table";
-import { ChevronDown, Download } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -32,15 +32,19 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [globalFilter, setGlobalFilter] = React.useState("");
 	const [semesterFilter, setSemesterFilter] = React.useState<string | null>(null);
-	const [exporting, setExporting] = React.useState(false);
 
-	const filteredData = React.useMemo(() => {
-		let tempData = data;
-		if (semesterFilter) {
-			tempData = tempData.filter((student) => student.sem === semesterFilter);
-		}
-		return tempData;
+	// Apply semester filter first
+	const semesterFilteredData = React.useMemo(() => {
+		if (!semesterFilter) return data;
+		return data.filter((student) => student.sem === semesterFilter);
 	}, [data, semesterFilter]);
+
+	// Apply global filter (search by name or usn) on semesterFilteredData
+	const filteredData = React.useMemo(() => {
+		if (!globalFilter) return semesterFilteredData;
+		const lowercasedFilter = globalFilter.toLowerCase();
+		return semesterFilteredData.filter((student) => student.name.toLowerCase().includes(lowercasedFilter) || student.usn.toLowerCase().includes(lowercasedFilter));
+	}, [semesterFilteredData, globalFilter]);
 
 	const table = useReactTable({
 		data: filteredData,
@@ -61,54 +65,15 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 		}
 	});
 
-	// Apply global filter
-	React.useEffect(() => {
-		table.getAllColumns().forEach((column) => {
-			if (column.getCanFilter()) {
-				column.setFilterValue(globalFilter || undefined);
-			}
-		});
-	}, [globalFilter, table]);
-
-	// ✅ Export Function
-	const handleExport = async () => {
-		try {
-			setExporting(true);
-			const fileName = prompt("Enter file name (optional):") || "student-data";
-
-			const res = await fetch("/api/export", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ data: filteredData, fileName })
-			});
-
-			const result = await res.json();
-			if (result.success) {
-				alert(`✅ Exported successfully as ${result.fileName}`);
-			} else {
-				alert(`❌ Failed: ${result.error}`);
-			}
-		} catch (err: any) {
-			alert("❌ Error exporting data: " + err.message);
-		} finally {
-			setExporting(false);
-		}
-	};
-
 	return (
 		<div className="p-4 border rounded-xl my-10">
 			<div className="flex justify-between items-center mb-5">
 				<h2 className="font-semibold text-2xl">Student Data</h2>
-
-				<Button onClick={handleExport} disabled={exporting} className="flex items-center gap-2">
-					<Download className="w-4 h-4" />
-					{exporting ? "Exporting..." : "Export Data"}
-				</Button>
 			</div>
 
 			{/* Filters */}
 			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
-				<Input placeholder="Search all fields..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
+				<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
 
 				<select className="border rounded-md px-3 py-2" value={semesterFilter ?? ""} onChange={(e) => setSemesterFilter(e.target.value || null)}>
 					<option value="">All Semesters</option>
