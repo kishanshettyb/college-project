@@ -6,7 +6,7 @@ import React from "react";
 function page() {
 	return (
 		<div>
-			<header className="flex mt-10 h-16 shrink-0 items-center gap-2 border-b px-4">
+			<header className="flex lg:mt-0 mt-10 h-16 shrink-0 items-center gap-2 border-b px-4">
 				<SidebarTrigger className="-ml-1" />
 				<Separator className="mr-2 data-[orientation=vertical]:h-4" />
 				<Breadcrumb>
