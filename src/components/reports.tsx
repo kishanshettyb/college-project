@@ -32,9 +32,9 @@ export default function Result({ data }: any) {
 
 	return (
 		<div className="p-4 space-y-6">
-			<div className="flex justify-between items-center">
+			<div className="flex flex-col lg:flex-row justify-start lg:justify-between items-start lg:items-center">
 				<div>
-					<h1 className="text-2xl font-semibold">Student Reports</h1>
+					<h1 className="text-2xl font-semibold mb-2">Student Reports</h1>
 				</div>
 				<div>
 					<Label htmlFor="semester">Select Semester</Label>
