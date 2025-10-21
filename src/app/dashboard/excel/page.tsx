@@ -57,7 +57,7 @@ export default function ExcelPage() {
 			) : files.length === 0 ? (
 				<p className="p-10 text-center">No export files found.</p>
 			) : (
-				<div className="grid p-10 gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-6">
+				<div className="grid p-10 gap-5 grid-cols-2 sm:grid-cols-2 md:grid-cols-6">
 					{files.map(({ name, date, url }) => (
 						<Card key={name} className="overflow-hidden p-0">
 							<div className="p-4 border border-x-0 border-t-0">
