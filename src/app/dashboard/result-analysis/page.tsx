@@ -1,11 +1,16 @@
+"use client";
+import Reports from "@/components/reports";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useGetAllGoogleSheet } from "@/services/queries/googlesheet/googlesheet";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import React from "react";
 
 function page() {
+	const { data, isLoading, isError } = useGetAllGoogleSheet();
+
 	return (
-		<div>
+		<div className="bg-slate-50 h-full">
 			<header className="flex lg:mt-0  h-16 shrink-0 items-center gap-2 border-b px-4">
 				<SidebarTrigger className="-ml-1" />
 				<Separator className="mr-2 data-[orientation=vertical]:h-4" />
@@ -21,6 +26,9 @@ function page() {
 					</BreadcrumbList>
 				</Breadcrumb>
 			</header>
+			<div>
+				<Reports data={data} />
+			</div>
 		</div>
 	);
 }
