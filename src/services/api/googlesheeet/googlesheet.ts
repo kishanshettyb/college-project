@@ -11,9 +11,9 @@ const axiosInstance = axios.create({
 	}
 });
 export const getAllGoogleSheet = async () => {
-	return await axiosInstance.get<Googlesheet[]>(`googlesheets?populate=*&pagination[limit]=2000`);
+	return await axiosInstance.get<Googlesheet[]>(`googlesheets?populate=*&pagination[limit]=2000&sort=createdAt:desc`);
 };
 
 export const getGoogleSheet = async (documentId: string) => {
-	return await axiosInstance.get(`googlesheets/${documentId}?populate=*&pagination[limit]=2000`);
+	return await axiosInstance.get(`googlesheets/${documentId}?populate=*&pagination[limit]=2000&sort=createdAt:desc`);
 };
