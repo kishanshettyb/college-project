@@ -91,7 +91,7 @@ export default function Result({ data }: any) {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{semesters.map((sem) => (
+								{semesters.filter(Boolean).map((sem) => (
 									<SelectItem key={sem} value={sem}>
 										Sem {sem}
 									</SelectItem>
@@ -122,7 +122,7 @@ export default function Result({ data }: any) {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{categories.map((cat) => (
+								{categories.filter(Boolean).map((cat) => (
 									<SelectItem key={cat} value={cat}>
 										{cat}
 									</SelectItem>
