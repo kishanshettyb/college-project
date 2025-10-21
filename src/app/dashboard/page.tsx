@@ -69,7 +69,7 @@ export default function Page() {
 				</Breadcrumb>
 			</header>
 
-			<div className="w-full px-10">
+			<div className="w-full">
 				<Result data={data} />
 			</div>
 		</>
