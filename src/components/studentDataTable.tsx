@@ -197,65 +197,66 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 
 			{/* Filters */}
 			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
-				<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
+				<div className="grid grid-cols-2 lg:grid-cols-6 gap-5">
+					<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
 
-				<select className="border rounded-md px-3 py-2" value={categoryFilter ?? ""} onChange={(e) => setCategoryFilter(e.target.value || null)}>
-					<option value="">All Categories</option>
-					{[...new Set(data.map((d) => d.category))].map((cat) => (
-						<option key={cat} value={cat}>
-							{cat}
-						</option>
-					))}
-				</select>
+					<select className="border rounded-md px-3 py-2" value={categoryFilter ?? ""} onChange={(e) => setCategoryFilter(e.target.value || null)}>
+						<option value="">All Categories</option>
+						{[...new Set(data.map((d) => d.category))].map((cat) => (
+							<option key={cat} value={cat}>
+								{cat}
+							</option>
+						))}
+					</select>
 
-				<select className="border rounded-md px-3 py-2" value={branchFilter ?? ""} onChange={(e) => setBranchFilter(e.target.value || null)}>
-					<option value="">All Branches</option>
-					{[...new Set(data.map((d) => d.branch))].map((branch) => (
-						<option key={branch} value={branch}>
-							{branch}
-						</option>
-					))}
-				</select>
+					<select className="border rounded-md px-3 py-2" value={branchFilter ?? ""} onChange={(e) => setBranchFilter(e.target.value || null)}>
+						<option value="">All Branches</option>
+						{[...new Set(data.map((d) => d.branch))].map((branch) => (
+							<option key={branch} value={branch}>
+								{branch}
+							</option>
+						))}
+					</select>
 
-				<select
-					className="border rounded-md px-3 py-2"
-					value={semesterFilter ?? ""}
-					onChange={(e) => {
-						const val = e.target.value;
-						setSemesterFilter(val === "" ? null : val);
-					}}
-				>
-					<option value="">All Semesters.</option>
-					{Array.from({ length: 8 }, (_, i) => (
-						<option key={i + 1} value={(i + 1).toString()}>
-							{i + 1} Semester
-						</option>
-					))}
-				</select>
+					<select
+						className="border rounded-md px-3 py-2"
+						value={semesterFilter ?? ""}
+						onChange={(e) => {
+							const val = e.target.value;
+							setSemesterFilter(val === "" ? null : val);
+						}}
+					>
+						<option value="">All Semesters.</option>
+						{Array.from({ length: 8 }, (_, i) => (
+							<option key={i + 1} value={(i + 1).toString()}>
+								{i + 1} Semester
+							</option>
+						))}
+					</select>
 
-				<select className="border rounded-md px-3 py-2" value={resultFilter ?? ""} onChange={(e) => setResultFilter(e.target.value || null)}>
-					<option value="">All Results</option>
-					<option value="pass">Pass</option>
-					<option value="fail">Fail</option>
-				</select>
-
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="ml-auto">
-							Columns <ChevronDown />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						{table
-							.getAllColumns()
-							.filter((column) => column.getCanHide())
-							.map((column) => (
-								<DropdownMenuCheckboxItem key={column.id} className="capitalize" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
-									{column.id}
-								</DropdownMenuCheckboxItem>
-							))}
-					</DropdownMenuContent>
-				</DropdownMenu>
+					<select className="border rounded-md px-3 py-2" value={resultFilter ?? ""} onChange={(e) => setResultFilter(e.target.value || null)}>
+						<option value="">All Results</option>
+						<option value="pass">Pass</option>
+						<option value="fail">Fail</option>
+					</select>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="outline" className="ml-auto w-full">
+								Columns <ChevronDown />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							{table
+								.getAllColumns()
+								.filter((column) => column.getCanHide())
+								.map((column) => (
+									<DropdownMenuCheckboxItem key={column.id} className="capitalize" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								))}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
 			</div>
 
 			{/* Table */}

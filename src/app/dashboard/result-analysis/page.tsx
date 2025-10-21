@@ -6,7 +6,7 @@ import React from "react";
 function page() {
 	return (
 		<div>
-			<header className="flex lg:mt-0 mt-10 h-16 shrink-0 items-center gap-2 border-b px-4">
+			<header className="flex lg:mt-0  h-16 shrink-0 items-center gap-2 border-b px-4">
 				<SidebarTrigger className="-ml-1" />
 				<Separator className="mr-2 data-[orientation=vertical]:h-4" />
 				<Breadcrumb>
@@ -16,7 +16,7 @@ function page() {
 						</BreadcrumbItem>
 						<BreadcrumbSeparator className="hidden md:block" />
 						<BreadcrumbItem>
-							<BreadcrumbPage>Forms Data</BreadcrumbPage>
+							<BreadcrumbPage>Result Analysis</BreadcrumbPage>
 						</BreadcrumbItem>
 					</BreadcrumbList>
 				</Breadcrumb>
