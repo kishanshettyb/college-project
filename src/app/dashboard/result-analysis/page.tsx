@@ -1,5 +1,5 @@
 "use client";
-import Reports from "@/components/reports";
+import ResultAdvanced from "@/components/result";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useGetAllGoogleSheet } from "@/services/queries/googlesheet/googlesheet";
@@ -27,7 +27,7 @@ function page() {
 				</Breadcrumb>
 			</header>
 			<div>
-				<Reports data={data} />
+				<ResultAdvanced data={data} />
 			</div>
 		</div>
 	);

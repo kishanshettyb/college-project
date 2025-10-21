@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Student, columns } from "./column";
 import { useGetAllGoogleSheet } from "@/services/queries/googlesheet/googlesheet";
+import Result from "@/components/reports";
 
 export default function Page() {
 	const { data, isLoading, isError } = useGetAllGoogleSheet();
@@ -68,7 +69,9 @@ export default function Page() {
 				</Breadcrumb>
 			</header>
 
-			<div className="w-full px-10"></div>
+			<div className="w-full px-10">
+				<Result data={data} />
+			</div>
 		</>
 	);
 }
