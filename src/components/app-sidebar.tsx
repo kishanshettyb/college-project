@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { VersionSwitcher } from "@/components/version-switcher";
 import {
@@ -12,6 +13,10 @@ import {
 	SidebarMenuItem,
 	SidebarRail
 } from "@/components/ui/sidebar";
+import { Button } from "./ui/button";
+import { LogOut } from "lucide-react";
+import { useAdminContext } from "@/lib/provider/adminContext";
+import { useRouter } from "next/navigation";
 
 // This is sample data.
 const data = {
@@ -39,6 +44,12 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const { loggedIn, logout } = useAdminContext();
+	const router = useRouter();
+
+	const handleLogout = () => {
+		logout();
+	};
 	return (
 		<Sidebar {...props}>
 			<SidebarHeader>
@@ -63,6 +74,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					</SidebarGroup>
 				))}
 			</SidebarContent>
+
+			<Button onClick={handleLogout} className="m-5">
+				Logout <LogOut />
+			</Button>
 			<SidebarRail />
 		</Sidebar>
 	);
