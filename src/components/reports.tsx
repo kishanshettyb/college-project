@@ -44,11 +44,19 @@ export default function Result({ data }: any) {
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="All">All</SelectItem>
-							{Array.from(new Set(resultData.map((d: any) => d.sem))).map((sem: string) => (
+							{/* {Array.from(new Set(resultData.map((d: any) => d.sem))).map((sem: string) => (
 								<SelectItem key={sem} value={sem}>
 									Sem {sem}
 								</SelectItem>
-							))}
+							))} */}
+							{Array.from(new Set(resultData.map((d: any) => d.sem)))
+								// filter out empty strings to avoid invalid SelectItem
+								.filter((sem) => sem.trim() !== "")
+								.map((sem: string) => (
+									<SelectItem key={sem} value={sem}>
+										Sem {sem}
+									</SelectItem>
+								))}
 						</SelectContent>
 					</Select>
 				</div>
