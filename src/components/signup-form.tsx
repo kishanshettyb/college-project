@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { useCreateUser } from "@/services/mutation/user/user";
 import Image from "next/image";
-
+import myImage from "@/public/logo.png";
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
 	const [formData, setFormData] = useState({
 		email: "",
@@ -36,16 +36,16 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 	};
 
 	return (
-		<div className={cn("flex flex-col gap-6", className)} {...props}>
+		<div className={cn("flex p-4 justify-center items-center flex-col gap-6", className)} {...props}>
 			<Image
-				width="100"
-				height="100"
+				width="1024"
+				height="1024"
 				className="w-[100px] flex justify-center items-center mx-auto border border-slate-100 h-[100px] object-cover rounded-full"
 				alt=""
-				src="/adaptive-icon.png"
+				src="/images/new.jpg"
 			/>
 			<h2 className="text-center text-3xl font-semibold">GEC-Chamarajanagara</h2>
-			<Card>
+			<Card className="w-full ">
 				<CardContent>
 					<div className="border border-x-0 border-t-0 pb-3">
 						<h2 className="text-center text-xl  font-semibold">Register</h2>

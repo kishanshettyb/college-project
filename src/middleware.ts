@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
 	const token = request.cookies.get("admin_token")?.value;
 
 	// Allow home page and static assets freely
-	if (url.pathname === "/" || url.pathname === "/register" || url.pathname.startsWith("/_next") || url.pathname.startsWith("/favicon")) {
+	if (url.pathname === "/" || url.pathname === "/register" || url.pathname.startsWith("/images") || url.pathname.startsWith("/_next") || url.pathname.startsWith("/favicon")) {
 		return NextResponse.next();
 	}
 

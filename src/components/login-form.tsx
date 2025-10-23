@@ -36,11 +36,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 	return (
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Image
-				width="100"
-				height="100"
+				src="/images/new.jpg"
+				width="1024"
+				height="1024"
 				className="w-[100px] flex justify-center items-center mx-auto border border-slate-100 h-[100px] object-cover rounded-full"
 				alt=""
-				src="/adaptive-icon.png"
 			/>
 			<h2 className="text-center text-3xl font-semibold">GEC-Chamarajanagara</h2>
 			<Card>
