@@ -37,7 +37,7 @@ export const columns: ColumnDef<Student>[] = [
 		header: "Sl No",
 		cell: ({ row }) => row.index + 1 // static serial number starting from 1
 	},
-	// { accessorKey: "id", header: "ID" },
+	{ accessorKey: "id", header: "ID" },
 	{ accessorKey: "name", header: "Name" },
 	{ accessorKey: "usn", header: "USN" },
 	{ accessorKey: "gender", header: "Gender" },
@@ -72,12 +72,15 @@ export const columns: ColumnDef<Student>[] = [
 			// You can also put per-row action buttons here if needed
 			<AlertDialog>
 				<AlertDialogTrigger asChild>
-					<Button variant="outline">Show Dialog</Button>
+					<Button variant="outline" className="text-xs text-red-600">
+						{" "}
+						<Trash /> Delete
+					</Button>
 				</AlertDialogTrigger>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-						<AlertDialogDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</AlertDialogDescription>
+						<AlertDialogTitle>Are sure to delete this record?</AlertDialogTitle>
+						<AlertDialogDescription>Once deleted, this record cannot be recovered. Do you still want to proceed?</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel>Cancel</AlertDialogCancel>
