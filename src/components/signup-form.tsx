@@ -7,20 +7,22 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { useAdminLogin } from "@/services/mutation/user/user";
+import { useCreateUser } from "@/services/mutation/user/user";
 import Image from "next/image";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
 	const [formData, setFormData] = useState({
-		identifier: "",
+		email: "",
+		username: "",
 		password: ""
 	});
-	const loginMutation = useAdminLogin();
+	const loginMutation = useCreateUser();
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		loginMutation.mutate({
-			identifier: formData.identifier,
+			username: formData.username,
+			email: formData.email,
 			password: formData.password
 		});
 	};
@@ -46,14 +48,17 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 			<Card>
 				<CardContent>
 					<div className="border border-x-0 border-t-0 pb-3">
-						<h2 className="text-center text-xl  font-semibold">Login</h2>
+						<h2 className="text-center text-xl  font-semibold">Register</h2>
 					</div>
-
 					<form onSubmit={handleSubmit} className="mt-5">
 						<div className="flex flex-col gap-6">
 							<div className="grid gap-3">
-								<Label htmlFor="email">Email or Username</Label>
-								<Input id="identifier" name="identifier" type="text" value={formData.identifier} onChange={handleInputChange} required />
+								<Label htmlFor="username">Username</Label>
+								<Input id="username" name="username" type="text" value={formData.username} onChange={handleInputChange} required />
+							</div>
+							<div className="grid gap-3">
+								<Label htmlFor="email">Email</Label>
+								<Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
 							</div>
 							<div className="grid gap-3">
 								<div className="flex flex-row justify-between items-center">
