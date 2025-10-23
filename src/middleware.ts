@@ -28,5 +28,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
 	// Apply middleware to all pages except static files and api routes
-	matcher: ["/((?!_next/static|_next/image|favicon.ico|api|dashboard/google-form).*)"]
+	matcher: ["/((?!_next/static|_next/image|favicon.ico|api).*)"]
 };
