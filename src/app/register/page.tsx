@@ -3,7 +3,7 @@ import React from "react";
 
 function page() {
 	return (
-		<div className="w-full min-h-svh   h-full flex flex-col justify-center items-center lg:w-1/4">
+		<div className="w-full min-h-svh   h-full flex flex-col justify-center items-center  ">
 			<SignupForm />
 		</div>
 	);
