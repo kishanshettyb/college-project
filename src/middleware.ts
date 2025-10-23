@@ -4,29 +4,27 @@ export async function middleware(request: NextRequest) {
 	const url = request.nextUrl.clone();
 	const token = request.cookies.get("admin_token")?.value;
 	const webviewToken = url.searchParams.get("webview_token");
-	// Allow home page and static assets freely
-	if (
-		url.pathname === "/" ||
-		url.pathname === "/register" ||
-		url.pathname.startsWith("/images") ||
-		url.pathname.startsWith("/_next") ||
-		url.pathname.startsWith("/favicon") ||
-		webviewToken === "123"
-	) {
+
+	// Allow unrestricted access for the home page and certain static asset paths
+	if (url.pathname === "/" || url.pathname === "/register" || url.pathname.startsWith("/images") || url.pathname.startsWith("/_next") || url.pathname.startsWith("/favicon")) {
 		return NextResponse.next();
 	}
 
-	// If token exists, allow access everywhere
+	// Allow if URL has any webview_token param (not empty)
+	if (webviewToken) {
+		return NextResponse.next();
+	}
+
+	// Allow if admin_token cookie exists
 	if (token) {
 		return NextResponse.next();
 	}
 
-	// If token missing and trying to access any protected route → redirect to home
+	// Otherwise, redirect to home page
 	url.pathname = "/";
 	return NextResponse.redirect(url);
 }
 
 export const config = {
-	// Apply middleware to all pages except static files and api routes
 	matcher: ["/((?!_next/static|_next/image|favicon.ico|api).*)"]
 };
