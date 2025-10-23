@@ -68,14 +68,14 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 							</div>
 							<div className="flex flex-col gap-3">
 								<Button type="submit" disabled={loginMutation.isPending}>
-									{loginMutation.isPending ? "Logging in..." : "Login"}
+									{loginMutation.isPending ? "Registering..." : "Register"}
 								</Button>
 							</div>
 						</div>
 						<div className="mt-4 text-center text-xs">
-							Don&apos;t have an account?{" "}
-							<Link href="/register" className="underline underline-offset-4">
-								Sign up
+							Already have an account?{" "}
+							<Link href="/" className="underline underline-offset-4">
+								Login
 							</Link>
 						</div>
 					</form>
