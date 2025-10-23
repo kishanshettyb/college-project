@@ -1,5 +1,17 @@
+import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-
+import { Delete, DeleteIcon, Trash } from "lucide-react";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 export type Student = {
 	id: number;
 	name: string;
@@ -52,5 +64,29 @@ export const columns: ColumnDef<Student>[] = [
 
 	{ accessorKey: "percentage", header: "Percentage" },
 	{ accessorKey: "SGPA", header: "SGPA" },
-	{ accessorKey: "CGPA", header: "CGPA" }
+	{ accessorKey: "CGPA", header: "CGPA" },
+	{
+		id: "actions",
+		header: () => <p>Action</p>,
+		cell: ({ row }) => (
+			// You can also put per-row action buttons here if needed
+			<AlertDialog>
+				<AlertDialogTrigger asChild>
+					<Button variant="outline">Show Dialog</Button>
+				</AlertDialogTrigger>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+						<AlertDialogDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogAction>Continue</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		),
+		// Optionally, disable sorting for this column
+		enableSorting: false
+	}
 ];

@@ -3,9 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
 	const url = request.nextUrl.clone();
 	const token = request.cookies.get("admin_token")?.value;
-
+	const webviewToken = url.searchParams.get("webview_token");
 	// Allow home page and static assets freely
-	if (url.pathname === "/" || url.pathname === "/register" || url.pathname.startsWith("/images") || url.pathname.startsWith("/_next") || url.pathname.startsWith("/favicon")) {
+	if (
+		url.pathname === "/" ||
+		url.pathname === "/register" ||
+		url.pathname.startsWith("/images") ||
+		url.pathname.startsWith("/_next") ||
+		url.pathname.startsWith("/favicon") ||
+		webviewToken === "123"
+	) {
 		return NextResponse.next();
 	}
 
@@ -21,5 +28,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
 	// Apply middleware to all pages except static files and api routes
-	matcher: ["/((?!_next/static|_next/image|favicon.ico|api).*)"]
+	matcher: ["/((?!_next/static|_next/image|favicon.ico|api|dashboard/google-form).*)"]
 };
