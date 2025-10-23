@@ -17,3 +17,7 @@ export const getAllGoogleSheet = async () => {
 export const getGoogleSheet = async (documentId: string) => {
 	return await axiosInstance.get(`googlesheets/${documentId}?populate=*&pagination[limit]=2000&sort=createdAt:desc`);
 };
+
+export const deleteGoogleSheet = async (documentId: string) => {
+	return await axiosInstance.delete(`googlesheets/${documentId}`);
+};
