@@ -1,11 +1,10 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-// import { toast } from 'sonner'
 import { AxiosError } from "axios";
 import { adminLogin } from "@/services/api/user/user";
 import { useAdminContext } from "@/lib/provider/adminContext";
-
+import { toast } from "sonner";
 interface LoginPayload {
 	email: string;
 	password: string;
@@ -24,7 +23,13 @@ export const useAdminLogin = () => {
 			} else if (error instanceof Error) {
 				apiMessage = error.message;
 			}
-			//   toast.error('Admin Login failed', { description: apiMessage })
+			toast.error("Login failed", {
+				description: "Invalid Credentials",
+				style: {
+					backgroundColor: "#fee2e2",
+					color: "#dc2626"
+				}
+			});
 		},
 
 		onSuccess: (data) => {
@@ -42,9 +47,9 @@ export const useAdminLogin = () => {
 					token
 				);
 
-				// toast.success('Admin Login successful!', {
-				//   description: `Welcome back ${user.firstname}!`
-				// })
+				toast.success("Admin Login successful!", {
+					description: `Welcome back ${user.firstname}!`
+				});
 
 				window.location.replace("/dashboard");
 			}

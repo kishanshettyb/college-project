@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ReactQueryProvider from "@/lib/ReactQueryProvider";
-
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { AdminProvider } from "@/lib/provider/adminContext";
 
@@ -31,6 +31,7 @@ export default function RootLayout({
 				<ReactQueryProvider>
 					<AdminProvider>{children}</AdminProvider>
 				</ReactQueryProvider>
+				<Toaster />
 			</body>
 		</html>
 	);
