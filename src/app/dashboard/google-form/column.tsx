@@ -26,12 +26,17 @@ export type Student = {
 	gender: string;
 	category: string;
 	sem: number;
+	grade: number;
 	branch: string;
 	bec601: number;
 	bec602: number;
-	bec603: number;
-	bec604: number;
-	bec605: number;
+	bec685: number;
+	becl606: number;
+	bnsk685: number;
+	biks609: number;
+	bec613b: number;
+	bis654c: number;
+	becl657d: number;
 	result: string;
 	percentage: number;
 	SGPA: number;
@@ -114,6 +119,7 @@ export const columns: ColumnDef<Student>[] = [
 	{ accessorKey: "bec603", header: "Bec603" },
 	{ accessorKey: "bec604", header: "Bec604" },
 	{ accessorKey: "bec605", header: "Bec605" },
+	{ accessorKey: "bec606", header: "Bec606" },
 	{
 		accessorKey: "result",
 		header: "Result",
