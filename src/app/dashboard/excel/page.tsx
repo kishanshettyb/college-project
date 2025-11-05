@@ -61,7 +61,7 @@ export default function ExcelPage() {
 					{files.map(({ name, date, url }) => (
 						<Card key={name} className="overflow-hidden p-0">
 							<div className="p-4 border border-x-0 border-t-0">
-								<Image alt="Excel icon" width={1000} height={1000} className="w-full h-full" src="/Microsoft_Excel-Logo.wine.png" priority={false} />
+								<Image alt="Excel icon" width={1000} height={1000} className="w-full h-full" src="/images/excel.png" />
 							</div>
 							<div className="h-[100px] p-4">
 								<p className="text-sm mb-5 font-semibold">

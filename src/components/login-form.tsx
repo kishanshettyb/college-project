@@ -69,9 +69,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 						</div>
 						<div className="mt-4 text-center text-xs">
 							Don&apos;t have an account?{" "}
-							<Link href="/register" className="underline underline-offset-4">
+							{/* <Link href="/register" className="underline underline-offset-4">
 								Sign up
-							</Link>
+							</Link> */}
 						</div>
 					</form>
 				</CardContent>

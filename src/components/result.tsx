@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Label } from "@radix-ui/react-label";
+import { Button } from "./ui/button";
 
 export default function Result({ data }: any) {
 	const resultData = data?.data?.data || [];
@@ -132,9 +133,9 @@ export default function Result({ data }: any) {
 					</div>
 
 					<div className="flex items-end">
-						<button onClick={exportCSV} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+						<Button onClick={exportCSV} className="   px-3 py-1 rounded  ">
 							Export CSV
-						</button>
+						</Button>
 					</div>
 				</div>
 			</div>
