@@ -32,7 +32,7 @@ export type Student = {
 	bec602: number;
 	bec685: number;
 	becl606: number;
-	bnsk685: number;
+	bnsk658: number;
 	biks609: number;
 	bec613b: number;
 	bis654c: number;
@@ -118,7 +118,7 @@ export const columns: ColumnDef<Student>[] = [
 	{ accessorKey: "bec602", header: "bec602" },
 	{ accessorKey: "bec685", header: "bec685" },
 	{ accessorKey: "becl606", header: "becl606" },
-	{ accessorKey: "bnsk685", header: "bnsk685" },
+	{ accessorKey: "bnsk658", header: "bnsk658" },
 	{ accessorKey: "biks609", header: "biks609" },
 	{ accessorKey: "bec613b", header: "bec613b" },
 	{ accessorKey: "bis654c", header: "bis654c" },
