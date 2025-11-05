@@ -26,7 +26,7 @@ export type Student = {
 	gender: string;
 	category: string;
 	sem: number;
-	grade: number;
+	grade: string;
 	branch: string;
 	bec601: number;
 	bec602: number;
@@ -135,6 +135,8 @@ export const columns: ColumnDef<Student>[] = [
 			return <div className={`border text-center rounded-xl px-2 py-1 text-sm ${bgColor} ${textColor} ${borderColor}`}>{result.toUpperCase()}</div>;
 		}
 	},
+	{ accessorKey: "grade", header: "grade" },
+
 	{ accessorKey: "percentage", header: "Percentage" },
 	{ accessorKey: "SGPA", header: "SGPA" },
 	{ accessorKey: "CGPA", header: "CGPA" },
