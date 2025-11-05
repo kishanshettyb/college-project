@@ -6,6 +6,7 @@ import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Link from "next/link";
+import Image from "next/image";
 
 export function VersionSwitcher({ versions, defaultVersion }: { versions: string[]; defaultVersion: string }) {
 	const [selectedVersion, setSelectedVersion] = React.useState(defaultVersion);
@@ -17,9 +18,9 @@ export function VersionSwitcher({ versions, defaultVersion }: { versions: string
 					<DropdownMenuTrigger asChild>
 						<Link href="/dashboard">
 							<SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-								<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-									<GalleryVerticalEnd className="size-4" />
-								</div>
+								{/* <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"> */}
+								<Image alt="gec" width={300} height={300} className="w-[50px] h-[50px] object-cover" src="/images/new-logo-gec.png" />
+								{/* </div> */}
 								<div className="flex flex-col gap-0.5 leading-none">
 									<span className="font-medium">GEC Chamarajnagar</span>
 								</div>
