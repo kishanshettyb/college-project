@@ -106,8 +106,8 @@ export const columns: ColumnDef<Student>[] = [
 		header: "Sl No",
 		cell: ({ row }) => row.index + 1
 	},
-	{ accessorKey: "id", header: "ID" },
-	{ accessorKey: "documentId", header: "Document ID" },
+	// { accessorKey: "id", header: "ID" },
+	// { accessorKey: "documentId", header: "Document ID" },
 	{ accessorKey: "name", header: "Name" },
 	{ accessorKey: "usn", header: "USN" },
 	{ accessorKey: "gender", header: "Gender" },
