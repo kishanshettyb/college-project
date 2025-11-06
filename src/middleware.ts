@@ -10,8 +10,15 @@ export async function middleware(request: NextRequest) {
 	const isExpoWebView = isExpoUserAgent(userAgent);
 
 	// Allow unrestricted access for the home page and certain static asset paths
+	if (url.pathname === "/") {
+		if (token) {
+			url.pathname = "/dashboard";
+			return NextResponse.redirect(url);
+		}
+		return NextResponse.next(); // Allow access to login page
+	}
 	if (
-		url.pathname === "/" ||
+		// url.pathname === "/" ||
 		url.pathname === "/register" ||
 		url.pathname.startsWith("/images") ||
 		url.pathname.startsWith("/_next") ||
