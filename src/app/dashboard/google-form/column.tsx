@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { Trash } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -78,7 +78,7 @@ function DeleteButton({ id }: { id: string }) {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<Button variant="outline" className="text-xs text-red-600 flex items-center gap-1">
+				<Button variant="outline" className="text-xs  cursor-pointer text-red-600 flex items-center gap-1">
 					<Trash size={14} /> Delete
 				</Button>
 			</AlertDialogTrigger>
@@ -136,14 +136,20 @@ export const columns: ColumnDef<Student>[] = [
 		}
 	},
 	{ accessorKey: "grade", header: "grade" },
-
 	{ accessorKey: "percentage", header: "Percentage" },
 	{ accessorKey: "SGPA", header: "SGPA" },
 	{ accessorKey: "CGPA", header: "CGPA" },
 	{
 		id: "actions",
 		header: "Action",
-		cell: ({ row }) => <DeleteButton id={row.original.documentId} />,
+		cell: ({ row }) => (
+			<div className="flex justify-center gap-5 items-center">
+				{/* <Button variant="outline" className="cursor-pointer">
+					<Edit size={16} /> Edit
+				</Button> */}
+				<DeleteButton id={row.original.documentId} />
+			</div>
+		),
 		enableSorting: false
 	}
 ];
