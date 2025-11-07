@@ -42,13 +42,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 				height="1024"
 				className="w-[100px] flex justify-center items-center mx-auto border border-slate-100 h-[100px] object-cover rounded-full"
 				alt=""
-				src="/images/new.jpg"
+				src="/images/new-logo-gec.png"
 			/>
 			<h2 className="text-center text-3xl font-semibold">GEC-Chamarajanagara</h2>
 			<Card className="w-full ">
 				<CardContent>
 					<div className="border border-x-0 border-t-0 pb-3">
-						<h2 className="text-center text-xl  font-semibold">Register</h2>
+						<h2 className="text-center text-xl  font-semibold">Students Registration</h2>
 					</div>
 					<form onSubmit={handleSubmit} className="mt-5">
 						<div className="flex flex-col gap-6">

@@ -10,7 +10,10 @@ import { Button } from "./ui/button";
 import { useAdminLogin } from "@/services/mutation/user/user";
 import Image from "next/image";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+interface LoginFormProps extends React.ComponentProps<"div"> {
+	title: string;
+}
+export function LoginForm({ title, className, ...props }: LoginFormProps) {
 	const [formData, setFormData] = useState({
 		identifier: "",
 		password: ""
@@ -46,7 +49,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 			<Card>
 				<CardContent>
 					<div className="border border-x-0 border-t-0 pb-3">
-						<h2 className="text-center text-xl  font-semibold">Login</h2>
+						<h2 className="text-center text-xl  font-semibold">{title}</h2>
 					</div>
 
 					<form onSubmit={handleSubmit} className="mt-5">
