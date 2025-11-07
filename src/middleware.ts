@@ -20,6 +20,8 @@ export async function middleware(request: NextRequest) {
 	if (
 		// url.pathname === "/" ||
 		url.pathname === "/register" ||
+		url.pathname === "/students/register" ||
+		url.pathname === "/students/login" ||
 		url.pathname.startsWith("/images") ||
 		url.pathname.startsWith("/_next") ||
 		url.pathname.startsWith("/favicon") ||
