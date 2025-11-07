@@ -12,8 +12,9 @@ import Image from "next/image";
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
 	title: string;
+	signup?: boolean;
 }
-export function LoginForm({ title, className, ...props }: LoginFormProps) {
+export function LoginForm({ title, signup, className, ...props }: LoginFormProps) {
 	const [formData, setFormData] = useState({
 		identifier: "",
 		password: ""
@@ -70,12 +71,14 @@ export function LoginForm({ title, className, ...props }: LoginFormProps) {
 								</Button>
 							</div>
 						</div>
-						<div className="mt-4 text-center text-xs">
-							Don&apos;t have an account?{" "}
-							{/* <Link href="/register" className="underline underline-offset-4">
-								Sign up
-							</Link> */}
-						</div>
+						{signup && (
+							<div className="mt-4 text-center text-xs">
+								Don&apos;t have an account?{" "}
+								<Link href="/register" className="underline underline-offset-4">
+									Sign up
+								</Link>
+							</div>
+						)}
 					</form>
 				</CardContent>
 			</Card>
