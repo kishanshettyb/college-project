@@ -9,7 +9,6 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { useCreateUser } from "@/services/mutation/user/user";
 import Image from "next/image";
-import myImage from "@/public/logo.png";
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
 	const [formData, setFormData] = useState({
 		email: "",
@@ -79,7 +78,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 								</div>
 								<div className="mt-4 text-center text-xs">
 									Already have an account?{" "}
-									<Link href="/students/login" className="underline underline-offset-4">
+									<Link href="/" className="underline underline-offset-4">
 										Login
 									</Link>
 								</div>
