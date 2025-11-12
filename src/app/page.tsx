@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { StudentLoginForm } from "@/components/student-login-form";
 export default function Page() {
 	return (
 		<div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
@@ -53,7 +54,7 @@ export default function Page() {
 								</CardTitle>
 							</CardHeader>
 							<CardContent className="grid gap-6">
-								<LoginForm title="Student Login" />
+								<StudentLoginForm title="Student Login" />
 							</CardContent>
 						</Card>
 					</TabsContent>

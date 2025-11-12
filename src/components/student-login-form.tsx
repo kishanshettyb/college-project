@@ -7,13 +7,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useAdminLogin } from "@/services/mutation/user/user";
-import { ShieldUser } from "lucide-react";
+import { User, Users } from "lucide-react";
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
 	title: string;
 	signup?: boolean;
 }
-export function LoginForm({ title, signup, className, ...props }: LoginFormProps) {
+export function StudentLoginForm({ title, signup, className, ...props }: LoginFormProps) {
 	const [formData, setFormData] = useState({
 		identifier: "",
 		password: ""
@@ -45,7 +45,7 @@ export function LoginForm({ title, signup, className, ...props }: LoginFormProps
 				<form onSubmit={handleSubmit} className="mt-0 p-4 border rounded-2xl">
 					<div className="flex flex-col gap-6">
 						<div className="grid gap-3">
-							<Label htmlFor="email">Email or Username</Label>
+							<Label htmlFor="email">USN</Label>
 							<Input id="identifier" name="identifier" type="text" value={formData.identifier} onChange={handleInputChange} required />
 						</div>
 						<div className="grid gap-3">
@@ -56,7 +56,8 @@ export function LoginForm({ title, signup, className, ...props }: LoginFormProps
 						</div>
 						<div className="flex flex-col gap-3">
 							<Button type="submit" disabled={loginMutation.isPending}>
-								<ShieldUser /> {loginMutation.isPending ? "Logging in..." : "Login as faculty"}
+								<User />
+								{loginMutation.isPending ? "Logging in..." : "Login as student"}
 							</Button>
 						</div>
 					</div>
