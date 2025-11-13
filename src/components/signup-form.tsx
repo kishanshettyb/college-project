@@ -57,7 +57,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 							<form onSubmit={handleSubmit} className="mt-5">
 								<div className="flex flex-col gap-3">
 									<div className="grid gap-2">
-										<Label htmlFor="username">Username</Label>
+										<Label htmlFor="username">USN</Label>
 										<Input id="username" name="username" type="text" value={formData.username} onChange={handleInputChange} required />
 									</div>
 									<div className="grid gap-2">
