@@ -144,9 +144,9 @@ export const columns: ColumnDef<Student>[] = [
 		header: "Action",
 		cell: ({ row }) => (
 			<div className="flex justify-center gap-5 items-center">
-				{/* <Button variant="outline" className="cursor-pointer">
-					<Edit size={16} /> Edit
-				</Button> */}
+				<Button variant="outline" className="cursor-pointer">
+					<Edit size={14} /> Edit
+				</Button>
 				<DeleteButton id={row.original.documentId} />
 			</div>
 		),
