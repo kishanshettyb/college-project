@@ -50,14 +50,15 @@ export const useAdminLogin = () => {
 						firstname: user.firstname,
 						lastname: user.lastname
 					},
-					token
+					token,
+					user.username
 				);
 
 				toast.success("Admin Login successful!", {
 					description: `Welcome back ${user.firstname}!`
 				});
 
-				window.location.replace("/dashboard");
+				window.location.replace("/student-dashboard");
 			}
 		}
 	});
@@ -98,14 +99,15 @@ export const useCreateUser = () => {
 						firstname: user.firstname,
 						lastname: user.lastname
 					},
-					token
+					token,
+					user.username
 				);
 
 				toast.success("Login successful!", {
 					description: `Welcome back ${user.firstname}!`
 				});
 
-				window.location.replace("/dashboard");
+				window.location.replace("/student-dashboard");
 			}
 		}
 	});

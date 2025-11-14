@@ -1,5 +1,8 @@
 "use client";
+
 import * as React from "react";
+
+import { SearchForm } from "@/components/search-form";
 import { VersionSwitcher } from "@/components/version-switcher";
 import {
 	Sidebar,
@@ -13,37 +16,34 @@ import {
 	SidebarMenuItem,
 	SidebarRail
 } from "@/components/ui/sidebar";
+import { StudentDashboardHeader } from "./student-dashboard-sidebar-header";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
-import { useAdminContext } from "@/lib/provider/adminContext";
 import { useRouter } from "next/router";
+import { useAdminContext } from "@/lib/provider/adminContext";
 
 // This is sample data.
 const data = {
 	versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
 	navMain: [
 		{
-			title: "Menus",
+			title: "Student Dashboard",
 			url: "#",
 			items: [
 				{
-					title: "Google Form Data List",
-					url: "/dashboard/google-form"
+					title: "Home",
+					url: "#"
 				},
 				{
-					title: "Exported Excel List",
-					url: "/dashboard/excel"
-				},
-				{
-					title: "Result Analysis",
-					url: "/dashboard/result-analysis"
+					title: "Forms",
+					url: "#"
 				}
 			]
 		}
 	]
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function StudentSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	const { loggedIn, logout } = useAdminContext();
 	// const router = useRouter();
 
@@ -53,9 +53,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar {...props}>
 			<SidebarHeader>
-				<VersionSwitcher versions={data.versions} defaultVersion={data.versions[0]} />
+				<StudentDashboardHeader versions={data.versions} defaultVersion={data.versions[0]} />
 			</SidebarHeader>
-			<SidebarContent>
+			<SidebarContent className="border border-x-0 border-t-slate-200">
 				{/* We create a SidebarGroup for each parent. */}
 				{data.navMain.map((item) => (
 					<SidebarGroup key={item.title}>
@@ -64,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							<SidebarMenu>
 								{item.items.map((item) => (
 									<SidebarMenuItem key={item.title}>
-										<SidebarMenuButton asChild>
+										<SidebarMenuButton asChild isActive={item.isActive}>
 											<a href={item.url}>{item.title}</a>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
@@ -74,7 +74,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					</SidebarGroup>
 				))}
 			</SidebarContent>
-
 			<Button onClick={handleLogout} className="m-5">
 				Logout <LogOut />
 			</Button>

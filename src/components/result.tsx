@@ -14,17 +14,28 @@ export default function Result({ data }: any) {
 	const [selectedSem, setSelectedSem] = useState("All");
 	const [selectedResult, setSelectedResult] = useState("All");
 	const [selectedCategory, setSelectedCategory] = useState("All");
+	const [selectedBranch, setSelectedBranch] = useState("All");
+	const [selectedGrade, setSelectedGrade] = useState("All");
+
+	// --- Unique values for filters ---
+	const semesters = Array.from(new Set(resultData.map((d) => d.sem)));
+	const categories = Array.from(new Set(resultData.map((d) => d.category)));
+	const branches = Array.from(new Set(resultData.map((d) => d.branch)));
+	const grades = Array.from(new Set(resultData.map((d) => d.grade)));
 
 	// --- Filtered Data ---
 	const filteredData = useMemo(() => {
 		if (!Array.isArray(resultData)) return [];
 		return resultData.filter((d: any) => {
 			const semMatch = selectedSem === "All" || d.sem === selectedSem;
-			const resultMatch = selectedResult === "All" || d.result === selectedResult;
+			const resultMatch = selectedResult === "All" || d.result?.toLowerCase() === selectedResult.toLowerCase();
 			const categoryMatch = selectedCategory === "All" || d.category === selectedCategory;
-			return semMatch && resultMatch && categoryMatch;
+			const branchMatch = selectedBranch === "All" || d.branch === selectedBranch;
+			const gradeMatch = selectedGrade === "All" || d.grade === selectedGrade;
+
+			return semMatch && resultMatch && categoryMatch && branchMatch && gradeMatch;
 		});
-	}, [selectedSem, selectedResult, selectedCategory, resultData]);
+	}, [selectedSem, selectedResult, selectedCategory, selectedBranch, selectedGrade, resultData]);
 
 	// --- SGPA vs CGPA Chart ---
 	const sgpaData = filteredData.map((d: any) => ({
@@ -36,18 +47,20 @@ export default function Result({ data }: any) {
 	// --- Average per Semester ---
 	const averageData = useMemo(() => {
 		const semesters = Array.from(new Set(filteredData.map((d) => d.sem)));
+
 		return semesters.map((sem) => {
 			const semData = filteredData.filter((d) => d.sem === sem);
 			const avgSGPA = semData.reduce((sum, s) => sum + parseFloat(s.SGPA), 0) / semData.length || 0;
 			const avgCGPA = semData.reduce((sum, s) => sum + parseFloat(s.CGPA), 0) / semData.length || 0;
+
 			return { sem, avgSGPA: parseFloat(avgSGPA.toFixed(2)), avgCGPA: parseFloat(avgCGPA.toFixed(2)) };
 		});
 	}, [filteredData]);
 
 	// --- Pass/Fail Pie ---
 	const passFail = [
-		{ name: "Pass", value: filteredData.filter((d: any) => d.result === "Pass").length },
-		{ name: "Fail", value: filteredData.filter((d: any) => d.result === "Fail").length }
+		{ name: "Pass", value: filteredData.filter((d: any) => d.result === "pass" || d.result === "Pass").length },
+		{ name: "Fail", value: filteredData.filter((d: any) => d.result === "fail" || d.result === "Fail").length }
 	];
 	const COLORS = ["#4ade80", "#f87171"];
 
@@ -64,8 +77,8 @@ export default function Result({ data }: any) {
 
 	// --- CSV Export ---
 	const exportCSV = () => {
-		const headers = ["Name", "Sem", "SGPA", "CGPA", "Result", "Category"];
-		const rows = filteredData.map((d) => [d.name, d.sem, d.SGPA, d.CGPA, d.result, d.category]);
+		const headers = ["Name", "Sem", "SGPA", "CGPA", "Result", "Category", "Branch", "Grade"];
+		const rows = filteredData.map((d) => [d.name, d.sem, d.SGPA, d.CGPA, d.result, d.category, d.branch, d.grade]);
 		const csvContent = [headers, ...rows].map((e) => e.join(",")).join("\n");
 		const blob = new Blob([csvContent], { type: "text/csv" });
 		const link = document.createElement("a");
@@ -74,25 +87,22 @@ export default function Result({ data }: any) {
 		link.click();
 	};
 
-	// --- Unique values for filters ---
-	const semesters = Array.from(new Set(resultData.map((d) => d.sem)));
-	const categories = Array.from(new Set(resultData.map((d) => d.category)));
-
 	return (
 		<div className="p-4 space-y-6">
 			{/* Header & Filters */}
 			<div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
 				<h1 className="text-2xl font-semibold">Student Reports</h1>
 				<div className="flex flex-wrap gap-4">
+					{/* Semester */}
 					<div>
-						<Label htmlFor="semester">Semester</Label>
+						<Label>Semester</Label>
 						<Select onValueChange={setSelectedSem} defaultValue="All">
 							<SelectTrigger className="w-[150px]">
 								<SelectValue placeholder="Select Semester" />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{semesters.filter(Boolean).map((sem) => (
+								{semesters.map((sem) => (
 									<SelectItem key={sem} value={sem}>
 										Sem {sem}
 									</SelectItem>
@@ -101,8 +111,9 @@ export default function Result({ data }: any) {
 						</Select>
 					</div>
 
+					{/* Result */}
 					<div>
-						<Label htmlFor="result">Result</Label>
+						<Label>Result</Label>
 						<Select onValueChange={setSelectedResult} defaultValue="All">
 							<SelectTrigger className="w-[120px]">
 								<SelectValue placeholder="Select Result" />
@@ -115,15 +126,16 @@ export default function Result({ data }: any) {
 						</Select>
 					</div>
 
+					{/* Category */}
 					<div>
-						<Label htmlFor="category">Category</Label>
+						<Label>Category</Label>
 						<Select onValueChange={setSelectedCategory} defaultValue="All">
 							<SelectTrigger className="w-[150px]">
 								<SelectValue placeholder="Select Category" />
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{categories.filter(Boolean).map((cat) => (
+								{categories.map((cat) => (
 									<SelectItem key={cat} value={cat}>
 										{cat}
 									</SelectItem>
@@ -132,14 +144,52 @@ export default function Result({ data }: any) {
 						</Select>
 					</div>
 
+					{/* Branch */}
+					<div>
+						<Label>Branch</Label>
+						<Select onValueChange={setSelectedBranch} defaultValue="All">
+							<SelectTrigger className="w-[220px]">
+								<SelectValue placeholder="Select Branch" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="All">All</SelectItem>
+								{branches.map((br) => (
+									<SelectItem key={br} value={br}>
+										{br}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+
+					{/* Grade */}
+					<div>
+						<Label>Grade</Label>
+						<Select onValueChange={setSelectedGrade} defaultValue="All">
+							<SelectTrigger className="w-[220px]">
+								<SelectValue placeholder="Select Grade" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="All">All</SelectItem>
+								{grades.map((gr) => (
+									<SelectItem key={gr} value={gr}>
+										{gr}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+
+					{/* CSV Export */}
 					<div className="flex items-end">
-						<Button onClick={exportCSV} className="   px-3 py-1 rounded  ">
+						<Button onClick={exportCSV} className="px-3 py-1">
 							Export CSV
 						</Button>
 					</div>
 				</div>
 			</div>
 
+			{/* No Data */}
 			{filteredData.length === 0 ? (
 				<p className="text-center text-gray-500">No data available</p>
 			) : (
@@ -162,6 +212,7 @@ export default function Result({ data }: any) {
 								</ResponsiveContainer>
 							</CardContent>
 						</Card>
+
 						<Card className="w-full lg:w-1/2">
 							<CardHeader>
 								<CardTitle>Average SGPA / CGPA per Semester</CardTitle>
@@ -169,7 +220,7 @@ export default function Result({ data }: any) {
 							<CardContent>
 								<ResponsiveContainer width="100%" height={300}>
 									<LineChart data={averageData}>
-										<XAxis dataKey="sem" label={{ value: "Semester", position: "insideBottom" }} />
+										<XAxis dataKey="sem" />
 										<YAxis />
 										<Tooltip />
 										<Legend />
@@ -180,6 +231,8 @@ export default function Result({ data }: any) {
 							</CardContent>
 						</Card>
 					</div>
+
+					{/* More Charts */}
 					<div className="flex gap-5 flex-col lg:flex-row">
 						<Card className="w-full lg:w-1/2">
 							<CardHeader>
@@ -196,6 +249,7 @@ export default function Result({ data }: any) {
 								</ResponsiveContainer>
 							</CardContent>
 						</Card>
+
 						<Card className="w-full lg:w-1/2">
 							<CardHeader>
 								<CardTitle>Result Summary (Pass / Fail)</CardTitle>
@@ -214,8 +268,9 @@ export default function Result({ data }: any) {
 							</CardContent>
 						</Card>
 					</div>
+
+					{/* Top & Bottom */}
 					<div className="flex gap-5 flex-col lg:flex-row">
-						{/* Top / Bottom Students */}
 						<Card className="w-full lg:w-1/2">
 							<CardHeader>
 								<CardTitle>Top 5 Students (SGPA)</CardTitle>
@@ -246,7 +301,7 @@ export default function Result({ data }: any) {
 							</CardContent>
 						</Card>
 
-						<Card className="w-full  lg:w-1/2">
+						<Card className="w-full lg:w-1/2">
 							<CardHeader>
 								<CardTitle>Bottom 5 Students (SGPA)</CardTitle>
 							</CardHeader>
