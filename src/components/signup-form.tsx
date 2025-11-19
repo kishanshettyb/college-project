@@ -30,7 +30,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 		const { name, value } = e.target;
 		setFormData((prev) => ({
 			...prev,
-			[name]: value
+			[name]: name === "username" ? value.toUpperCase() : value
 		}));
 	};
 

@@ -32,7 +32,7 @@ export function StudentLoginForm({ title, signup, className, ...props }: LoginFo
 		const { name, value } = e.target;
 		setFormData((prev) => ({
 			...prev,
-			[name]: value
+			[name]: name === "identifier" ? value.toUpperCase() : value
 		}));
 	};
 
