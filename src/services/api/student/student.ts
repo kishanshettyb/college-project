@@ -2,7 +2,7 @@ import { Student } from "@/types/studentTypes";
 import axios from "axios";
 
 const token = process.env.NEXT_PUBLIC_TOKEN;
-const baseurl = "http://localhost:1337/api/";
+const baseurl = process.env.NEXT_PUBLIC_BASE_URL;
 const axiosInstance = axios.create({
 	baseURL: baseurl,
 
