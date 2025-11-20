@@ -28,15 +28,15 @@ const data = {
 	navMain: [
 		{
 			title: "Student Dashboard",
-			url: "#",
+			url: "/student-dashboard",
 			items: [
 				{
 					title: "Home",
-					url: "#"
+					url: "/student-dashboard"
 				},
 				{
 					title: "Forms",
-					url: "#"
+					url: "/student-dashboard/exam-marks"
 				}
 			]
 		}

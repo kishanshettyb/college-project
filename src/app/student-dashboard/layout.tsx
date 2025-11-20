@@ -25,7 +25,7 @@ function layout({ children }: { children: React.ReactNode }) {
 							</BreadcrumbList>
 						</Breadcrumb>
 					</header>
-					<div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+					<div className="p-4">{children}</div>
 				</SidebarInset>
 			</SidebarProvider>
 		</div>

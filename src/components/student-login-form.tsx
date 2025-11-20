@@ -22,10 +22,15 @@ export function StudentLoginForm({ title, signup, className, ...props }: LoginFo
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		loginMutation.mutate({
-			identifier: formData.identifier,
-			password: formData.password
-		});
+		const isStudent = formData.identifier.startsWith("4GE");
+		if (isStudent) {
+			loginMutation.mutate({
+				identifier: formData.identifier,
+				password: formData.password
+			});
+		} else {
+			alert("USN should start with 4GE");
+		}
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
