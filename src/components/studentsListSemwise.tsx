@@ -12,23 +12,24 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from "@tanstack/react-table";
-import { ChevronDown, File } from "lucide-react";
+import { ChevronDown, File, FilesIcon, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Student, columns } from "@/app/dashboard/google-form/column";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { StudentSemwise, columns } from "@/app/dashboard/students/column";
+import { AddStudentModal } from "./addStudentModal";
 
 interface DataTableProps {
-	data: Student[];
+	data: StudentSemwise[];
 	isLoading: boolean;
 	isError: boolean;
 }
 
-export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, isError }) => {
+export const StudentDataTableSemwise: React.FC<DataTableProps> = ({ data, isLoading, isError }) => {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -92,7 +93,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	}, [data, categoryFilter, branchFilter, semesterFilter, resultFilter, gradeFilter, globalFilter]);
 
 	const table = useReactTable({
-		data: filteredData,
+		data: data,
 		columns,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
@@ -175,103 +176,38 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 				<h2 className="font-semibold text-2xl">Student Data</h2>
 				<Dialog>
 					<form onSubmit={(e) => e.preventDefault()}>
-						<DialogTrigger asChild>
-							<Button variant="default">
-								<File />
-								Export Data
-							</Button>
-						</DialogTrigger>
-						<DialogContent className="sm:max-w-[425px]">
-							<DialogHeader>
-								<DialogTitle>Export data to excel file</DialogTitle>
-							</DialogHeader>
-							<div className="grid gap-4">
-								<Input type="text" placeholder="Enter filename" value={exportFileName} onChange={(e) => setExportFileName(e.target.value)} className="max-w-xs" />
-								<DialogClose asChild>
-									<Button size="lg" onClick={handleExport} variant="default">
-										Export Excel
-									</Button>
-								</DialogClose>
+						<div className="flex gap-x-5">
+							<div>
+								<AddStudentModal />
 							</div>
-						</DialogContent>
+							<div>
+								<DialogTrigger asChild>
+									<Button variant="outline">
+										<FilesIcon />
+										Export Data
+									</Button>
+								</DialogTrigger>
+
+								<DialogContent className="sm:max-w-[425px]">
+									<DialogHeader>
+										<DialogTitle>Export data to excel file</DialogTitle>
+									</DialogHeader>
+									<div className="grid gap-4">
+										<Input type="text" placeholder="Enter filename" value={exportFileName} onChange={(e) => setExportFileName(e.target.value)} className="max-w-xs" />
+										<DialogClose asChild>
+											<Button size="lg" onClick={handleExport} variant="default">
+												Export Excel
+											</Button>
+										</DialogClose>
+									</div>
+								</DialogContent>
+							</div>
+						</div>
 					</form>
 				</Dialog>
 			</div>
 
 			{/* Filters */}
-			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
-				<div className="grid grid-cols-2 lg:grid-cols-7 gap-5">
-					<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
-
-					<select className="border rounded-md px-3 py-2" value={categoryFilter ?? ""} onChange={(e) => setCategoryFilter(e.target.value || null)}>
-						<option value="">All Categories</option>
-						{[...new Set(data.map((d) => d.category))].map((cat) => (
-							<option key={cat} value={cat}>
-								{cat}
-							</option>
-						))}
-					</select>
-
-					<select className="border rounded-md px-3 py-2" value={branchFilter ?? ""} onChange={(e) => setBranchFilter(e.target.value || null)}>
-						<option value="">All Branches</option>
-						{[...new Set(data.map((d) => d.branch))].map((branch) => (
-							<option key={branch} value={branch}>
-								{branch}
-							</option>
-						))}
-					</select>
-
-					<select
-						className="border rounded-md px-3 py-2"
-						value={semesterFilter ?? ""}
-						onChange={(e) => {
-							const val = e.target.value;
-							setSemesterFilter(val === "" ? null : val);
-						}}
-					>
-						<option value="">All Semesters.</option>
-						{Array.from({ length: 8 }, (_, i) => (
-							<option key={i + 1} value={(i + 1).toString()}>
-								{i + 1} Semester
-							</option>
-						))}
-					</select>
-
-					<select className="border rounded-md px-3 py-2" value={resultFilter ?? ""} onChange={(e) => setResultFilter(e.target.value || null)}>
-						<option value="">All Results</option>
-						<option value="pass">Pass</option>
-						<option value="fail">Fail</option>
-					</select>
-
-					{/* New Grade Filter */}
-					<select className="border rounded-md px-3 py-2" value={gradeFilter ?? ""} onChange={(e) => setGradeFilter(e.target.value || null)}>
-						<option value="">All Grades</option>
-						{[...new Set(data.map((d) => d.grade))].map((g) => (
-							<option key={g} value={g}>
-								{g}
-							</option>
-						))}
-					</select>
-
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="outline" className="ml-auto w-full">
-								Columns <ChevronDown />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							{table
-								.getAllColumns()
-								.filter((column) => column.getCanHide())
-								.map((column) => (
-									<DropdownMenuCheckboxItem key={column.id} className="capitalize" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>
-										{column.id}
-									</DropdownMenuCheckboxItem>
-								))}
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-			</div>
 
 			{/* Table */}
 			<div className="overflow-hidden rounded-md border">

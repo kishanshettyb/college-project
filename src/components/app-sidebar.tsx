@@ -37,6 +37,10 @@ const data = {
 				{
 					title: "Result Analysis",
 					url: "/dashboard/result-analysis"
+				},
+				{
+					title: "Students",
+					url: "/dashboard/students"
 				}
 			]
 		}
