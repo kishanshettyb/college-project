@@ -51,7 +51,8 @@ export const useAdminLogin = () => {
 						lastname: user.lastname
 					},
 					token,
-					user.username
+					user.username,
+					user.documentId
 				);
 
 				toast.success("Admin Login successful!", {
@@ -90,7 +91,6 @@ export const useCreateUser = () => {
 			const token = data?.jwt;
 			const user = data?.user;
 			console.log(JSON.stringify(data));
-			console.log(JSON.stringify(data));
 
 			if (token && user) {
 				login(
@@ -100,7 +100,8 @@ export const useCreateUser = () => {
 						lastname: user.lastname
 					},
 					token,
-					user.username
+					user.username,
+					user.documentId
 				);
 
 				toast.success("Login successful!", {

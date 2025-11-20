@@ -14,7 +14,8 @@ export interface AdminContextType {
 	token: string | null;
 	loggedIn: boolean;
 	username: string | null;
-	login: (userData: AdminUser, token: string, username: string) => void;
+	documentId: string | null;
+	login: (userData: AdminUser, token: string, username: string, documentId: string) => void;
 	logout: () => void;
 	updateAdmin: (userData: Partial<AdminUser>) => void;
 }
@@ -28,30 +29,35 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 	const [admin, setAdmin] = useState<AdminUser | null>(null);
 	const [token, setToken] = useState<string | null>(null);
 	const [username, setUsername] = useState<string | null>(null);
+	const [documentId, setDocumentId] = useState<string | null>(null);
 	const [loggedIn, setLoggedIn] = useState(false);
 
 	useEffect(() => {
 		const savedToken = Cookies.get("admin_token");
 		const savedAdmin = Cookies.get("admin_user");
 		const savedUsername = Cookies.get("username");
+		const savedDocumentId = Cookies.get("documentId");
 
 		if (savedToken && savedAdmin && savedUsername) {
 			setToken(savedToken);
 			setAdmin(JSON.parse(savedAdmin));
 			setUsername(JSON.parse(savedUsername));
+			setDocumentId(JSON.parse(savedDocumentId));
 			setLoggedIn(true);
 		}
 	}, []);
 
-	const login = (userData: AdminUser, authToken: string, username: string) => {
+	const login = (userData: AdminUser, authToken: string, username: string, documentId: string) => {
 		setAdmin(userData);
 		setToken(authToken);
 		setUsername(username);
+		setDocumentId(documentId);
 		setLoggedIn(true);
 
 		Cookies.set("admin_token", authToken, { expires: 7, secure: true, sameSite: "strict" });
 		Cookies.set("admin_user", JSON.stringify(userData), { expires: 7 });
 		Cookies.set("username", JSON.stringify(username), { expires: 7 });
+		Cookies.set("documentId", JSON.stringify(documentId), { expires: 7 });
 
 		localStorage.setItem("admin_session", "true");
 	};
@@ -69,10 +75,12 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 		setAdmin(null);
 		setToken(null);
 		setUsername(null);
+		setDocumentId(null);
 		setLoggedIn(false);
 		Cookies.remove("admin_token");
 		Cookies.remove("admin_user");
 		Cookies.remove("username");
+		Cookies.remove("documentId");
 		localStorage.removeItem("admin_session");
 		window.location.replace("/");
 	};
@@ -84,6 +92,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 				token,
 				loggedIn,
 				username,
+				documentId,
 				login,
 				logout,
 				updateAdmin

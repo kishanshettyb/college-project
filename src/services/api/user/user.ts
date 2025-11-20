@@ -1,12 +1,14 @@
 import axios from "axios";
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const LOGIN_URL = process.env.NEXT_PUBLIC_LOGIN_URL;
 const REGISTER_URL = process.env.NEXT_PUBLIC_REGISTER_URL;
+
 const axiosInstance = axios.create({
-	baseURL: BASE_URL,
+	baseURL: LOGIN_URL,
 	headers: {
 		"Content-Type": "application/json"
 	}
 });
+
 const axiosInstancenew = axios.create({
 	baseURL: REGISTER_URL,
 	headers: {

@@ -13,6 +13,9 @@ const axiosInstance = axios.create({
 export const getAllStudentsSemwise = async () => {
 	return await axiosInstance.get<Student[]>(`students?populate=*&sort=createdAt:desc`);
 };
+export const getAllStudentsSemwiseById = async (documentId: string) => {
+	return await axiosInstance.get<Student[]>(`students?filters[usn][$eq]=${documentId}&populate=branch`);
+};
 
 export const getStudent = async (documentId: string) => {
 	return await axiosInstance.get(`students/${documentId}?populate=*&pagination[limit]=2000&sort=createdAt:desc`);
