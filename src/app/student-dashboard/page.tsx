@@ -29,6 +29,10 @@ function page() {
 								<TableCell className="font-medium">Gender :</TableCell>
 								<TableCell>Male</TableCell>
 							</TableRow>
+							<TableRow>
+								<TableCell className="font-medium">Branch :</TableCell>
+								<TableCell>CS</TableCell>
+							</TableRow>
 						</TableBody>
 					</Table>
 				</div>
