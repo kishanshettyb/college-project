@@ -1,6 +1,6 @@
 import axios from "axios";
-const BASE_URL = "https://light-birds-a8f47896af.strapiapp.com/api/auth/";
-const REGISTER_URL = "https://light-birds-a8f47896af.strapiapp.com/api/auth/local/";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const REGISTER_URL = process.env.NEXT_PUBLIC_REGISTER_URL;
 const axiosInstance = axios.create({
 	baseURL: BASE_URL,
 	headers: {
