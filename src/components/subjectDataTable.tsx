@@ -39,6 +39,11 @@ export const SubjectDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 		setOpen(true);
 	});
 
+	const handleModalOpen = (v: boolean) => {
+		setOpen(v);
+		if (!v) setSelectedId(null); // 🔥 reset when closed
+	};
+
 	const table = useReactTable({
 		data: data,
 		columns,
@@ -68,7 +73,7 @@ export const SubjectDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			<div className="flex justify-between items-center mb-5">
 				<h2 className="font-semibold text-2xl">Subjects</h2>
 				<div>
-					<SubjectFormModal open={open} onOpenChange={setOpen} documentId={selectedId ?? undefined} />
+					<SubjectFormModal open={open} onOpenChange={handleModalOpen} documentId={selectedId ?? undefined} />
 				</div>
 			</div>
 

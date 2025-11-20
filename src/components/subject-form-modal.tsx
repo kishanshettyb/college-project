@@ -12,6 +12,14 @@ type Props = {
 };
 
 export function SubjectFormModal({ open, onOpenChange, documentId }: Props) {
+	const handleOpenChange = (v: boolean) => {
+		if (!v) {
+			// modal closing → clear selected id
+			onOpenChange(false);
+		} else {
+			onOpenChange(true);
+		}
+	};
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>
@@ -25,7 +33,7 @@ export function SubjectFormModal({ open, onOpenChange, documentId }: Props) {
 					<DialogTitle>{documentId ? "Edit Subject" : "Create Subject"}</DialogTitle>
 				</DialogHeader>
 
-				<SubjectForm documentId={documentId ?? ""} />
+				<SubjectForm key={documentId ?? "create"} documentId={documentId ?? ""} />
 			</DialogContent>
 		</Dialog>
 	);

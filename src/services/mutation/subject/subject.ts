@@ -1,5 +1,6 @@
 import { createSubject, updateSubject } from "@/services/api/subjects/subjectsApi";
 import { Category } from "@/types/categoryTypes";
+import { Subject } from "@/types/subjectType";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -42,7 +43,7 @@ export function useUpdateSubject() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({ data, documentId }: { data: Category; documentId: string }) => updateSubject(data, documentId),
+		mutationFn: ({ data, documentId }: { data: Subject; documentId: string }) => updateSubject(data, documentId),
 		onMutate: () => {
 			console.log("mutate!!!");
 		},
