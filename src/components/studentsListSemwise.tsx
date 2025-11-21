@@ -181,13 +181,6 @@ export const StudentDataTableSemwise: React.FC<DataTableProps> = ({ data, isLoad
 								<AddStudentModal />
 							</div>
 							<div>
-								<DialogTrigger asChild>
-									<Button variant="outline">
-										<FilesIcon />
-										Export Data
-									</Button>
-								</DialogTrigger>
-
 								<DialogContent className="sm:max-w-[425px]">
 									<DialogHeader>
 										<DialogTitle>Export data to excel file</DialogTitle>
