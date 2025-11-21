@@ -10,8 +10,11 @@ import { Input } from "@/components/ui/input";
 import { CheckCheck, X } from "lucide-react";
 
 function Page() {
-	const documentId = Cookies.get("username");
-	const clean = decodeURIComponent(documentId).replace(/"/g, "");
+	const username = Cookies.get("username");
+	const documentId = Cookies.get("documentId");
+	const clean = decodeURIComponent(username).replace(/"/g, "");
+	const cleanDocumentId = decodeURIComponent(documentId).replace(/"/g, "");
+	console.log(cleanDocumentId);
 
 	// Fetch Student
 	const { data: studentData } = useGetStudentsSemwiseById(clean);
@@ -45,6 +48,26 @@ function Page() {
 		const filtered = subjectsData?.data?.data?.filter((s) => s.semister === `sem${Number(sem)}` && s.branch?.id === branchId);
 		console.log("Filtered Subjects:", filtered);
 		setSubjects(filtered || []);
+	};
+
+	const handleSubmit = async () => {
+		if (!Object.keys(marks).length) return;
+
+		const semesterValue = `sem${selectedSem}`; // 🔥 format "sem1"
+
+		const payload = Object.entries(marks).map(([subId, values]) => {
+			const subject = subjects.find((s) => s.id === Number(subId));
+
+			return {
+				subject: subject?.documentId,
+				internal: Number(values.internal),
+				external: Number(values.external),
+				student: cleanDocumentId,
+				semester: semesterValue // 🔥 Add semester to each entry
+			};
+		});
+
+		console.log("Payload to Strapi:", JSON.stringify(payload, null, 2));
 	};
 
 	return (
@@ -100,7 +123,10 @@ function Page() {
 							{/* Subject Entry */}
 							{subjects?.map((sub) => (
 								<div key={sub.id} className="flex flex-col lg:flex-row justify-self-start items-start p-4 gap-4 border-x-0 border-b border-b-slate-200  w-full my-2">
-									<p className="w-32 textlg font-semibold">{sub.sub_code}</p>
+									<p className="w-32 textlg font-semibold">
+										{sub.sub_code}
+										{sub.documentId}
+									</p>
 									<div className="flex gap-2 flex-row">
 										<Input placeholder="Internal" onChange={(e) => handleInput(sub.id, "internal", e.target.value)} className="w-full" />
 										<Input placeholder="External" onChange={(e) => handleInput(sub.id, "external", e.target.value)} className="w-full" />
@@ -112,7 +138,7 @@ function Page() {
 									<X />
 									Cancel
 								</Button>
-								<Button className="w-full lg:w-[200px]">
+								<Button onClick={handleSubmit} className="w-full lg:w-[200px]">
 									<CheckCheck />
 									Submit
 								</Button>
