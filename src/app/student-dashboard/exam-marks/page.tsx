@@ -60,10 +60,10 @@ function Page() {
 
 			return {
 				subject: subject?.documentId,
-				internal: Number(values.internal),
-				external: Number(values.external),
+				internal_mark: Number(values.internal),
+				external_mark: Number(values.external),
 				student: cleanDocumentId,
-				semester: semesterValue // 🔥 Add semester to each entry
+				semister: semesterValue // 🔥 Add semester to each entry
 			};
 		});
 
@@ -123,13 +123,10 @@ function Page() {
 							{/* Subject Entry */}
 							{subjects?.map((sub) => (
 								<div key={sub.id} className="flex flex-col lg:flex-row justify-self-start items-start p-4 gap-4 border-x-0 border-b border-b-slate-200  w-full my-2">
-									<p className="w-32 textlg font-semibold">
-										{sub.sub_code}
-										{sub.documentId}
-									</p>
+									<p className="w-32 textlg font-semibold">{sub.sub_code}</p>
 									<div className="flex gap-2 flex-row">
-										<Input placeholder="Internal" onChange={(e) => handleInput(sub.id, "internal", e.target.value)} className="w-full" />
-										<Input placeholder="External" onChange={(e) => handleInput(sub.id, "external", e.target.value)} className="w-full" />
+										<Input type="number" placeholder="Internal" onChange={(e) => handleInput(sub.id, "internal", e.target.value)} className="w-full" />
+										<Input type="number" placeholder="External" onChange={(e) => handleInput(sub.id, "external", e.target.value)} className="w-full" />
 									</div>
 								</div>
 							))}
