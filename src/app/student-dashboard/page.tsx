@@ -18,7 +18,7 @@ function page() {
 	return (
 		<div>
 			<h2 className="mb-5 font-semibold text-lg">Student Basic Details</h2>
-			<div className="w-1/2 bg-white p-6 border rounded-2xl">
+			<div className="w-full lg:w-1/2 bg-white p-6 border rounded-2xl">
 				<div className="border rounded-lg bg-slate-50">
 					<Table>
 						<TableBody>

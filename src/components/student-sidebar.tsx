@@ -35,7 +35,7 @@ const data = {
 					url: "/student-dashboard"
 				},
 				{
-					title: "Forms",
+					title: "Add Exam Marks",
 					url: "/student-dashboard/exam-marks"
 				}
 			]
