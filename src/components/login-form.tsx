@@ -22,10 +22,15 @@ export function LoginForm({ title, signup, className, ...props }: LoginFormProps
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		loginMutation.mutate({
-			identifier: formData.identifier,
-			password: formData.password
-		});
+		const isStudent = formData.identifier.startsWith("4GE");
+		if (isStudent) {
+			alert("please enter valid username for faculty login");
+		} else {
+			loginMutation.mutate({
+				identifier: formData.identifier,
+				password: formData.password
+			});
+		}
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

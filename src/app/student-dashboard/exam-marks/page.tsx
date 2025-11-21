@@ -6,6 +6,8 @@ import { useGetStudentsSemwiseById } from "@/services/queries/student/student";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGetAllSubjects } from "@/services/queries/subjects/branch";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { CheckCheck, ClosedCaption, X } from "lucide-react";
 
 function Page() {
 	const documentId = Cookies.get("username");
@@ -52,53 +54,66 @@ function Page() {
 	return (
 		<div>
 			<h2 className="text-2xl font-semibold mb-5">Exam marks entry</h2>
+			<div className="flex flex-col gap-y-2 lg:flex-col">
+				<div className="w-full lg:w-1/2">
+					<h2 className="font-semibold text-lg mb-3">Student Basic details:</h2>
 
-			<div className="bg-white border rounded-xl p-4">
-				<h2 className="font-semibold text-lg mb-5">Student Basic details:</h2>
-
-				<div className="border opacity-80 rounded-lg bg-slate-50">
-					<div className="border-b p-2">
-						<b>Name:</b> {student?.name}
-					</div>
-					<div className="border-b p-2">
-						<b>USN:</b> {student?.usn}
-					</div>
-					<div className="p-2">
-						<b>Branch:</b> {student?.branch?.branch_name}
+					<div className="border opacity-80 rounded-lg bg-slate-50">
+						<div className="border-b py-2 text-sm px-4">
+							<b>Name:</b> {student?.name}
+						</div>
+						<div className="border-b py-2 text-sm px-4">
+							<b>USN:</b> {student?.usn}
+						</div>
+						<div className="py-2 px-4 text-sm">
+							<b>Branch:</b> {student?.branch?.branch_name}
+						</div>
 					</div>
 				</div>
-				<div className="border rounded-2xl my-10">
-					<div className="flex justify-start gap-x-4 bg-slate-50 px-4 py-2 rounded-xl items-center">
-						<div>
-							<h2 className="font-semibold text-lg my-5">Select Semester:</h2>
+				<div className="w-full lg:w-1/2">
+					<div className="border rounded-2xl my-10">
+						<div className="flex justify-start gap-x-4 bg-slate-50 px-4 py-2 rounded-t-2xl items-center">
+							<div>
+								<h2 className="font-semibold text-base my-5">Select Semester:</h2>
+							</div>
+							<div>
+								<Select onValueChange={handleSemesterChange}>
+									<SelectTrigger className="w-[180px]">
+										<SelectValue placeholder="Select Semester" />
+									</SelectTrigger>
+									<SelectContent>
+										{[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+											<SelectItem key={sem} value={sem.toString()}>
+												{`Semester ${sem}`}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							</div>
 						</div>
 						<div>
-							<Select onValueChange={handleSemesterChange}>
-								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Select Semester" />
-								</SelectTrigger>
-								<SelectContent>
-									{[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-										<SelectItem key={sem} value={sem.toString()}>
-											{`Semester ${sem}`}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
-					</div>
-					{/* Subject Entry */}
-					{subjects?.map((sub) => (
-						<div key={sub.id} className="flex  p-4  gap-4 border-x-0 border-b-slate-200 border items-center my-2">
-							<p className="w-32">{sub.sub_code}</p>
+							{/* Subject Entry */}
+							{subjects?.map((sub) => (
+								<div key={sub.id} className="flex p-4 gap-4 border-x-0 border-b border-b-slate-200 items-center my-2">
+									<p className="w-32 textlg font-semibold">{sub.sub_code}</p>
 
-							<input placeholder="Internal" className="border p-2" onChange={(e) => handleInput(sub.id, "internal", e.target.value)} />
+									<Input placeholder="Internal" onChange={(e) => handleInput(sub.id, "internal", e.target.value)} className="w-full" />
 
-							<input placeholder="External" className="border p-2" onChange={(e) => handleInput(sub.id, "external", e.target.value)} />
+									<Input placeholder="External" onChange={(e) => handleInput(sub.id, "external", e.target.value)} className="w-full" />
+								</div>
+							))}
+							<div className="flex bg-slate-50 rounded-b-2xl justify-end gap-x-4 p-4">
+								<Button variant="outline" className="w-[200px]">
+									<X />
+									Cancel
+								</Button>
+
+								<Button className="w-[200px]">
+									<CheckCheck />
+									Submit
+								</Button>
+							</div>
 						</div>
-					))}
-					<div className="flex w-1/2 justify-start p-2">
-						<Button className="w-[200px]">Submit</Button>
 					</div>
 				</div>
 			</div>
