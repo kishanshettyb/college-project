@@ -18,13 +18,15 @@ export const getAllMarks = async () => {
 
 // Add function to get marks by student and semester
 export const getMarksByStudentAndSemester = async (studentId: string, semester: string) => {
-	const response = await axiosInstance.get(`marks`, {
-		params: {
-			"filters[student][$eq]": studentId,
-			"filters[semister][$eq]": semester,
-			populate: "*"
-		}
-	});
+	// const response = await axiosInstance.get(`marks`, {
+	// 	params: {
+	// 		"filters[student][$eq]": studentId,
+	// 		"filters[semister][$eq]": semester,
+	// 		populate: "*"
+	// 	}
+	// });
+	const response = await axiosInstance.get(`marks?filters[student][documentId][$eq]=${studentId}&filters[semister][$eq]=${semester}&populate=*`);
+
 	return response.data;
 };
 
