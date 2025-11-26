@@ -54,7 +54,7 @@ export function useUpdateStudent() {
 		onSuccess: () => {
 			console.log("success!!!");
 			toast.success("successfull updated student.");
-			queryClient.invalidateQueries({ queryKey: ["student"] });
+			queryClient.invalidateQueries({ queryKey: ["students"] });
 		},
 
 		onSettled: async (_, error) => {
@@ -65,7 +65,7 @@ export function useUpdateStudent() {
 				const errorMessage = axiosError.response?.data?.message || axiosError.response?.data?.error?.name || "An error occurred";
 				toast.error("unable to update student." + errorMessage);
 			} else {
-				await queryClient.invalidateQueries({ queryKey: ["student"] });
+				await queryClient.invalidateQueries({ queryKey: ["students"] });
 			}
 		}
 	});

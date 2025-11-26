@@ -21,7 +21,7 @@ export function AddStudentModal({ docId }: ModalProps) {
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Add Students</DialogTitle>
+					<DialogTitle>{documentId ? "Edit Details" : "Add Details"}</DialogTitle>
 				</DialogHeader>
 				<div className="grid gap-4">
 					<StudentForm docId={documentId} usn={usn} />
