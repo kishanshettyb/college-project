@@ -62,22 +62,6 @@ export default function SubjectPage() {
 
 	return (
 		<>
-			<header className="flex  lg:mt-0 h-16 shrink-0 items-center gap-2 border-b px-4">
-				<SidebarTrigger className="-ml-1" />
-				<Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-				<Breadcrumb>
-					<BreadcrumbList>
-						<BreadcrumbItem className="hidden md:block">
-							<BreadcrumbLink href="#">Google Form Data List</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator className="hidden md:block" />
-						<BreadcrumbItem>
-							<BreadcrumbPage>Google Forms Data</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
-			</header>
-
 			<div className="w-full px-2 lg:px-10 mb-50">
 				<SubjectDataTable data={statusesData} isLoading={isLoading} isError={isError} />
 			</div>

@@ -17,10 +17,10 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Student, columns } from "@/app/dashboard/google-form/column";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { Student, columns } from "@/app/dashboard/student-marks-data/column";
 
 interface DataTableProps {
 	data: Student[];
