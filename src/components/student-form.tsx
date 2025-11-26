@@ -121,10 +121,14 @@ export function StudentForm({ docId }: StudentFormProps) {
 					{/* Gender */}
 					<div className="grid gap-1">
 						<Label>Gender</Label>
-						<Select onValueChange={(value) => form.setValue("gender", value)} defaultValue={form.watch("gender")}>
+						<Select
+							value={form.watch("gender") || ""} // <---- FIX
+							onValueChange={(value) => form.setValue("gender", value)}
+						>
 							<SelectTrigger>
 								<SelectValue placeholder="Select gender" />
 							</SelectTrigger>
+
 							<SelectContent>
 								<SelectGroup>
 									<SelectItem value="male">Male</SelectItem>
@@ -138,14 +142,17 @@ export function StudentForm({ docId }: StudentFormProps) {
 					<div className="grid gap-1">
 						<Label>Branch</Label>
 
-						<Select onValueChange={(value) => form.setValue("branch", value)} defaultValue={form.watch("branch")}>
+						<Select
+							value={form.watch("branch") || ""} // <---- FIX
+							onValueChange={(value) => form.setValue("branch", value)}
+						>
 							<SelectTrigger>
 								<SelectValue placeholder="Select branch" />
 							</SelectTrigger>
 
 							<SelectContent>
 								<SelectGroup>
-									{branchData?.data?.data?.map((b: any) => (
+									{branchData?.data?.data?.map((b) => (
 										<SelectItem key={b.id} value={b.documentId}>
 											{b.branch_name}
 										</SelectItem>
