@@ -96,7 +96,7 @@ export default function Page() {
 	// --------------------------------------------------------
 
 	return (
-		<>
+		<div className="mb-50">
 			<header className="flex mt-0 lg:mt-0 h-16 shrink-0 items-center gap-2 border-b px-4">
 				<SidebarTrigger className="-ml-1" />
 				<Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
@@ -113,6 +113,6 @@ export default function Page() {
 			<div className="w-full">
 				<Result data={formatted} />
 			</div>
-		</>
+		</div>
 	);
 }

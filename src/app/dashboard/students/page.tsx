@@ -77,7 +77,7 @@ export default function Page() {
 				</Breadcrumb>
 			</header>
 
-			<div className="w-full px-2 lg:px-10">
+			<div className="w-full px-2 lg:px-10 mb-50">
 				<StudentDataTableSemwise data={statusesData} isLoading={isLoading} isError={isError} />
 			</div>
 		</>

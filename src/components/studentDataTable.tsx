@@ -172,7 +172,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	return (
 		<div className="p-4 border rounded-xl my-10">
 			<div className="flex justify-between items-center mb-5">
-				<h2 className="font-semibold text-2xl">Student Data</h2>
+				<h2 className="font-semibold text-2xl">Student Marks Data</h2>
 				<Dialog>
 					<form onSubmit={(e) => e.preventDefault()}>
 						<DialogTrigger asChild>

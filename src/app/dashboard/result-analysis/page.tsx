@@ -130,7 +130,7 @@ function page() {
 	// --------------------------------------------------------
 
 	return (
-		<div className="bg-slate-50 h-full">
+		<div className="bg-slate-50 h-full mb-50">
 			<header className="flex lg:mt-0 h-16 shrink-0 items-center gap-2 border-b px-4">
 				<SidebarTrigger className="-ml-1" />
 				<Separator className="mr-2 data-[orientation=vertical]:h-4" />

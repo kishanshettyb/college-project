@@ -27,7 +27,7 @@ const data = {
 			url: "#",
 			items: [
 				{
-					title: "Google Form Data List",
+					title: "Students Data",
 					url: "/dashboard/google-form"
 				},
 				{

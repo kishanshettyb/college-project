@@ -78,7 +78,7 @@ export default function SubjectPage() {
 				</Breadcrumb>
 			</header>
 
-			<div className="w-full px-2 lg:px-10">
+			<div className="w-full px-2 lg:px-10 mb-50">
 				<SubjectDataTable data={statusesData} isLoading={isLoading} isError={isError} />
 			</div>
 		</>

@@ -35,7 +35,7 @@ export default function ExcelPage() {
 	}, []);
 
 	return (
-		<div>
+		<div className="mb-50">
 			<header className="flex h-16  shrink-0 items-center gap-2 border-b px-4">
 				<SidebarTrigger className="-ml-1" />
 				<Separator className="mr-2 data-[orientation=vertical]:h-4" />
@@ -79,7 +79,7 @@ export default function ExcelPage() {
 							</div>
 							<div className="flex flex-col border p-4 border-t-slate-200 border-x-0 border-b-0 justify-between items-center">
 								<Button className="w-full my-5" asChild size="lg" variant="default">
-									<a href={url} download>
+									<a href={`/export/${name}`} download>
 										<Download />
 										Download
 									</a>
