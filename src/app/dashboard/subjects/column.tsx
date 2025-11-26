@@ -21,11 +21,7 @@ export const getColumns = (onEdit: (documentId: string) => void): ColumnDef<Subj
 		header: "Sl No",
 		cell: ({ row }) => row.index + 1
 	},
-	{
-		id: "documentId",
-		header: "Id",
-		cell: ({ row }) => row.original.documentId
-	},
+
 	{ accessorKey: "sub_code", header: "Subject Code" },
 	{
 		accessorFn: (row) => row.semister,
