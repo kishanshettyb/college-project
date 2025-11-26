@@ -49,8 +49,7 @@ function DeleteButton({ id }: { id: string }) {
 
 	const deleteMutation = useMutation({
 		mutationFn: async () => {
-			const token =
-				"776f29d590a26aa8f3e002f92fa77f760b68eaa24813321a23ebb439ff05274976cb1d9005cf986487c75a6549249737be707455766703911c395e9950180b408a09c9ee38732fde27a2d7d56bba6819cfc96f8d21e141ebe0abf6b83cbba4c6395d09949ddee33a019ce3c6d8ff59be241feacbff4d3582fb2dcdca82eb66ad";
+			const token = process.env.NEXT_PUBLIC_TOKEN;
 
 			const response = await fetch(`https://light-birds-a8f47896af.strapiapp.com/api/googlesheets/${id}`, {
 				method: "DELETE",
@@ -114,15 +113,39 @@ export const columns: ColumnDef<Student>[] = [
 	{ accessorKey: "category", header: "Category" },
 	{ accessorKey: "sem", header: "Semester" },
 	{ accessorKey: "branch", header: "Branch" },
-	{ accessorKey: "bec601", header: "bec601" },
-	{ accessorKey: "bec602", header: "bec602" },
-	{ accessorKey: "bec685", header: "bec685" },
-	{ accessorKey: "becl606", header: "becl606" },
-	{ accessorKey: "bnsk658", header: "bnsk658" },
-	{ accessorKey: "biks609", header: "biks609" },
-	{ accessorKey: "bec613b", header: "bec613b" },
-	{ accessorKey: "bis654c", header: "bis654c" },
-	{ accessorKey: "becl657d", header: "becl657d" },
+	{
+		id: "subjects",
+		header: "Subjects",
+		cell: ({ row }) => {
+			const student = row.original;
+
+			// Pick only subject keys (all lowercase code keys starting with 'ec', 'be', etc.)
+			const subjectEntries = Object.entries(student).filter(
+				([key, value]) => key.match(/^[a-z]{2,5}[0-9]{2,5}$/i) // matches ecs001, bec601, bis654c etc.
+			);
+
+			return (
+				<div className="text-xs space-y-1">
+					{subjectEntries.length === 0 && <span>No Subjects</span>}
+					{subjectEntries.map(([key, value]) => (
+						<div key={key} className="flex justify-between gap-2">
+							<span className="font-medium">{key.toUpperCase()}</span>
+							<span>{value}</span>
+						</div>
+					))}
+				</div>
+			);
+		}
+	},
+	// { accessorKey: "bec601", header: "bec601" },
+	// { accessorKey: "bec602", header: "bec602" },
+	// { accessorKey: "bec685", header: "bec685" },
+	// { accessorKey: "becl606", header: "becl606" },
+	// { accessorKey: "bnsk658", header: "bnsk658" },
+	// { accessorKey: "biks609", header: "biks609" },
+	// { accessorKey: "bec613b", header: "bec613b" },
+	// { accessorKey: "bis654c", header: "bis654c" },
+	// { accessorKey: "becl657d", header: "becl657d" },
 	{
 		accessorKey: "result",
 		header: "Result",
