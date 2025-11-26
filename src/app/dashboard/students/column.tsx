@@ -1,6 +1,8 @@
 "use client";
 
+import { StudentForm } from "@/components/student-form";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
 
@@ -25,30 +27,35 @@ export const columns: ColumnDef<StudentSemwise>[] = [
 	{ accessorKey: "name", header: "Name" },
 	{ accessorKey: "usn", header: "USN" },
 	{ accessorKey: "gender", header: "Gender" },
-	{ accessorKey: "age", header: "Category" },
+	{ accessorKey: "dob", header: "DOB" },
+	{ accessorKey: "category", header: "Category" },
 	{
 		accessorFn: (row) => row.branch?.branch_name,
 		id: "branch",
 		header: "Branch",
 		cell: ({ row }) => row.original.branch?.branch_name ?? "-"
-	}
-	// {
-	// 	accessorFn: (row) => row.documentId,
-	// 	id: "documentId",
-	// 	header: "documentId",
-	// 	cell: ({ row }) => row.original.documentId
-	// },
+	},
 
-	// {
-	// 	id: "actions",
-	// 	header: "Action",
-	// 	cell: ({ row }) => (
-	// 		<div className="flex justify-center gap-5 items-center">
-	// 			<Button variant="outline" className="cursor-pointer">
-	// 				<Edit size={14} /> Edit
-	// 			</Button>
-	// 		</div>
-	// 	),
-	// 	enableSorting: false
-	// }
+	{
+		id: "actions",
+		header: "Actions",
+		cell: ({ row }) => {
+			const student = row.original;
+
+			return (
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button variant="outline" size="sm">
+							<Edit className="w-4 h-4 mr-2" />
+							Edit
+						</Button>
+					</DialogTrigger>
+
+					<DialogContent className="max-w-xl">
+						<StudentForm docId={student.documentId} />
+					</DialogContent>
+				</Dialog>
+			);
+		}
+	}
 ];
