@@ -31,18 +31,24 @@ export const columns: ColumnDef<StudentSemwise>[] = [
 		id: "branch",
 		header: "Branch",
 		cell: ({ row }) => row.original.branch?.branch_name ?? "-"
-	},
-
-	{
-		id: "actions",
-		header: "Action",
-		cell: ({ row }) => (
-			<div className="flex justify-center gap-5 items-center">
-				<Button variant="outline" className="cursor-pointer">
-					<Edit size={14} /> Edit
-				</Button>
-			</div>
-		),
-		enableSorting: false
 	}
+	// {
+	// 	accessorFn: (row) => row.documentId,
+	// 	id: "documentId",
+	// 	header: "documentId",
+	// 	cell: ({ row }) => row.original.documentId
+	// },
+
+	// {
+	// 	id: "actions",
+	// 	header: "Action",
+	// 	cell: ({ row }) => (
+	// 		<div className="flex justify-center gap-5 items-center">
+	// 			<Button variant="outline" className="cursor-pointer">
+	// 				<Edit size={14} /> Edit
+	// 			</Button>
+	// 		</div>
+	// 	),
+	// 	enableSorting: false
+	// }
 ];
