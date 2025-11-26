@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
 import { useGetStudentsSemwiseById } from "@/services/queries/student/student";
 import Cookies from "js-cookie";
+import { AddStudentModal } from "@/components/addStudentModal";
 function page() {
 	const documentId = Cookies.get("username");
 	// const clean = "4jn13mca25";
@@ -49,6 +50,9 @@ function page() {
 						</TableBody>
 					</Table>
 				</div>
+			</div>
+			<div className="my-5">
+				<AddStudentModal />
 			</div>
 		</div>
 	);

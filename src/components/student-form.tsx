@@ -8,8 +8,11 @@ import { Button } from "./ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGetAllBranches } from "@/services/queries/branch/branch";
 import { useCreateStudent } from "@/services/mutation/student/student";
-
-export function StudentForm({ className, ...props }: React.ComponentProps<"div">) {
+interface StudentFormProps extends React.ComponentProps<"div"> {
+	className?: string;
+	usn?: string;
+}
+export function StudentForm({ className, usn, ...props }: StudentFormProps) {
 	const [formData, setFormData] = useState({
 		usn: "",
 		name: "",
@@ -19,12 +22,14 @@ export function StudentForm({ className, ...props }: React.ComponentProps<"div">
 	});
 	const studentMutation = useCreateStudent();
 	const { data, isLoading, isError } = useGetAllBranches();
+	const value = usn;
+	const clean = value?.replace(/"/g, "");
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		const payload = {
 			data: {
-				usn: formData.usn,
+				usn: clean,
 				name: formData.name,
 				gender: formData.gender,
 				age: formData.age,
@@ -51,7 +56,7 @@ export function StudentForm({ className, ...props }: React.ComponentProps<"div">
 						<div className="flex flex-col gap-3">
 							<div className="grid gap-2">
 								<Label htmlFor="usn">USN</Label>
-								<Input id="usn" name="usn" type="text" value={formData.usn} onChange={handleInputChange} required />
+								<Input id="usn" name="usn" type="text" value={clean} onChange={handleInputChange} required />
 							</div>
 							<div className="grid gap-2">
 								<Label htmlFor="name">Name</Label>
