@@ -17,6 +17,10 @@ export const getAllStudentsSemwiseById = async (documentId: string) => {
 	return await axiosInstance.get<Student[]>(`students?filters[usn][$eq]=${documentId}&populate=branch`);
 };
 
+export const getAllStudentById = async (documentId: string) => {
+	return await axiosInstance.get<Student[]>(`students/${documentId}?populate=*`);
+};
+
 export const getStudent = async (documentId: string) => {
 	return await axiosInstance.get(`students/${documentId}?populate=*&pagination[limit]=2000&sort=createdAt:desc`);
 };

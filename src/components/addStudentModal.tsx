@@ -10,6 +10,7 @@ type ModalProps = {
 export function AddStudentModal({ docId }: ModalProps) {
 	const usn = Cookies.get("username");
 	const documentId = docId;
+	console.log(usn + documentId);
 
 	return (
 		<Dialog>
