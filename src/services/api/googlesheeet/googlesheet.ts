@@ -2,8 +2,9 @@ import { Googlesheet } from "@/types/googlesheet";
 import axios from "axios";
 
 const token = process.env.NEXT_PUBLIC_TOKEN;
+const baseurl = process.env.NEXT_PUBLIC_BASE_URL;
 const axiosInstance = axios.create({
-	baseURL: "https://light-birds-a8f47896af.strapiapp.com/api/",
+	baseURL: baseurl,
 
 	headers: {
 		Authorization: `Bearer ${token}`

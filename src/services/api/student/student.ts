@@ -13,6 +13,10 @@ const axiosInstance = axios.create({
 export const getAllStudentsSemwise = async () => {
 	return await axiosInstance.get<Student[]>(`students?populate=*&sort=createdAt:desc`);
 };
+
+export const getAllStudentsFullAll = async () => {
+	return await axiosInstance.get<Student[]>(`student-full-all`);
+};
 export const getAllStudentsSemwiseById = async (documentId: string) => {
 	return await axiosInstance.get<Student[]>(`students?filters[usn][$eq]=${documentId}&populate=branch`);
 };

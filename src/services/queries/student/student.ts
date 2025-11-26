@@ -1,10 +1,18 @@
-import { getAllStudentById, getAllStudentsSemwise, getAllStudentsSemwiseById } from "@/services/api/student/student";
+import { getAllStudentById, getAllStudentsFullAll, getAllStudentsSemwise, getAllStudentsSemwiseById } from "@/services/api/student/student";
 import { useQuery } from "@tanstack/react-query";
 
 export function useGetAllStudentsSemwise() {
 	return useQuery({
 		queryKey: ["students"],
 		queryFn: () => getAllStudentsSemwise(),
+		refetchOnMount: false
+	});
+}
+
+export function useGetAllStudentsFull() {
+	return useQuery({
+		queryKey: ["students"],
+		queryFn: () => getAllStudentsFullAll(),
 		refetchOnMount: false
 	});
 }
