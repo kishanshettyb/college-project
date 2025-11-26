@@ -8,10 +8,22 @@ import { useGetAllSubjects } from "@/services/queries/subjects/branch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CheckCheck, X } from "lucide-react";
-import { useCreateMarks, useCreateOrUpdateBulkMarks } from "@/services/mutation/marks/marks";
+import { useCreateOrUpdateBulkMarks } from "@/services/mutation/marks/marks";
 import { useGetAllMarksByStudent } from "@/services/queries/marks/marks";
 import { toast } from "sonner";
 import { useCreateResult } from "@/services/mutation/result/result";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import MarksTable from "@/components/marksTable";
 
 function Page() {
 	// Computed results
@@ -19,7 +31,8 @@ function Page() {
 		totalMarks: 0,
 		sgpa: "0.00",
 		percentage: "0.00",
-		result: "-"
+		result: "-",
+		grade: "-"
 	});
 
 	const username = Cookies.get("username");
@@ -31,18 +44,14 @@ function Page() {
 	const studentDocumentId = student?.documentId;
 	const branchId = student?.branch?.id;
 
-	// UI States
 	const [selectedSem, setSelectedSem] = useState<string | null>(null);
 	const [subjects, setSubjects] = useState([]);
 	const [marks, setMarks] = useState({});
 
-	// Dynamic semester like "sem1"
 	const sem = selectedSem ? `sem${selectedSem}` : null;
 
-	// Fetch Subjects
 	const { data: subjectsData } = useGetAllSubjects();
 
-	// Fetch existing marks
 	const { data: marksData } = useGetAllMarksByStudent(studentDocumentId, sem, {
 		enabled: !!(studentDocumentId && sem)
 	});
@@ -50,7 +59,7 @@ function Page() {
 	const marksMutation = useCreateOrUpdateBulkMarks();
 	const summaryMutation = useCreateResult();
 
-	/** Handle Input Changes */
+	/** ---------------- Handle marks input ---------------- */
 	const handleInput = (subId, type, value) => {
 		setMarks((prev) => ({
 			...prev,
@@ -61,7 +70,7 @@ function Page() {
 		}));
 	};
 
-	/** Handle Semester Change */
+	/** ---------------- Fetch subjects ---------------- */
 	const handleSemesterChange = (value) => {
 		setSelectedSem(value);
 
@@ -73,12 +82,11 @@ function Page() {
 		setMarks({});
 	};
 
-	/** PRE-FILL MARKS FROM DB */
+	/** ---------------- Preload existing marks ---------------- */
 	const preloadMarks = () => {
 		if (!marksData?.data) return;
 
 		const prefilled = {};
-
 		marksData.data.forEach((record) => {
 			const subjectId = record.subject.id;
 			prefilled[subjectId] = {
@@ -94,10 +102,8 @@ function Page() {
 		preloadMarks();
 	}, [marksData]);
 
-	/** -------------------------------
-	 *  VTU RESULT ENUM LOGIC
-	 * --------------------------------*/
-	const getResultEnum = (percentage, hasFailed) => {
+	/** ---------------- ENUM LOGIC ---------------- */
+	const getGrade = (percentage, hasFailed) => {
 		const percent = Number(percentage);
 
 		if (hasFailed) return "fail";
@@ -107,9 +113,11 @@ function Page() {
 		return "fail";
 	};
 
-	/** -------------------------------
-	 *  CALCULATE SGPA, TOTAL, RESULT
-	 * --------------------------------*/
+	const getResult = (percentage) => {
+		return Number(percentage) < 40 ? "fail" : "pass";
+	};
+
+	/** ---------------- CALCULATE ---------------- */
 	const calculateResults = () => {
 		if (subjects.length === 0) return;
 
@@ -146,13 +154,15 @@ function Page() {
 		const sgpa = (creditGradePoints / totalCredits).toFixed(2);
 		const percentage = ((totalMarks / (subjects.length * 100)) * 100).toFixed(2);
 
-		const resultEnum = getResultEnum(percentage, hasFailed);
+		const grade = getGrade(percentage, hasFailed);
+		const result = getResult(percentage);
 
 		setComputed({
 			totalMarks,
 			sgpa,
 			percentage,
-			result: resultEnum
+			grade,
+			result
 		});
 	};
 
@@ -160,7 +170,7 @@ function Page() {
 		calculateResults();
 	}, [marks, subjects]);
 
-	/** SUBMIT HANDLER */
+	/** ---------------- SUBMIT HANDLER ---------------- */
 	const handleSubmit = async () => {
 		if (!Object.keys(marks).length || !selectedSem) {
 			toast.error("Please select semester and enter marks");
@@ -176,7 +186,7 @@ function Page() {
 				const externalMark = Number(values.external);
 
 				if (isNaN(internalMark) || isNaN(externalMark)) {
-					toast.error(`Please enter valid marks for ${subject?.sub_code}`);
+					toast.error(`Enter valid marks for ${subject?.sub_code}`);
 					return null;
 				}
 
@@ -189,8 +199,6 @@ function Page() {
 				};
 			})
 			.filter(Boolean);
-
-		console.log("Final Payload:", JSON.stringify(payload, null, 2));
 
 		marksMutation.mutate(
 			{
@@ -206,13 +214,12 @@ function Page() {
 							SGPA: computed.sgpa,
 							total: computed.totalMarks,
 							percentage: computed.percentage,
+							grade: computed.grade,
 							result: computed.result,
 							semister: `sem${selectedSem}`,
 							students: studentDocumentId
 						}
 					};
-
-					console.log("SUMMARY PAYLOAD:", summaryPayload);
 
 					summaryMutation.mutate(summaryPayload);
 				}
@@ -220,13 +227,23 @@ function Page() {
 		);
 	};
 
+	// Check if all marks are filled for every subject
+	const isAllMarksFilled =
+		subjects.length > 0 &&
+		subjects.every((sub) => {
+			const m = marks[sub.id];
+			return m && m.internal !== undefined && m.internal !== "" && m.external !== undefined && m.external !== "" && !isNaN(Number(m.internal)) && !isNaN(Number(m.external));
+		});
+
 	return (
 		<div className="mb-60">
 			<h2 className="text-2xl font-semibold mb-5">Exam marks entry</h2>
-			<div className="flex flex-col gap-y-2 p-3 lg:p-6 border rounded-2xl">
+
+			<div className="flex flex-col lg:flex-row gap-10 p-3 lg:p-6 border rounded-2xl">
 				{/* Student Details */}
 				<div className="w-full lg:w-1/2">
 					<h2 className="font-semibold text-lg mb-3">Student Basic details:</h2>
+
 					<div className="flex w-full flex-col lg:flex-row border bg-white shadow-2xl shadow-blue-100 rounded-lg">
 						<div className="w-full">
 							<div className="border-b py-2 text-sm px-4">
@@ -239,19 +256,20 @@ function Page() {
 								<b>Branch:</b> {student?.branch?.branch_name}
 							</div>
 						</div>
+
 						<div className="w-full">
 							<div className="border-b py-2 text-sm px-4">
 								<b>Gender:</b> {student?.gender}
 							</div>
 							<div className="border-b py-2 text-sm px-4">
-								<b>Age:</b> {student?.age}
+								<b>DOB:</b> {student?.dob}
+							</div>
+							<div className="border-b py-2 text-sm px-4">
+								<b>Category:</b> {student?.category}
 							</div>
 						</div>
 					</div>
-				</div>
 
-				{/* Marks Section */}
-				<div className="w-full lg:w-1/2">
 					<div className="border rounded-2xl shadow-2xl my-10 shadow-blue-100">
 						{/* Select Semester */}
 						<div className="flex border bg-slate-50 px-4 py-2 rounded-t-2xl gap-x-4 items-center">
@@ -280,69 +298,104 @@ function Page() {
 									<div className="flex gap-2 flex-row">
 										<Input
 											type="number"
+											disabled={marksData?.data.length > 0}
 											placeholder="Internal"
 											onChange={(e) => handleInput(sub.id, "internal", e.target.value)}
-											className="w-full"
 											value={marks[sub.id]?.internal ?? ""}
 										/>
 
 										<Input
 											type="number"
+											disabled={marksData?.data.length > 0}
 											placeholder="External"
 											onChange={(e) => handleInput(sub.id, "external", e.target.value)}
-											className="w-full"
 											value={marks[sub.id]?.external ?? ""}
 										/>
 									</div>
 								</div>
 							))}
+
 							{/* Computed Results */}
-							<p>
-								{subjects.length > 0 && (
-									<div className="p-4 border my-10">
-										<h2 className="p-2 border">
-											<span className="font-semibold opacity-85">CGPA:</span> {computed.sgpa}
-										</h2>
-										<h2 className="p-2 border">
-											<span className="font-semibold opacity-85">SGPA:</span> {computed.sgpa}
-										</h2>
-										<h2 className="p-2 border">
-											<span className=" opacity-85 font-bold text-xl">Total:</span>
-											<span className="font-bold text-xl"> {computed.totalMarks}</span>
-										</h2>
-										<h2 className="p-2 border">
-											<span className="font-semibold opacity-85">Percentage:</span>{" "}
-											<span className={Number(computed.percentage) < 40 ? "text-red-500 font-semibold" : "text-green-600 font-semibold"}>{computed.percentage}%</span>
-										</h2>
-										<h2 className="p-2 border">
-											<span className="font-semibold opacity-85">Result:</span>{" "}
-											<span className={`${computed.result === "Fail" ? "text-red-500" : "text-green-600"}`}>{computed.result}</span>
-										</h2>
-									</div>
-								)}
-							</p>
+							{subjects.length > 0 && (
+								<div className="border flex flex-col   bg-slate-50 my-10">
+									<h2 className="px-4 py-2 border border-x-0 border-t-0 text-sm">
+										<span className="font-semibold">CGPA:</span> {computed.sgpa}
+									</h2>
+									<h2 className="px-4 py-2 border border-x-0 border-t-0 text-sm">
+										<span className="font-semibold">SGPA:</span> {computed.sgpa}
+									</h2>
+									<h2 className="px-4 py-2 border border-x-0 border-t-0 text-sm">
+										<span className="font-semibold text-xl">Total:</span> <span className="font-bold text-xl">{computed.totalMarks}</span>
+									</h2>
+									<h2 className="px-4 py-2 border border-x-0 border-t-0 text-sm">
+										<span className="font-semibold">Percentage:</span>{" "}
+										<span className={Number(computed.percentage) < 40 ? "text-red-500 font-semibold" : "text-green-600 font-semibold"}>{computed.percentage}%</span>
+									</h2>
+									<h2 className="px-4 py-2 border border-x-0 border-t-0 text-sm">
+										<span className="font-semibold">Grade:</span>{" "}
+										<span className={computed.grade === "fail" ? "text-red-500 font-semibold" : "text-green-600 font-semibold"}>{computed.grade}</span>
+									</h2>
+									<h2 className="px-4 py-2 border border-x-0 border-t-0 text-sm">
+										<span className="font-semibold">Result:</span>{" "}
+										<span className={computed.result === "fail" ? "text-red-500 font-semibold" : "text-green-600 font-semibold"}>{computed.result}</span>
+									</h2>
+								</div>
+							)}
 
-							{/* Buttons */}
-							<div className="flex bg-slate-50 flex-col lg:flex-row rounded-b-2xl justify-end gap-4 p-4">
-								<Button
-									variant="outline"
-									className="w-full lg:w-[200px]"
-									onClick={() => {
-										setMarks({});
-										setSelectedSem(null);
-									}}
-								>
-									<X /> Cancel
-								</Button>
+							{/* ❗ Confirmation Dialog — SAVE MARKS ❗ */}
+							{marksData?.data?.length > 0 ? (
+								" "
+							) : (
+								<div className="flex bg-slate-50 flex-col lg:flex-row rounded-b-2xl justify-end gap-4 p-4">
+									<Button
+										variant="outline"
+										className="w-full lg:w-[200px]"
+										onClick={() => {
+											setMarks({});
+											setSelectedSem(null);
+										}}
+									>
+										<X /> Cancel
+									</Button>
 
-								<Button onClick={handleSubmit} disabled={marksMutation.isPending || !selectedSem || subjects.length === 0} className="w-full lg:w-[200px]">
-									<CheckCheck />
-									{marksMutation.isPending ? "Saving..." : "Save Marks"}
-								</Button>
-							</div>
+									<AlertDialog>
+										<AlertDialogTrigger asChild>
+											<Button disabled={marksMutation.isPending || !selectedSem || subjects.length === 0 || !isAllMarksFilled} className="w-full lg:w-[200px]">
+												<CheckCheck />
+												{marksMutation.isPending ? "Saving..." : "Save Marks"}
+											</Button>
+										</AlertDialogTrigger>
+
+										<AlertDialogContent>
+											<AlertDialogHeader>
+												<AlertDialogTitle>Are you sure?</AlertDialogTitle>
+												<AlertDialogDescription>
+													Once submitted, marks <b>cannot be edited</b>. This action is permanent.
+												</AlertDialogDescription>
+											</AlertDialogHeader>
+
+											<AlertDialogFooter>
+												<AlertDialogCancel>Cancel</AlertDialogCancel>
+												<AlertDialogAction onClick={handleSubmit} className="bg-red-600 text-white hover:bg-red-700">
+													Submit Marks
+												</AlertDialogAction>
+											</AlertDialogFooter>
+										</AlertDialogContent>
+									</AlertDialog>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
+
+				{/* {marksData?.data?.length > 0 ? (
+					<div className="w-full lg:w-1/2 bg-slate-50 p-4 border rounded-2xl">
+						<MarksTable data={marksData?.data} />
+					</div>
+				) : (
+					""
+				)} */}
+				{/* Marks Section */}
 			</div>
 		</div>
 	);

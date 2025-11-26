@@ -23,10 +23,10 @@ function page() {
 				<div className="border rounded-lg bg-slate-50">
 					<Table>
 						<TableBody>
-							{/* <TableRow>
+							<TableRow>
 								<TableCell className="font-medium">DocId :</TableCell>
 								<TableCell className="uppercase">{student?.documentId}</TableCell>
-							</TableRow> */}
+							</TableRow>
 							<TableRow>
 								<TableCell className="font-medium">USN :</TableCell>
 								<TableCell className="uppercase">{student?.usn || clean}</TableCell>

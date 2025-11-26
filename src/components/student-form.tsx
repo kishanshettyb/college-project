@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,9 +28,10 @@ type StudentSchema = z.infer<typeof studentSchema>;
 
 interface StudentFormProps {
 	docId?: string;
+	usn?: string;
 }
 
-export function StudentForm({ docId }: StudentFormProps) {
+export function StudentForm({ docId, usn }: StudentFormProps) {
 	const createMutation = useCreateStudent();
 	const updateMutation = useUpdateStudent();
 
@@ -49,26 +50,33 @@ export function StudentForm({ docId }: StudentFormProps) {
 		}
 	});
 
-	/** 🔥 PREFILL DATA IN EDIT MODE */
+	/** 🔥 If "usn" is passed from parent, prefill it */
+	useEffect(() => {
+		if (usn) {
+			form.setValue("usn", usn.replace(/"/g, "").toUpperCase());
+		}
+	}, [usn, form]);
+
+	/** 🔥 Load edit data from API */
 	useEffect(() => {
 		if (docId && studentDataRes?.data?.data) {
 			const s = studentDataRes.data.data;
 
-			form.setValue("usn", s.usn || "");
-			form.setValue("name", s.name || "");
-			form.setValue("dob", s.dob || "");
-			form.setValue("category", s.category || "");
-			form.setValue("gender", s.gender || "");
-			form.setValue("branch", s.branch?.documentId || "");
+			form.setValue("usn", s.usn?.replace(/"/g, ""));
+			form.setValue("name", s.name);
+			form.setValue("dob", s.dob);
+			form.setValue("category", s.category);
+			form.setValue("gender", s.gender);
+			form.setValue("branch", s.branch?.documentId);
 		}
 	}, [studentDataRes, docId, form]);
 
-	/** 🔥 Uppercase fields */
+	/** 🔠 Uppercase fields */
 	const handleUppercase = (field: "usn" | "category", value: string) => {
-		form.setValue(field, value.toUpperCase());
+		form.setValue(field, value.replace(/"/g, "").toUpperCase());
 	};
 
-	/** 🔥 Submit handler */
+	/** 🚀 Submit */
 	const onSubmit = (values: StudentSchema) => {
 		const payload = {
 			data: {
@@ -95,7 +103,12 @@ export function StudentForm({ docId }: StudentFormProps) {
 					{/* USN */}
 					<div className="grid gap-1">
 						<Label>USN</Label>
-						<Input {...form.register("usn")} onChange={(e) => handleUppercase("usn", e.target.value)} />
+						<Input
+							{...form.register("usn")}
+							disabled={true} // disable editing in edit mode
+							className={docId ? "pointer-events-none bg-muted text-gray-700" : ""}
+							onChange={(e) => handleUppercase("usn", e.target.value)}
+						/>
 					</div>
 
 					{/* Name */}
@@ -121,14 +134,10 @@ export function StudentForm({ docId }: StudentFormProps) {
 					{/* Gender */}
 					<div className="grid gap-1">
 						<Label>Gender</Label>
-						<Select
-							value={form.watch("gender") || ""} // <---- FIX
-							onValueChange={(value) => form.setValue("gender", value)}
-						>
+						<Select value={form.watch("gender") || ""} onValueChange={(v) => form.setValue("gender", v)}>
 							<SelectTrigger>
 								<SelectValue placeholder="Select gender" />
 							</SelectTrigger>
-
 							<SelectContent>
 								<SelectGroup>
 									<SelectItem value="male">Male</SelectItem>
@@ -141,15 +150,10 @@ export function StudentForm({ docId }: StudentFormProps) {
 					{/* Branch */}
 					<div className="grid gap-1">
 						<Label>Branch</Label>
-
-						<Select
-							value={form.watch("branch") || ""} // <---- FIX
-							onValueChange={(value) => form.setValue("branch", value)}
-						>
+						<Select value={form.watch("branch") || ""} onValueChange={(v) => form.setValue("branch", v)}>
 							<SelectTrigger>
 								<SelectValue placeholder="Select branch" />
 							</SelectTrigger>
-
 							<SelectContent>
 								<SelectGroup>
 									{branchData?.data?.data?.map((b) => (
