@@ -8,11 +8,20 @@ import { useGetAllSubjects } from "@/services/queries/subjects/branch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CheckCheck, X } from "lucide-react";
-import { useCreateOrUpdateBulkMarks } from "@/services/mutation/marks/marks";
+import { useCreateMarks, useCreateOrUpdateBulkMarks } from "@/services/mutation/marks/marks";
 import { useGetAllMarksByStudent } from "@/services/queries/marks/marks";
 import { toast } from "sonner";
+import { useCreateResult } from "@/services/mutation/result/result";
 
 function Page() {
+	// Computed results
+	const [computed, setComputed] = useState({
+		totalMarks: 0,
+		sgpa: "0.00",
+		percentage: "0.00",
+		result: "-"
+	});
+
 	const username = Cookies.get("username");
 	const clean = decodeURIComponent(username).replace(/"/g, "");
 
@@ -33,12 +42,13 @@ function Page() {
 	// Fetch Subjects
 	const { data: subjectsData } = useGetAllSubjects();
 
-	// Fetch marks based on selected sem
+	// Fetch existing marks
 	const { data: marksData } = useGetAllMarksByStudent(studentDocumentId, sem, {
 		enabled: !!(studentDocumentId && sem)
 	});
 
 	const marksMutation = useCreateOrUpdateBulkMarks();
+	const summaryMutation = useCreateResult();
 
 	/** Handle Input Changes */
 	const handleInput = (subId, type, value) => {
@@ -70,7 +80,7 @@ function Page() {
 		const prefilled = {};
 
 		marksData.data.forEach((record) => {
-			const subjectId = record.subject.id; // numeric subject id
+			const subjectId = record.subject.id;
 			prefilled[subjectId] = {
 				internal: record.internal_mark,
 				external: record.external_mark
@@ -84,7 +94,73 @@ function Page() {
 		preloadMarks();
 	}, [marksData]);
 
-	/** Submit Handler */
+	/** -------------------------------
+	 *  VTU RESULT ENUM LOGIC
+	 * --------------------------------*/
+	const getResultEnum = (percentage, hasFailed) => {
+		const percent = Number(percentage);
+
+		if (hasFailed) return "fail";
+		if (percent >= 70) return "first class with distinction";
+		if (percent >= 60) return "first class";
+		if (percent >= 40) return "pass";
+		return "fail";
+	};
+
+	/** -------------------------------
+	 *  CALCULATE SGPA, TOTAL, RESULT
+	 * --------------------------------*/
+	const calculateResults = () => {
+		if (subjects.length === 0) return;
+
+		let totalMarks = 0;
+		let totalCredits = 0;
+		let creditGradePoints = 0;
+		let hasFailed = false;
+
+		subjects.forEach((sub) => {
+			const internal = Number(marks[sub.id]?.internal ?? 0);
+			const external = Number(marks[sub.id]?.external ?? 0);
+			const total = internal + external;
+
+			let gradePoint = 0;
+
+			if (total >= 90) gradePoint = 10;
+			else if (total >= 80) gradePoint = 9;
+			else if (total >= 70) gradePoint = 8;
+			else if (total >= 60) gradePoint = 7;
+			else if (total >= 50) gradePoint = 6;
+			else if (total >= 45) gradePoint = 5;
+			else if (total >= 40) gradePoint = 4;
+			else gradePoint = 0;
+
+			if (gradePoint === 0) hasFailed = true;
+
+			const credit = sub.credit || 3;
+
+			totalMarks += total;
+			totalCredits += credit;
+			creditGradePoints += credit * gradePoint;
+		});
+
+		const sgpa = (creditGradePoints / totalCredits).toFixed(2);
+		const percentage = ((totalMarks / (subjects.length * 100)) * 100).toFixed(2);
+
+		const resultEnum = getResultEnum(percentage, hasFailed);
+
+		setComputed({
+			totalMarks,
+			sgpa,
+			percentage,
+			result: resultEnum
+		});
+	};
+
+	useEffect(() => {
+		calculateResults();
+	}, [marks, subjects]);
+
+	/** SUBMIT HANDLER */
 	const handleSubmit = async () => {
 		if (!Object.keys(marks).length || !selectedSem) {
 			toast.error("Please select semester and enter marks");
@@ -116,11 +192,32 @@ function Page() {
 
 		console.log("Final Payload:", JSON.stringify(payload, null, 2));
 
-		marksMutation.mutate({
-			marks: payload,
-			studentId: studentDocumentId,
-			semester: semesterValue
-		});
+		marksMutation.mutate(
+			{
+				marks: payload,
+				studentId: studentDocumentId,
+				semester: semesterValue
+			},
+			{
+				onSuccess: () => {
+					const summaryPayload = {
+						data: {
+							CGPA: computed.sgpa,
+							SGPA: computed.sgpa,
+							total: computed.totalMarks,
+							percentage: computed.percentage,
+							result: computed.result,
+							semister: `sem${selectedSem}`,
+							students: studentDocumentId
+						}
+					};
+
+					console.log("SUMMARY PAYLOAD:", summaryPayload);
+
+					summaryMutation.mutate(summaryPayload);
+				}
+			}
+		);
 	};
 
 	return (
@@ -154,7 +251,7 @@ function Page() {
 				</div>
 
 				{/* Marks Section */}
-				<div className="w-full lg:w-1/2 ">
+				<div className="w-full lg:w-1/2">
 					<div className="border rounded-2xl shadow-2xl my-10 shadow-blue-100">
 						{/* Select Semester */}
 						<div className="flex border bg-slate-50 px-4 py-2 rounded-t-2xl gap-x-4 items-center">
@@ -167,14 +264,14 @@ function Page() {
 								<SelectContent>
 									{[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
 										<SelectItem key={sem} value={sem.toString()}>
-											{`Semester ${sem}`}
+											Semester {sem}
 										</SelectItem>
 									))}
 								</SelectContent>
 							</Select>
 						</div>
 
-						{/* Each Subject Input */}
+						{/* Each Subject */}
 						<div>
 							{subjects?.map((sub) => (
 								<div key={sub.id} className="flex flex-col lg:flex-row items-center p-4 gap-4 border-b border-b-slate-200 w-full my-2">
@@ -199,7 +296,33 @@ function Page() {
 									</div>
 								</div>
 							))}
+							{/* Computed Results */}
+							<p>
+								{subjects.length > 0 && (
+									<div className="p-4 border my-10">
+										<h2 className="p-2 border">
+											<span className="font-semibold opacity-85">CGPA:</span> {computed.sgpa}
+										</h2>
+										<h2 className="p-2 border">
+											<span className="font-semibold opacity-85">SGPA:</span> {computed.sgpa}
+										</h2>
+										<h2 className="p-2 border">
+											<span className=" opacity-85 font-bold text-xl">Total:</span>
+											<span className="font-bold text-xl"> {computed.totalMarks}</span>
+										</h2>
+										<h2 className="p-2 border">
+											<span className="font-semibold opacity-85">Percentage:</span>{" "}
+											<span className={Number(computed.percentage) < 40 ? "text-red-500 font-semibold" : "text-green-600 font-semibold"}>{computed.percentage}%</span>
+										</h2>
+										<h2 className="p-2 border">
+											<span className="font-semibold opacity-85">Result:</span>{" "}
+											<span className={`${computed.result === "Fail" ? "text-red-500" : "text-green-600"}`}>{computed.result}</span>
+										</h2>
+									</div>
+								)}
+							</p>
 
+							{/* Buttons */}
 							<div className="flex bg-slate-50 flex-col lg:flex-row rounded-b-2xl justify-end gap-4 p-4">
 								<Button
 									variant="outline"
