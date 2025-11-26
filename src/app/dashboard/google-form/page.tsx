@@ -23,6 +23,7 @@ export default function Page() {
 
 	// ✅ Make sure the path matches your API response
 	const statusesData: Student[] = data?.data?.data ?? [];
+	console.log("statusesData" + JSON.stringify(statusesData));
 
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
