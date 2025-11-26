@@ -124,7 +124,7 @@ function Page() {
 	};
 
 	return (
-		<div>
+		<div className="mb-60">
 			<h2 className="text-2xl font-semibold mb-5">Exam marks entry</h2>
 			<div className="flex flex-col gap-y-2 p-3 lg:p-6 border rounded-2xl">
 				{/* Student Details */}
@@ -154,7 +154,7 @@ function Page() {
 				</div>
 
 				{/* Marks Section */}
-				<div className="w-full lg:w-1/2">
+				<div className="w-full lg:w-1/2 ">
 					<div className="border rounded-2xl shadow-2xl my-10 shadow-blue-100">
 						{/* Select Semester */}
 						<div className="flex border bg-slate-50 px-4 py-2 rounded-t-2xl gap-x-4 items-center">
