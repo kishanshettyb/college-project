@@ -5,9 +5,29 @@ import { useAdminContext } from "@/lib/provider/adminContext";
 import { BarChart2, BookA, ExternalLink, Home, LogOut, MoreHorizontal, Plus, TextSearch, Users2 } from "lucide-react";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
 export default function Page({ children }: { children: React.ReactNode }) {
+	function formatPath(path: string) {
+		if (!path) return "";
+
+		// Remove leading slash
+		let cleaned = path.replace(/^\/+/, "");
+
+		// Remove dashboard prefix if exists
+		cleaned = cleaned.replace("dashboard/", "");
+
+		// Replace hyphens with spaces
+		cleaned = cleaned.replace(/-/g, " ");
+
+		// Capitalize each word
+		return cleaned.replace(/\b\w/g, (char) => char.toUpperCase());
+	}
+
 	const { loggedIn, logout } = useAdminContext();
+	const pathname = usePathname();
+	const urlpathname = formatPath(pathname); // 👉 format it
 	// const router = useRouter();
 
 	const handleLogout = () => {
@@ -17,6 +37,20 @@ export default function Page({ children }: { children: React.ReactNode }) {
 		<SidebarProvider>
 			<AppSidebar />
 			<SidebarInset>
+				<header className="flex lg:mt-0 h-16 shrink-0 items-center gap-2 border-b px-4">
+					<SidebarTrigger className="-ml-1" />
+					<Breadcrumb>
+						<BreadcrumbList>
+							<BreadcrumbItem className="hidden md:block">
+								<BreadcrumbLink href="#">Google Form Data List</BreadcrumbLink>
+							</BreadcrumbItem>
+							<BreadcrumbSeparator className="hidden md:block" />
+							<BreadcrumbItem>
+								<BreadcrumbPage>{urlpathname}</BreadcrumbPage>
+							</BreadcrumbItem>
+						</BreadcrumbList>
+					</Breadcrumb>
+				</header>
 				{children}
 				<footer className="relative ">
 					<div className="md:hidden border flex gap-x-3 justify-between items-center fixed w-full bottom-0 bg-slate-50 p-5">
@@ -27,7 +61,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
 							</Link>
 						</div>
 						<div>
-							<Link className="text-center text-xs flex justify-center items-center flex-col" href="/dashboard/google-form">
+							<Link className="text-center text-xs flex justify-center items-center flex-col" href="/dashboard/student-marks-data">
 								<TextSearch size={20} />
 								<p className="font-semibold">Marks</p>
 							</Link>

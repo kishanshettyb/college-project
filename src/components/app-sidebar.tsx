@@ -28,7 +28,7 @@ const data = {
 			items: [
 				{
 					title: "Students Data",
-					url: "/dashboard/google-form"
+					url: "/dashboard/student-marks-data"
 				},
 				{
 					title: "Exported Excel List",
