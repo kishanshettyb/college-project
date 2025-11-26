@@ -7,7 +7,7 @@ import { Label } from "@radix-ui/react-label";
 
 export default function Result({ data }: any) {
 	// ✅ handle nested structure safely
-	const resultData = data?.data?.data || [];
+	const resultData = data?.data || [];
 
 	const [selectedSem, setSelectedSem] = useState("All");
 
