@@ -24,6 +24,10 @@ function page() {
 					<Table>
 						<TableBody>
 							<TableRow>
+								<TableCell className="font-medium">DocId :</TableCell>
+								<TableCell className="uppercase">{student?.documentId}</TableCell>
+							</TableRow>
+							<TableRow>
 								<TableCell className="font-medium">USN :</TableCell>
 								<TableCell className="uppercase">{student?.usn || clean}</TableCell>
 							</TableRow>
@@ -52,7 +56,7 @@ function page() {
 				</div>
 			</div>
 			<div className="my-5">
-				<AddStudentModal />
+				<AddStudentModal docId={student?.documentId} />
 			</div>
 		</div>
 	);

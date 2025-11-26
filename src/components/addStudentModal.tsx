@@ -4,15 +4,19 @@ import { UserPlus } from "lucide-react";
 import Cookies from "js-cookie";
 import { StudentForm } from "./student-form";
 
-export function AddStudentModal() {
-	const documentId = Cookies.get("username");
+type ModalProps = {
+	docId?: string;
+};
+export function AddStudentModal({ docId }: ModalProps) {
+	const usn = Cookies.get("username");
+	const documentId = docId;
 
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button variant="default">
 					<UserPlus />
-					Add Students
+					{docId ? "Edit Details" : "Add Details"}
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
@@ -20,7 +24,7 @@ export function AddStudentModal() {
 					<DialogTitle>Add Students</DialogTitle>
 				</DialogHeader>
 				<div className="grid gap-4">
-					<StudentForm usn={documentId} />
+					<StudentForm docId={documentId} usn={usn} />
 				</div>
 			</DialogContent>
 		</Dialog>

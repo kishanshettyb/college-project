@@ -11,8 +11,9 @@ import { useCreateStudent } from "@/services/mutation/student/student";
 interface StudentFormProps extends React.ComponentProps<"div"> {
 	className?: string;
 	usn?: string;
+	docId?: string;
 }
-export function StudentForm({ className, usn, ...props }: StudentFormProps) {
+export function StudentForm({ className, usn, docId, ...props }: StudentFormProps) {
 	const [formData, setFormData] = useState({
 		usn: "",
 		name: "",
@@ -93,7 +94,6 @@ export function StudentForm({ className, usn, ...props }: StudentFormProps) {
 									<SelectTrigger className="w-full">
 										<SelectValue placeholder="Select Branch" />
 									</SelectTrigger>
-
 									<SelectContent>
 										<SelectGroup>
 											<SelectLabel>Select Branch</SelectLabel>
@@ -115,7 +115,7 @@ export function StudentForm({ className, usn, ...props }: StudentFormProps) {
 							</div>
 							<div className="flex my-2 flex-col gap-2">
 								<Button type="submit" disabled={studentMutation.isPending}>
-									{studentMutation.isPending ? "Please Wait..." : "Add Student"}
+									{studentMutation.isPending ? "Please Wait..." : `${docId ? "Edit Details" : "Add Details"}`}
 								</Button>
 							</div>
 						</div>
