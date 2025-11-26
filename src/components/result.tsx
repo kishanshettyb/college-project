@@ -8,7 +8,7 @@ import { Label } from "@radix-ui/react-label";
 import { Button } from "./ui/button";
 
 export default function Result({ data }: any) {
-	const resultData = data?.data?.data || [];
+	const resultData = data?.data || [];
 
 	console.log("resultData--" + JSON.stringify(resultData));
 
