@@ -23,10 +23,10 @@ function page() {
 				<div className="border rounded-lg bg-slate-50">
 					<Table>
 						<TableBody>
-							<TableRow>
+							{/* <TableRow>
 								<TableCell className="font-medium">DocId :</TableCell>
 								<TableCell className="uppercase">{student?.documentId}</TableCell>
-							</TableRow>
+							</TableRow> */}
 							<TableRow>
 								<TableCell className="font-medium">USN :</TableCell>
 								<TableCell className="uppercase">{student?.usn || clean}</TableCell>
@@ -38,13 +38,17 @@ function page() {
 							</TableRow>
 
 							<TableRow>
-								<TableCell className="font-medium">Age :</TableCell>
-								<TableCell>{student?.age}</TableCell>
+								<TableCell className="font-medium">DOB :</TableCell>
+								<TableCell>{student?.dob}</TableCell>
 							</TableRow>
 
 							<TableRow>
 								<TableCell className="font-medium">Gender :</TableCell>
 								<TableCell>{student?.gender}</TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell className="font-medium">Category :</TableCell>
+								<TableCell>{student?.category}</TableCell>
 							</TableRow>
 
 							<TableRow>

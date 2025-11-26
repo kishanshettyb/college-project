@@ -24,8 +24,8 @@ export default function Result({ data }: any) {
 	}));
 
 	const passFail = [
-		{ name: "Pass", value: filteredData.filter((d: any) => d.result === "Pass").length },
-		{ name: "Fail", value: filteredData.filter((d: any) => d.result === "Fail").length }
+		{ name: "Pass", value: filteredData.filter((d: any) => d.result === "pass").length },
+		{ name: "Fail", value: filteredData.filter((d: any) => d.result === "fail").length }
 	];
 
 	const COLORS = ["#4ade80", "#f87171"];

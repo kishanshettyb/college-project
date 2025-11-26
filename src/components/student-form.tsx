@@ -20,7 +20,8 @@ export function StudentForm({ className, usn, docId, ...props }: StudentFormProp
 	const [formData, setFormData] = useState({
 		usn: "",
 		name: "",
-		age: "",
+		dob: "",
+		category: "",
 		gender: "",
 		branch: ""
 	});
@@ -49,7 +50,8 @@ export function StudentForm({ className, usn, docId, ...props }: StudentFormProp
 				usn: cleanUSN,
 				name: formData.name,
 				gender: formData.gender,
-				age: formData.age,
+				dob: formData.dob,
+				category: formData.category,
 				branch: formData.branch
 			}
 		};
@@ -65,10 +67,11 @@ export function StudentForm({ className, usn, docId, ...props }: StudentFormProp
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
+		const upperCaseFields = ["usn", "category"]; // add your fields here
 
 		setFormData((prev) => ({
 			...prev,
-			[name]: name === "usn" ? value.toUpperCase() : value
+			[name]: upperCaseFields.includes(name) ? value.toUpperCase() : value
 		}));
 	};
 
@@ -91,8 +94,14 @@ export function StudentForm({ className, usn, docId, ...props }: StudentFormProp
 
 						{/* Age */}
 						<div className="grid gap-2">
-							<Label htmlFor="age">Age</Label>
-							<Input id="age" name="age" type="number" value={formData.age} onChange={handleInputChange} required />
+							<Label htmlFor="dob">
+								DOB : <span className="text-xs opacity-50">DD/MM/YYYY</span>
+							</Label>
+							<Input id="dob" name="dob" type="text" value={formData.dob} onChange={handleInputChange} required />
+						</div>
+						<div className="grid gap-2">
+							<Label htmlFor="category">Category</Label>
+							<Input id="category" name="category" type="text" value={formData.category} onChange={handleInputChange} required />
 						</div>
 
 						{/* Gender */}
