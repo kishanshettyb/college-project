@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Trash } from "lucide-react";
+import { Edit, MinusIcon, PlusIcon, Trash } from "lucide-react";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -113,39 +113,74 @@ export const columns: ColumnDef<Student>[] = [
 	{ accessorKey: "category", header: "Category" },
 	{ accessorKey: "sem", header: "Semester" },
 	{ accessorKey: "branch", header: "Branch" },
+	// {
+	// 	id: "subjects",
+	// 	header: "Subjects",
+	// 	cell: ({ row }) => {
+	// 		const student = row.original;
+
+	// 		// Pick only subject keys (all lowercase code keys starting with 'ec', 'be', etc.)
+	// 		const subjectEntries = Object.entries(student).filter(
+	// 			([key, value]) => key.match(/^[a-z]{2,5}[0-9]{2,5}$/i) // matches ecs001, bec601, bis654c etc.
+	// 		);
+
+	// 		return (
+	// 			<div className="text-xs space-y-1">
+	// 				{subjectEntries.length === 0 && <span>No Subjects</span>}
+	// 				{subjectEntries.map(([key, value]) => (
+	// 					<div key={key} className="flex border p-1 rounded-2xl justify-between gap-2">
+	// 						<span className="font-medium text-xs">{key.toUpperCase()}</span>
+	// 						<span>{value}</span>
+	// 					</div>
+	// 				))}
+	// 			</div>
+	// 		);
+	// 	}
+	// },
 	{
 		id: "subjects",
 		header: "Subjects",
 		cell: ({ row }) => {
 			const student = row.original;
 
-			// Pick only subject keys (all lowercase code keys starting with 'ec', 'be', etc.)
-			const subjectEntries = Object.entries(student).filter(
-				([key, value]) => key.match(/^[a-z]{2,5}[0-9]{2,5}$/i) // matches ecs001, bec601, bis654c etc.
-			);
+			// pick subject keys dynamically
+			const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z]{2,6}[0-9]{2,5}$/i.test(key));
+
+			const [open, setOpen] = useState(false);
 
 			return (
-				<div className="text-xs space-y-1">
-					{subjectEntries.length === 0 && <span>No Subjects</span>}
-					{subjectEntries.map(([key, value]) => (
-						<div key={key} className="flex justify-between gap-2">
-							<span className="font-medium">{key.toUpperCase()}</span>
-							<span>{value}</span>
+				<div className="text-xs">
+					{/* Toggle Button */}
+					<button onClick={() => setOpen(!open)} className="px-2 py-1 text-white bg-slate-900 rounded-md text-xs">
+						{open ? (
+							<div className="flex items-center">
+								<MinusIcon size="15" />
+								Hide Subjects
+							</div>
+						) : (
+							<div className="flex items-center">
+								<PlusIcon size="15" />
+								View Subjects ({subjectEntries.length})
+							</div>
+						)}
+					</button>
+
+					{/* Expandable Section */}
+					{open && (
+						<div className="mt-2 space-y-1 border rounded-md p-2 bg-slate-50 max-h-48 overflow-y-auto">
+							{subjectEntries.map(([code, mark]) => (
+								<div key={code} className="flex justify-between gap-2 border px-2 py-1 rounded-xl bg-white">
+									<span className="font-semibold">{code.toUpperCase()}</span>
+									<span>{mark}</span>
+								</div>
+							))}
 						</div>
-					))}
+					)}
 				</div>
 			);
 		}
 	},
-	// { accessorKey: "bec601", header: "bec601" },
-	// { accessorKey: "bec602", header: "bec602" },
-	// { accessorKey: "bec685", header: "bec685" },
-	// { accessorKey: "becl606", header: "becl606" },
-	// { accessorKey: "bnsk658", header: "bnsk658" },
-	// { accessorKey: "biks609", header: "biks609" },
-	// { accessorKey: "bec613b", header: "bec613b" },
-	// { accessorKey: "bis654c", header: "bis654c" },
-	// { accessorKey: "becl657d", header: "becl657d" },
+
 	{
 		accessorKey: "result",
 		header: "Result",
@@ -161,18 +196,5 @@ export const columns: ColumnDef<Student>[] = [
 	{ accessorKey: "grade", header: "grade" },
 	{ accessorKey: "percentage", header: "Percentage" },
 	{ accessorKey: "SGPA", header: "SGPA" },
-	{ accessorKey: "CGPA", header: "CGPA" },
-	{
-		id: "actions",
-		header: "Action",
-		cell: ({ row }) => (
-			<div className="flex justify-center gap-5 items-center">
-				<Button variant="outline" className="cursor-pointer">
-					<Edit size={14} /> Edit
-				</Button>
-				<DeleteButton id={row.original.documentId} />
-			</div>
-		),
-		enableSorting: false
-	}
+	{ accessorKey: "CGPA", header: "CGPA" }
 ];
