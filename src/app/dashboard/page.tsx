@@ -7,10 +7,17 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Result from "@/components/reports";
 import { useGetAllStudentsFull } from "@/services/queries/student/student";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function Page() {
 	const { data, isLoading } = useGetAllStudentsFull();
-	if (isLoading) return "Loading...";
+	if (isLoading)
+		return (
+			<div className="flex justify-center items-center w-full h-full">
+				<Loader2 className="animate-spin" />
+			</div>
+		);
 
 	console.log("FULL API RESPONSE:", data);
 
@@ -21,8 +28,20 @@ export default function Page() {
 	console.log("marks" + JSON.stringify(marks));
 
 	// 🛑 If missing, show error
-	if (!students.length) return "No students found";
-	if (!marks.length) return "No marks found";
+	if (!students.length)
+		return (
+			<div className="flex flex-col justify-center w-full h-full items-center ">
+				<Image src="/images/nodata.jpg" alt="No Data found" width={500} height={500} className="w-[400px] h-[400px] object-cover" />
+				<h2 className="text-2xl font-semibold">Sorry No Data Found</h2>
+			</div>
+		);
+	if (!marks.length)
+		return (
+			<div className="flex flex-col justify-center w-full h-full items-center ">
+				<Image src="/images/nodata.jpg" alt="No Data found" width={500} height={500} className="w-[400px] h-[400px] object-cover" />
+				<h2 className="text-2xl font-semibold">Sorry No Data Found</h2>
+			</div>
+		);
 
 	// --------------------------------------------------------
 	// 🔥 Transform into your desired final structure

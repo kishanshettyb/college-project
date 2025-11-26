@@ -7,17 +7,36 @@ import { Separator } from "@/components/ui/separator";
 import { StudentDataTable } from "@/components/studentDataTable";
 import { useGetAllStudentsFull } from "@/services/queries/student/student";
 import { Student } from "./column";
+import Image from "next/image";
+import { Loader2 } from "lucide-react";
 
 export default function Page() {
 	const { data, isLoading } = useGetAllStudentsFull();
-	if (isLoading) return "Loading...";
+	if (isLoading)
+		return (
+			<div className="flex justify-center items-center w-full h-full">
+				<Loader2 className="animate-spin" />
+			</div>
+		);
 
 	// Extract API structure
 	const students = data?.data?.students ?? [];
 	const marks = data?.data?.marks ?? [];
 
-	if (!students.length) return "No students found";
-	if (!marks.length) return "No marks found";
+	if (!students.length)
+		return (
+			<div className="flex flex-col justify-center w-full h-full items-center ">
+				<Image src="/images/nodata.jpg" alt="No Data found" width={500} height={500} className="w-[400px] h-[400px] object-cover" />
+				<h2 className="text-2xl font-semibold">Sorry No Data Found</h2>
+			</div>
+		);
+	if (!marks.length)
+		return (
+			<div className="flex flex-col justify-center w-full h-full items-center ">
+				<Image src="/images/nodata.jpg" alt="No Data found" width={500} height={500} className="w-[400px] h-[400px] object-cover" />
+				<h2 className="text-2xl font-semibold">Sorry No Data Found</h2>
+			</div>
+		);
 
 	// ------------------------------
 	// TRANSFORM DATA

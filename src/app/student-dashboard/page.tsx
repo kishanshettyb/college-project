@@ -2,7 +2,7 @@
 import React from "react";
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Loader2 } from "lucide-react";
 import { useGetStudentsSemwiseById } from "@/services/queries/student/student";
 import Cookies from "js-cookie";
 import { AddStudentModal } from "@/components/addStudentModal";
@@ -13,7 +13,12 @@ function page() {
 	const { data, isLoading, isError } = useGetStudentsSemwiseById(clean);
 	const student = data?.data?.data[0]; // extract student
 
-	if (isLoading) return <p>Loading...</p>;
+	if (isLoading)
+		return (
+			<div className="flex justify-center items-center w-full h-full">
+				<Loader2 className="animate-spin" />
+			</div>
+		);
 	if (isError) return <p>Error fetching student</p>;
 	console.log("data=" + JSON.stringify("student" + student));
 	return (

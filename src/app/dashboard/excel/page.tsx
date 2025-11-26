@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { Download } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 import moment from "moment";
 interface ExcelFile {
 	name: string;
@@ -53,9 +53,14 @@ export default function ExcelPage() {
 			</header>
 
 			{loading ? (
-				<p className="p-10 text-center">Loading...</p>
+				<div className="flex justify-center items-center w-full h-full">
+					<Loader2 className="animate-spin" />
+				</div>
 			) : files.length === 0 ? (
-				<p className="p-10 text-center">No export files found.</p>
+				<div className="flex flex-col justify-center w-full h-full items-center ">
+					<Image src="/images/nodata.jpg" alt="No Data found" width={500} height={500} className="w-[400px] h-[400px] object-cover" />
+					<h2 className="text-2xl font-semibold">Sorry No Data Found</h2>
+				</div>
 			) : (
 				<div className="grid p-4 gap-5 grid-cols-2 sm:grid-cols-2 md:grid-cols-6">
 					{files.map(({ name, date, url }) => (
