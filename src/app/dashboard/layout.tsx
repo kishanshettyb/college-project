@@ -18,8 +18,8 @@ export default function Page({ children }: { children: React.ReactNode }) {
 			<AppSidebar />
 			<SidebarInset>
 				{children}
-				<footer className="relative">
-					<div className="border flex gap-x-3 justify-between items-center fixed w-full bottom-0 bg-slate-50 p-5">
+				<footer className="relative ">
+					<div className="md:hidden border flex gap-x-3 justify-between items-center fixed w-full bottom-0 bg-slate-50 p-5">
 						<div>
 							<Link className="text-center text-xs flex justify-center items-center flex-col" href="/dashboard">
 								<Home size={20} />
