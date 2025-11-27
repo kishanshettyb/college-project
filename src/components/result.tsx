@@ -142,8 +142,8 @@ export default function Result({ data }: any) {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{categories.map((cat) => (
-									<SelectItem key={cat} value={cat}>
+								{categories.map((cat, i) => (
+									<SelectItem key={i} value={String(cat)}>
 										{cat}
 									</SelectItem>
 								))}
@@ -160,8 +160,8 @@ export default function Result({ data }: any) {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{branches.map((br) => (
-									<SelectItem key={br} value={br}>
+								{branches.map((br, i) => (
+									<SelectItem key={i} value={String(br)}>
 										{br}
 									</SelectItem>
 								))}
@@ -178,8 +178,8 @@ export default function Result({ data }: any) {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{grades.map((gr) => (
-									<SelectItem key={gr} value={gr}>
+								{grades.map((gr, i) => (
+									<SelectItem key={i} value={String(gr)}>
 										{gr}
 									</SelectItem>
 								))}
