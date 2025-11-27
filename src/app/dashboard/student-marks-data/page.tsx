@@ -71,23 +71,6 @@ export default function Page() {
 
 	return (
 		<div className="mb-50">
-			<header className="flex h-16 items-center gap-2 border-b px-4">
-				<SidebarTrigger className="-ml-1" />
-				<Separator orientation="vertical" className="mr-2" />
-
-				<Breadcrumb>
-					<BreadcrumbList>
-						<BreadcrumbItem>
-							<BreadcrumbLink href="#">Student Results</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbPage>Analysis</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
-			</header>
-
 			<div className="w-full px-2 lg:px-10">
 				{/* Pass valid Student[] */}
 				<StudentDataTable data={finalData} isLoading={isLoading} isError={false} />
