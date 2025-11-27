@@ -135,7 +135,7 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 					<div className="grid gap-1">
 						<Label>Gender</Label>
 						<Select value={form.watch("gender") || ""} onValueChange={(v) => form.setValue("gender", v)}>
-							<SelectTrigger>
+							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Select gender" />
 							</SelectTrigger>
 							<SelectContent>
@@ -151,7 +151,7 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 					<div className="grid gap-1">
 						<Label>Branch</Label>
 						<Select value={form.watch("branch") || ""} onValueChange={(v) => form.setValue("branch", v)}>
-							<SelectTrigger>
+							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Select branch" />
 							</SelectTrigger>
 							<SelectContent>

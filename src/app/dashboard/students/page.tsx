@@ -11,9 +11,6 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from "@tanstack/react-table";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { StudentSemwise, columns } from "./column";
 import { StudentDataTableSemwise } from "@/components/studentsListSemwise";
 import { useGetAllStudentsSemwise } from "@/services/queries/student/student";

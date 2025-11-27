@@ -73,7 +73,7 @@ export function SubjectForm({ documentId }: SubjectFormProps) {
 					<div>
 						<Label className="mb-2">Semester</Label>
 						<Select value={form.watch("semister")} onValueChange={(value) => form.setValue("semister", value)}>
-							<SelectTrigger>
+							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Select Semester" />
 							</SelectTrigger>
 							<SelectContent>
@@ -91,7 +91,7 @@ export function SubjectForm({ documentId }: SubjectFormProps) {
 					<div>
 						<Label className="mb-2">Branch</Label>
 						<Select value={form.watch("branch")} onValueChange={(value) => form.setValue("branch", value)}>
-							<SelectTrigger>
+							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Select Branch">{branches?.data?.data?.find((b) => b.documentId === form.watch("branch"))?.branch_name}</SelectValue>
 							</SelectTrigger>
 							<SelectContent>
