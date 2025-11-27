@@ -19,11 +19,11 @@ export default function Result({ data }: any) {
 	const [selectedBranch, setSelectedBranch] = useState("All");
 	const [selectedGrade, setSelectedGrade] = useState("All");
 
-	// --- Unique values for filters ---
-	const semesters = Array.from(new Set(resultData.map((d) => d.sem)));
-	const categories = Array.from(new Set(resultData.map((d) => d.category)));
-	const branches = Array.from(new Set(resultData.map((d) => d.branch)));
-	const grades = Array.from(new Set(resultData.map((d) => d.grade)));
+	// --- Unique values for filters, filter out empty/falsy strings ---
+	const semesters = Array.from(new Set(resultData.map((d) => d.sem))).filter(Boolean);
+	const categories = Array.from(new Set(resultData.map((d) => d.category))).filter(Boolean);
+	const branches = Array.from(new Set(resultData.map((d) => d.branch))).filter(Boolean);
+	const grades = Array.from(new Set(resultData.map((d) => d.grade))).filter(Boolean);
 
 	// --- Filtered Data ---
 	const filteredData = useMemo(() => {
@@ -104,11 +104,6 @@ export default function Result({ data }: any) {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{/* {semesters.map((sem) => (
-									<SelectItem key={sem} value={sem}>
-										Sem {sem}
-									</SelectItem>
-								))} */}
 								{semesters.map((sem) => (
 									<SelectItem key={sem} value={String(sem)}>
 										Sem {sem}
