@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 	}
 });
 export const getAllStudentsSemwise = async () => {
-	return await axiosInstance.get<Student[]>(`students?populate=*&sort=createdAt:desc`);
+	return await axiosInstance.get<Student[]>(`students?populate=*&sort=createdAt:desc&pagination[pageSize]=1000`);
 };
 
 export const getAllStudentsFullAll = async () => {
