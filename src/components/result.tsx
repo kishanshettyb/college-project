@@ -104,8 +104,13 @@ export default function Result({ data }: any) {
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="All">All</SelectItem>
-								{semesters.map((sem) => (
+								{/* {semesters.map((sem) => (
 									<SelectItem key={sem} value={sem}>
+										Sem {sem}
+									</SelectItem>
+								))} */}
+								{semesters.map((sem) => (
+									<SelectItem key={sem} value={String(sem)}>
 										Sem {sem}
 									</SelectItem>
 								))}
