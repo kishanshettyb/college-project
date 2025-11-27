@@ -296,21 +296,9 @@ function Page() {
 									<p className="w-20 text-base font-semibold">{sub.sub_code}</p>
 
 									<div className="flex gap-2 flex-row">
-										<Input
-											type="number"
-											disabled={marksData?.data.length > 0}
-											placeholder="Internal"
-											onChange={(e) => handleInput(sub.id, "internal", e.target.value)}
-											value={marks[sub.id]?.internal ?? ""}
-										/>
+										<Input type="number" placeholder="Internal" onChange={(e) => handleInput(sub.id, "internal", e.target.value)} value={marks[sub.id]?.internal ?? ""} />
 
-										<Input
-											type="number"
-											disabled={marksData?.data.length > 0}
-											placeholder="External"
-											onChange={(e) => handleInput(sub.id, "external", e.target.value)}
-											value={marks[sub.id]?.external ?? ""}
-										/>
+										<Input type="number" placeholder="External" onChange={(e) => handleInput(sub.id, "external", e.target.value)} value={marks[sub.id]?.external ?? ""} />
 									</div>
 								</div>
 							))}
@@ -343,10 +331,11 @@ function Page() {
 							)}
 
 							{/* ❗ Confirmation Dialog — SAVE MARKS ❗ */}
-							{marksData?.data?.length > 0 ? (
-								" "
-							) : (
-								<div className="flex bg-slate-50 flex-col lg:flex-row rounded-b-2xl justify-end gap-4 p-4">
+
+							<div className="flex bg-slate-50 flex-col lg:flex-row rounded-b-2xl justify-end gap-4 p-4">
+								{marksData?.data?.length > 0 ? (
+									" "
+								) : (
 									<Button
 										variant="outline"
 										className="w-full lg:w-[200px]"
@@ -357,33 +346,32 @@ function Page() {
 									>
 										<X /> Cancel
 									</Button>
+								)}
+								<AlertDialog>
+									<AlertDialogTrigger asChild>
+										<Button disabled={marksMutation.isPending || !selectedSem || subjects.length === 0 || !isAllMarksFilled} className="w-full lg:w-[200px]">
+											<CheckCheck />
+											{marksMutation.isPending ? "Saving..." : "Save Marks"}
+										</Button>
+									</AlertDialogTrigger>
 
-									<AlertDialog>
-										<AlertDialogTrigger asChild>
-											<Button disabled={marksMutation.isPending || !selectedSem || subjects.length === 0 || !isAllMarksFilled} className="w-full lg:w-[200px]">
-												<CheckCheck />
-												{marksMutation.isPending ? "Saving..." : "Save Marks"}
-											</Button>
-										</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>Are you sure?</AlertDialogTitle>
+											<AlertDialogDescription>
+												Once submitted, marks <b>cannot be edited</b>. This action is permanent.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
 
-										<AlertDialogContent>
-											<AlertDialogHeader>
-												<AlertDialogTitle>Are you sure?</AlertDialogTitle>
-												<AlertDialogDescription>
-													Once submitted, marks <b>cannot be edited</b>. This action is permanent.
-												</AlertDialogDescription>
-											</AlertDialogHeader>
-
-											<AlertDialogFooter>
-												<AlertDialogCancel>Cancel</AlertDialogCancel>
-												<AlertDialogAction onClick={handleSubmit} className="bg-red-600 text-white hover:bg-red-700">
-													Submit Marks
-												</AlertDialogAction>
-											</AlertDialogFooter>
-										</AlertDialogContent>
-									</AlertDialog>
-								</div>
-							)}
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction onClick={handleSubmit} className="bg-red-600 text-white hover:bg-red-700">
+												Submit Marks
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
+							</div>
 						</div>
 					</div>
 				</div>

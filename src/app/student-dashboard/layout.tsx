@@ -36,8 +36,8 @@ function layout({ children }: { children: React.ReactNode }) {
 						</Breadcrumb>
 					</header>
 					<div className="p-4">{children}</div>
-					<footer className="relative">
-						<div className="border flex gap-x-10 justify-between items-center fixed w-full bottom-0 bg-slate-50 p-5">
+					<footer className="relative  ">
+						<div className=" md:hidden border flex gap-x-10 justify-between items-center fixed w-full bottom-0 bg-slate-50 p-5">
 							<div>
 								<Link className="text-center flex justify-center items-center flex-col" href="/student-dashboard">
 									<Home />
