@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 });
 
 export const getAllSubjects = async () => {
-	return await axiosInstance.get<Subject[]>(`subjects?populate=*`);
+	return await axiosInstance.get<Subject[]>(`subjects?populate=*&pagination[pageSize]=1000`);
 };
 export const getSubjectById = async (documentId: string) => {
 	return await axiosInstance.get(`subjects/${documentId}?populate=*`);
