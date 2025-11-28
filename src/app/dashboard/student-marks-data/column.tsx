@@ -17,6 +17,8 @@ import {
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { EditStudent } from "@/components/editStudent";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export type Student = {
 	id: number;
@@ -121,35 +123,45 @@ export const columns: ColumnDef<Student>[] = [
 		cell: ({ row }) => {
 			const student = row.original;
 
-			// pick subject keys dynamically
-			const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z]{2,6}[0-9]{2,5}$/i.test(key));
+			// match keys like bec601_internal, bec601_external, bec601_total
+			const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z]{2,6}[0-9]{2,5}_(internal|external|total)$/i.test(key));
+
+			// group by subject code
+			const groupedSubjects: Record<string, any> = {};
+			subjectEntries.forEach(([key, value]) => {
+				const [code, type] = key.split("_");
+				if (!groupedSubjects[code]) groupedSubjects[code] = {};
+				groupedSubjects[code][type] = value;
+			});
 
 			const [open, setOpen] = useState(false);
 
 			return (
 				<div className="text-xs">
-					{/* Toggle Button */}
 					<button onClick={() => setOpen(!open)} className="px-2 py-1 text-white bg-slate-900 rounded-md text-xs">
 						{open ? (
 							<div className="flex items-center">
-								<MinusIcon size="15" />
-								Hide Subjects
+								<MinusIcon size={15} /> Hide Subjects
 							</div>
 						) : (
 							<div className="flex items-center">
-								<PlusIcon size="15" />
-								View Subjects ({subjectEntries.length})
+								<PlusIcon size={15} /> View Subjects ({Object.keys(groupedSubjects).length})
 							</div>
 						)}
 					</button>
 
-					{/* Expandable Section */}
 					{open && (
-						<div className="mt-2 space-y-1 border rounded-md p-2 bg-slate-50 max-h-48 overflow-y-auto">
-							{subjectEntries.map(([code, mark]) => (
-								<div key={code} className="flex justify-between gap-2 border px-2 py-1 rounded-xl bg-white">
-									<span className="font-semibold">{code.toUpperCase()}</span>
-									<span>{mark}</span>
+						<div className="mt-2 p-2 border rounded-md bg-slate-50 max-h-48 overflow-y-auto">
+							{Object.entries(groupedSubjects).map(([code, marks]: any) => (
+								<div key={code} className="border bg-white rounded-xl p-2 mb-2">
+									<div className="font-bold text-sm mb-1">{code.toUpperCase()}</div>
+									<div className="flex justify-between text-xs">
+										<span>Internal: {marks.internal ?? "-"}</span>
+										<span>External: {marks.external ?? "-"}</span>
+										<span>
+											Total: <b>{marks.total ?? "-"}</b>
+										</span>
+									</div>
 								</div>
 							))}
 						</div>
@@ -173,6 +185,30 @@ export const columns: ColumnDef<Student>[] = [
 	},
 	{ accessorKey: "grade", header: "grade" },
 	{ accessorKey: "percentage", header: "Percentage" },
-	{ accessorKey: "SGPA", header: "SGPA" }
+	{ accessorKey: "SGPA", header: "SGPA" },
 	// { accessorKey: "CGPA", header: "CGPA" }
+	{
+		id: "actions",
+		header: "Actions",
+		cell: ({ row }) => {
+			const student = row.original.documentId;
+			const usn = row.original.usn;
+			const sem = "sem" + row.original.sem;
+
+			return (
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button variant="outline" size="sm">
+							<Edit className="w-4 h-4 mr-2" />
+							Edit
+						</Button>
+					</DialogTrigger>
+
+					<DialogContent className="max-w-xl">
+						<EditStudent studentId={student} semister={sem} usn={usn} />
+					</DialogContent>
+				</Dialog>
+			);
+		}
+	}
 ];

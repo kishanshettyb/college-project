@@ -70,6 +70,8 @@ export function useCreateOrUpdateBulkMarks() {
 
 			toast.success(message);
 			queryClient.invalidateQueries({ queryKey: ["marks"] });
+			queryClient.invalidateQueries({ queryKey: ["students"] });
+			queryClient.invalidateQueries({ queryKey: ["results"] });
 		},
 		onSettled: async (data, error) => {
 			console.log("bulk settled");

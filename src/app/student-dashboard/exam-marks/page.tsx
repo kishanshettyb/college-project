@@ -330,8 +330,6 @@ function Page() {
 								</div>
 							)}
 
-							{/* ❗ Confirmation Dialog — SAVE MARKS ❗ */}
-
 							<div className="flex bg-slate-50 flex-col lg:flex-row rounded-b-2xl justify-end gap-4 p-4">
 								{marksData?.data?.length > 0 ? (
 									" "
