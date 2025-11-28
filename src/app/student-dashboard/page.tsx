@@ -55,7 +55,10 @@ function page() {
 								<TableCell className="font-medium">Category :</TableCell>
 								<TableCell>{student?.category}</TableCell>
 							</TableRow>
-
+							<TableRow>
+								<TableCell className="font-medium">Batch :</TableCell>
+								<TableCell>{student?.batch}</TableCell>
+							</TableRow>
 							<TableRow>
 								<TableCell className="font-medium">Branch :</TableCell>
 								<TableCell>{student?.branch?.branch_name}</TableCell>

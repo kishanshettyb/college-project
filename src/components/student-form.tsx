@@ -21,7 +21,8 @@ const studentSchema = z.object({
 	dob: z.string().min(4),
 	category: z.string().min(1),
 	gender: z.string(),
-	branch: z.string()
+	branch: z.string(),
+	batch: z.string()
 });
 
 type StudentSchema = z.infer<typeof studentSchema>;
@@ -46,7 +47,8 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 			dob: "",
 			category: "",
 			gender: "",
-			branch: ""
+			branch: "",
+			batch: ""
 		}
 	});
 
@@ -68,6 +70,7 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 			form.setValue("category", s.category);
 			form.setValue("gender", s.gender);
 			form.setValue("branch", s.branch?.documentId);
+			form.setValue("batch", s.batch);
 		}
 	}, [studentDataRes, docId, form]);
 
@@ -85,7 +88,8 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 				dob: values.dob,
 				category: values.category.toUpperCase(),
 				gender: values.gender,
-				branch: values.branch
+				branch: values.branch,
+				batch: values.batch
 			}
 		};
 
@@ -110,13 +114,11 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 							onChange={(e) => handleUppercase("usn", e.target.value)}
 						/>
 					</div>
-
 					{/* Name */}
 					<div className="grid gap-1">
 						<Label>Name</Label>
 						<Input {...form.register("name")} />
 					</div>
-
 					{/* DOB */}
 					<div className="grid gap-1">
 						<Label>
@@ -124,13 +126,11 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 						</Label>
 						<Input {...form.register("dob")} />
 					</div>
-
 					{/* Category */}
 					<div className="grid gap-1">
 						<Label>Category</Label>
 						<Input {...form.register("category")} onChange={(e) => handleUppercase("category", e.target.value)} />
 					</div>
-
 					{/* Gender */}
 					<div className="grid gap-1">
 						<Label>Gender</Label>
@@ -142,6 +142,28 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 								<SelectGroup>
 									<SelectItem value="male">Male</SelectItem>
 									<SelectItem value="female">Female</SelectItem>
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+					</div>
+					<div className="grid gap-1">
+						<Label>Batch</Label>
+						<Select value={form.watch("batch") || ""} onValueChange={(v) => form.setValue("batch", v)}>
+							<SelectTrigger className="w-full">
+								<SelectValue placeholder="Select batch" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									<SelectItem value="Batch-2020-21">Batch-2020-21</SelectItem>
+									<SelectItem value="Batch-2021-22">Batch-2021-22</SelectItem>
+									<SelectItem value="Batch-2022-23">Batch-2022-23</SelectItem>
+									<SelectItem value="Batch-2023-24">Batch-2023-24</SelectItem>
+									<SelectItem value="Batch-2024-25">Batch-2024-25</SelectItem>
+									<SelectItem value="Batch-2025-26">Batch-2025-26</SelectItem>
+									<SelectItem value="Batch-2026-27">Batch-2026-27</SelectItem>
+									<SelectItem value="Batch-2027-28">Batch-2027-28</SelectItem>
+									<SelectItem value="Batch-2028-29">Batch-2028-29</SelectItem>
+									<SelectItem value="Batch-2029-30">Batch-2029-30</SelectItem>
 								</SelectGroup>
 							</SelectContent>
 						</Select>
@@ -165,7 +187,6 @@ export function StudentForm({ docId, usn }: StudentFormProps) {
 							</SelectContent>
 						</Select>
 					</div>
-
 					{/* Submit */}
 					<Button type="submit" className="w-full">
 						{docId ? "Update Student" : "Add Student"}

@@ -41,6 +41,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	const [gradeFilter, setGradeFilter] = React.useState<string | null>(null); // New grade filter
 	const [pageSize, setPageSize] = React.useState(500);
 	const [exportFileName, setExportFileName] = React.useState("student_data");
+	const [batchFilter, setBatchFilter] = React.useState<string | null>(null);
 
 	// Utility to get timestamp string for export filename
 	const getTimeStamp = () => {
@@ -58,6 +59,10 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 
 		if (branchFilter) {
 			tempData = tempData.filter((student) => student.branch === branchFilter);
+		}
+
+		if (batchFilter) {
+			tempData = tempData.filter((student) => (student.batch ?? "").trim() === batchFilter.trim());
 		}
 
 		if (semesterFilter) {
@@ -89,7 +94,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 		}
 
 		return tempData;
-	}, [data, categoryFilter, branchFilter, semesterFilter, resultFilter, gradeFilter, globalFilter]);
+	}, [data, categoryFilter, branchFilter, batchFilter, semesterFilter, resultFilter, gradeFilter, globalFilter]);
 
 	const table = useReactTable({
 		data: filteredData,
@@ -202,6 +207,15 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
 				<div className="grid grid-cols-2 lg:grid-cols-7 gap-5">
 					<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
+					<select className="border rounded-md px-3 py-2" value={batchFilter ?? ""} onChange={(e) => setBatchFilter(e.target.value || null)}>
+						<option value="">All Batches</option>
+
+						{[...new Set(data.map((d) => d.batch).filter(Boolean))].map((batch) => (
+							<option key={batch} value={batch}>
+								{batch}
+							</option>
+						))}
+					</select>
 
 					<select className="border rounded-md px-3 py-2" value={categoryFilter ?? ""} onChange={(e) => setCategoryFilter(e.target.value || null)}>
 						<option value="">All Categories</option>

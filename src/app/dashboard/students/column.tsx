@@ -29,6 +29,7 @@ export const columns: ColumnDef<StudentSemwise>[] = [
 	{ accessorKey: "gender", header: "Gender" },
 	{ accessorKey: "dob", header: "DOB" },
 	{ accessorKey: "category", header: "Category" },
+	{ accessorKey: "batch", header: "Batch" },
 	{
 		accessorFn: (row) => row.branch?.branch_name,
 		id: "branch",

@@ -28,6 +28,7 @@ export type Student = {
 	sem: number;
 	grade: string;
 	branch: string;
+	batch: string;
 	bec601: number;
 	bec602: number;
 	bec685: number;
@@ -113,30 +114,7 @@ export const columns: ColumnDef<Student>[] = [
 	{ accessorKey: "category", header: "Category" },
 	{ accessorKey: "sem", header: "Semester" },
 	{ accessorKey: "branch", header: "Branch" },
-	// {
-	// 	id: "subjects",
-	// 	header: "Subjects",
-	// 	cell: ({ row }) => {
-	// 		const student = row.original;
-
-	// 		// Pick only subject keys (all lowercase code keys starting with 'ec', 'be', etc.)
-	// 		const subjectEntries = Object.entries(student).filter(
-	// 			([key, value]) => key.match(/^[a-z]{2,5}[0-9]{2,5}$/i) // matches ecs001, bec601, bis654c etc.
-	// 		);
-
-	// 		return (
-	// 			<div className="text-xs space-y-1">
-	// 				{subjectEntries.length === 0 && <span>No Subjects</span>}
-	// 				{subjectEntries.map(([key, value]) => (
-	// 					<div key={key} className="flex border p-1 rounded-2xl justify-between gap-2">
-	// 						<span className="font-medium text-xs">{key.toUpperCase()}</span>
-	// 						<span>{value}</span>
-	// 					</div>
-	// 				))}
-	// 			</div>
-	// 		);
-	// 	}
-	// },
+	{ accessorKey: "batch", header: "Batch" },
 	{
 		id: "subjects",
 		header: "Subjects",

@@ -65,6 +65,7 @@ export default function Page() {
 			result: student.result?.result || "",
 			grade: student.result?.grade || "",
 			branch: student.branch?.branch_name || "",
+			batch: student.batch || "",
 			...subjectMarkMap
 		};
 	});
