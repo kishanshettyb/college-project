@@ -236,7 +236,7 @@ export function EditStudent({ studentId, semister, usn }: StudentProps) {
 
 			{/* Marks Input */}
 			{subjects.map((sub) => (
-				<div key={sub.id} className="flex items-center p-4 gap-4 border-b">
+				<div key={sub.id} className="flex items-center p-4 gap-4 border-b h-[60%] overflow-scroll">
 					<p className="w-20 font-semibold">{sub.sub_code}</p>
 
 					<div className="flex gap-2">
