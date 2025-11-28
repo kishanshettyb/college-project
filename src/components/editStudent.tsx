@@ -206,70 +206,70 @@ export function EditStudent({ studentId, semister, usn }: StudentProps) {
 	return (
 		<div>
 			<h2 className="text-xl font-semibold mb-5">Edit Student Marks</h2>
+			<div className="h-[500px] overflow-scroll">
+				{/* Student Basic Info */}
+				<div className="flex border bg-white shadow rounded-lg mb-5">
+					<div className="w-full">
+						<div className="border-b py-2 text-sm px-4">
+							<b>Name:</b> {student?.name}
+						</div>
+						<div className="border-b py-2 text-sm px-4">
+							<b>USN:</b> {student?.usn}
+						</div>
+						<div className="py-2 px-4 text-sm">
+							<b>Branch:</b> {student?.branch?.branch_name}
+						</div>
+					</div>
 
-			{/* Student Basic Info */}
-			<div className="flex border bg-white shadow rounded-lg mb-5">
-				<div className="w-full">
-					<div className="border-b py-2 text-sm px-4">
-						<b>Name:</b> {student?.name}
-					</div>
-					<div className="border-b py-2 text-sm px-4">
-						<b>USN:</b> {student?.usn}
-					</div>
-					<div className="py-2 px-4 text-sm">
-						<b>Branch:</b> {student?.branch?.branch_name}
+					<div className="w-full">
+						<div className="border-b py-2 text-sm px-4">
+							<b>Gender:</b> {student?.gender}
+						</div>
+						<div className="border-b py-2 text-sm px-4">
+							<b>DOB:</b> {student?.dob}
+						</div>
+						<div className="border-b py-2 text-sm px-4">
+							<b>Category:</b> {student?.category}
+						</div>
 					</div>
 				</div>
 
-				<div className="w-full">
-					<div className="border-b py-2 text-sm px-4">
-						<b>Gender:</b> {student?.gender}
+				{/* Marks Input */}
+				{subjects.map((sub) => (
+					<div key={sub.id} className="flex items-center p-4 gap-4 border-b">
+						<p className="w-20 font-semibold">{sub.sub_code}</p>
+
+						<div className="flex gap-2">
+							<Input type="number" placeholder="Internal" value={marks[sub.id]?.internal ?? ""} onChange={(e) => handleInput(sub.id, "internal", e.target.value)} />
+							<Input type="number" placeholder="External" value={marks[sub.id]?.external ?? ""} onChange={(e) => handleInput(sub.id, "external", e.target.value)} />
+						</div>
 					</div>
-					<div className="border-b py-2 text-sm px-4">
-						<b>DOB:</b> {student?.dob}
+				))}
+
+				{/* Calculated Results */}
+				{subjects.length > 0 && (
+					<div className="border bg-slate-50 p-4 mt-5">
+						<div>
+							<b>SGPA:</b> {computed.sgpa}
+						</div>
+						<div>
+							<b>CGPA:</b> {computed.sgpa}
+						</div>
+						<div>
+							<b>Total:</b> {computed.totalMarks}
+						</div>
+						<div>
+							<b>Percentage:</b> {computed.percentage}%
+						</div>
+						<div>
+							<b>Grade:</b> {computed.grade}
+						</div>
+						<div>
+							<b>Result:</b> {computed.result}
+						</div>
 					</div>
-					<div className="border-b py-2 text-sm px-4">
-						<b>Category:</b> {student?.category}
-					</div>
-				</div>
+				)}
 			</div>
-
-			{/* Marks Input */}
-			{subjects.map((sub) => (
-				<div key={sub.id} className="flex items-center p-4 gap-4 border-b h-[60%] overflow-scroll">
-					<p className="w-20 font-semibold">{sub.sub_code}</p>
-
-					<div className="flex gap-2">
-						<Input type="number" placeholder="Internal" value={marks[sub.id]?.internal ?? ""} onChange={(e) => handleInput(sub.id, "internal", e.target.value)} />
-						<Input type="number" placeholder="External" value={marks[sub.id]?.external ?? ""} onChange={(e) => handleInput(sub.id, "external", e.target.value)} />
-					</div>
-				</div>
-			))}
-
-			{/* Calculated Results */}
-			{subjects.length > 0 && (
-				<div className="border bg-slate-50 p-4 mt-5">
-					<div>
-						<b>SGPA:</b> {computed.sgpa}
-					</div>
-					<div>
-						<b>CGPA:</b> {computed.sgpa}
-					</div>
-					<div>
-						<b>Total:</b> {computed.totalMarks}
-					</div>
-					<div>
-						<b>Percentage:</b> {computed.percentage}%
-					</div>
-					<div>
-						<b>Grade:</b> {computed.grade}
-					</div>
-					<div>
-						<b>Result:</b> {computed.result}
-					</div>
-				</div>
-			)}
-
 			{/* Submit */}
 			<div className="flex justify-end mt-5">
 				<AlertDialog>
