@@ -205,7 +205,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 
 			{/* Filters */}
 			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
-				<div className="grid grid-cols-2 lg:grid-cols-7 gap-5">
+				<div className="grid grid-cols-2 lg:grid-cols-8 gap-5">
 					<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
 					<select className="border rounded-md px-3 py-2" value={batchFilter ?? ""} onChange={(e) => setBatchFilter(e.target.value || null)}>
 						<option value="">All Batches</option>

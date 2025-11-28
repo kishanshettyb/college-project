@@ -173,6 +173,6 @@ export const columns: ColumnDef<Student>[] = [
 	},
 	{ accessorKey: "grade", header: "grade" },
 	{ accessorKey: "percentage", header: "Percentage" },
-	{ accessorKey: "SGPA", header: "SGPA" },
-	{ accessorKey: "CGPA", header: "CGPA" }
+	{ accessorKey: "SGPA", header: "SGPA" }
+	// { accessorKey: "CGPA", header: "CGPA" }
 ];
