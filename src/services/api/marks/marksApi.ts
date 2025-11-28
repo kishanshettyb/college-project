@@ -40,8 +40,6 @@ export const createOrUpdateBulkMarks = async (marks: Marks[], studentId: string,
 	const existingMarksResponse = await getMarksByStudentAndSemester(studentId, semester);
 	const existingMarks = existingMarksResponse.data || [];
 
-	console.log("Existing marks:", existingMarks);
-
 	const results = [];
 
 	for (const mark of marks) {
@@ -54,7 +52,6 @@ export const createOrUpdateBulkMarks = async (marks: Marks[], studentId: string,
 
 		if (existingMark) {
 			// Update existing mark using documentId (NOT id)
-			console.log("Updating mark:", existingMark.documentId, mark);
 
 			const response = await updateMarks(mark, existingMark.documentId);
 
@@ -65,7 +62,6 @@ export const createOrUpdateBulkMarks = async (marks: Marks[], studentId: string,
 			});
 		} else {
 			// Create new mark
-			console.log("Creating new mark:", mark);
 
 			const response = await createMarks({ data: mark });
 

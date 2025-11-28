@@ -20,7 +20,6 @@ function page() {
 			</div>
 		);
 	if (isError) return <p>Error fetching student</p>;
-	console.log("data=" + JSON.stringify("student" + student));
 	return (
 		<div>
 			<h2 className="mb-5 font-semibold text-lg">Student Basic Details</h2>

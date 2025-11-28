@@ -1,9 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
 import { StudentDataTable } from "@/components/studentDataTable";
 import { useGetAllStudentsFull } from "@/services/queries/student/student";
 import { Student } from "./column";
@@ -38,37 +35,6 @@ export default function Page() {
 			</div>
 		);
 
-	// ------------------------------
-	// TRANSFORM DATA
-	// ------------------------------
-	// const finalData: Student[] = students.map((student: any) => {
-	// 	const stuMarks = marks.filter((m: any) => m.student.id === student.id);
-
-	// 	const subjectMarkMap: Record<string, string> = {};
-	// 	stuMarks.forEach((m: any) => {
-	// 		const code = m.subject.sub_code.toLowerCase();
-	// 		const total = Number(m.internal_mark || 0) + Number(m.external_mark || 0);
-	// 		subjectMarkMap[code] = total.toString();
-	// 	});
-
-	// 	return {
-	// 		id: student.id,
-	// 		documentId: student.documentId,
-	// 		name: student.name,
-	// 		usn: student.usn,
-	// 		sem: Number(student.result?.semister?.replace("sem", "")) || 0,
-	// 		SGPA: Number(student.result?.SGPA || 0),
-	// 		CGPA: Number(student.result?.CGPA || 0),
-	// 		percentage: Number(student.result?.percentage || 0),
-	// 		category: student.category,
-	// 		gender: student.gender,
-	// 		result: student.result?.result || "",
-	// 		grade: student.result?.grade || "",
-	// 		branch: student.branch?.branch_name || "",
-	// 		batch: student.batch || "",
-	// 		...subjectMarkMap
-	// 	};
-	// });
 	const finalData: Student[] = students.map((student: any) => {
 		const stuMarks = marks.filter((m: any) => m.student.id === student.id);
 

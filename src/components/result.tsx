@@ -10,8 +10,6 @@ import { Button } from "./ui/button";
 export default function Result({ data }: any) {
 	const resultData = data?.data || [];
 
-	console.log("resultData--" + JSON.stringify(resultData));
-
 	// --- Filters ---
 	const [selectedSem, setSelectedSem] = useState("All");
 	const [selectedResult, setSelectedResult] = useState("All");

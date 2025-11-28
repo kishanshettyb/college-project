@@ -15,13 +15,9 @@ function page() {
 			</div>
 		);
 
-	console.log("FULL API RESPONSE:", data);
-
 	// ✅ Extract correct fields (based on your response)
 	const students = data?.data?.students ?? [];
 	const marks = data?.data?.marks ?? [];
-	console.log("students" + JSON.stringify(students));
-	console.log("marks" + JSON.stringify(marks));
 
 	// 🛑 If missing, show error
 	if (!students.length)
@@ -87,8 +83,6 @@ function page() {
 			}
 		}
 	};
-	console.log("finalData" + JSON.stringify(finalData));
-	console.log("formatted" + JSON.stringify(formatted));
 	// --------------------------------------------------------
 
 	return (

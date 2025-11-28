@@ -14,11 +14,12 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
-import { useState } from "react";
+import { use, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { EditStudent } from "@/components/editStudent";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import Cookies from "js-cookie";
 
 export type Student = {
 	id: number;
@@ -191,23 +192,30 @@ export const columns: ColumnDef<Student>[] = [
 		id: "actions",
 		header: "Actions",
 		cell: ({ row }) => {
+			const username = Cookies.get("username")?.replace(/"/g, "");
 			const student = row.original.documentId;
 			const usn = row.original.usn;
 			const sem = "sem" + row.original.sem;
 
 			return (
-				<Dialog>
-					<DialogTrigger asChild>
-						<Button variant="outline" size="sm">
-							<Edit className="w-4 h-4 mr-2" />
-							Edit
-						</Button>
-					</DialogTrigger>
+				<>
+					{username == "superadmin" ? (
+						<Dialog>
+							<DialogTrigger asChild>
+								<Button variant="outline" size="sm">
+									<Edit className="w-4 h-4 mr-2" />
+									Edit
+								</Button>
+							</DialogTrigger>
 
-					<DialogContent className="max-w-xl">
-						<EditStudent studentId={student} semister={sem} usn={usn} />
-					</DialogContent>
-				</Dialog>
+							<DialogContent className="max-w-xl">
+								<EditStudent studentId={student} semister={sem} usn={usn} />
+							</DialogContent>
+						</Dialog>
+					) : (
+						" "
+					)}
+				</>
 			);
 		}
 	}

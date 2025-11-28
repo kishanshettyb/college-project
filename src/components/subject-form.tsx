@@ -54,20 +54,12 @@ export function SubjectForm({ documentId }: SubjectFormProps) {
 	// ✅ SIMPLE FIX: Use a more direct approach
 	useEffect(() => {
 		if (documentId && subjectData?.data && !isSubjectLoading) {
-			console.log("🔄 POPULATING FORM WITH:", subjectData.data);
-
 			const sub = subjectData.data;
 
 			// Direct individual setting - more reliable than reset
 			form.setValue("sub_code", sub.sub_code || "");
 			form.setValue("semister", sub.semister || "");
 			form.setValue("branch", sub.branch?.documentId || "");
-
-			console.log("✅ VALUES SET:", {
-				sub_code: sub.sub_code,
-				semister: sub.semister,
-				branch: sub.branch?.documentId
-			});
 
 			setIsReady(true);
 		}

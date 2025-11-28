@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
+import Cookies from "js-cookie";
 
 export type Subject = {
 	id: number;
@@ -39,11 +40,20 @@ export const getColumns = (onEdit: (documentId: string) => void): ColumnDef<Subj
 	{
 		id: "actions",
 		header: "Action",
-		cell: ({ row }) => (
-			<Button variant="outline" onClick={() => onEdit(row.original.documentId)}>
-				<Edit size={14} /> Edit
-			</Button>
-		),
-		enableSorting: false
+		cell: ({ row }) => {
+			const username = Cookies.get("username")?.replace(/"/g, "");
+
+			return (
+				<>
+					{username === "superadmin" ? (
+						<Button variant="outline" onClick={() => onEdit(row.original.documentId)}>
+							<Edit size={14} /> Edit
+						</Button>
+					) : (
+						""
+					)}
+				</>
+			);
+		}
 	}
 ];
