@@ -1,4 +1,4 @@
-import { createSubject, updateSubject } from "@/services/api/subjects/subjectsApi";
+import { createSubject, deleteSubject, updateSubject } from "@/services/api/subjects/subjectsApi";
 import { Category } from "@/types/categoryTypes";
 import { Subject } from "@/types/subjectType";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -65,6 +65,39 @@ export function useUpdateSubject() {
 				const axiosError = error as AxiosError<ErrorResponse>;
 				const errorMessage = axiosError.response?.data?.message || axiosError.response?.data?.error?.name || "An error occurred";
 				toast.error("unable to update subjects." + errorMessage);
+			} else {
+				await queryClient.invalidateQueries({ queryKey: ["subjects"] });
+			}
+		}
+	});
+}
+
+export function useDeleteSubject() {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: ({ documentId }: { documentId: string }) => deleteSubject(documentId),
+		onMutate: () => {
+			console.log("mutate!!!");
+		},
+
+		onError: () => {
+			console.log("error!!!");
+		},
+
+		onSuccess: () => {
+			console.log("success!!!");
+			toast.success("successfull deleted subjects.");
+			queryClient.invalidateQueries({ queryKey: ["subjects"] });
+		},
+
+		onSettled: async (_, error) => {
+			console.log("settled");
+			if (error) {
+				console.log("Show Error: " + error);
+				const axiosError = error as AxiosError<ErrorResponse>;
+				const errorMessage = axiosError.response?.data?.message || axiosError.response?.data?.error?.name || "An error occurred";
+				toast.error("unable to delete subjects." + errorMessage);
 			} else {
 				await queryClient.invalidateQueries({ queryKey: ["subjects"] });
 			}

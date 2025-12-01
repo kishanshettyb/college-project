@@ -26,3 +26,7 @@ export const createSubject = async (data: Subject) => {
 export const updateSubject = async (data: Subject, documentId: string) => {
 	return await axiosInstance.put(`subjects/${documentId}`, data);
 };
+
+export const deleteSubject = async (documentId: string) => {
+	return await axiosInstance.delete(`subjects/${documentId}`);
+};
