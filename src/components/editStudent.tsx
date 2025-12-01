@@ -185,9 +185,9 @@ export function EditStudent({ studentId, semister, usn }: StudentProps) {
 							total: computed.totalMarks,
 							percentage: computed.percentage,
 							grade: computed.grade,
-							result: computed.result,
+							resultstatus: computed.result,
 							semister,
-							students: studentDocumentId
+							student: studentDocumentId
 						}
 					});
 				}
