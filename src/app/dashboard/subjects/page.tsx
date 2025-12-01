@@ -11,21 +11,14 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from "@tanstack/react-table";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { StudentDataTableSemwise } from "@/components/studentsListSemwise";
-import { useGetAllStudentsSemwise } from "@/services/queries/student/student";
 import { StudentSemwise, columns } from "../students/column";
 import { SubjectDataTable } from "@/components/subjectDataTable";
 import { useGetAllSubjects } from "@/services/queries/subjects/branch";
 
 export default function SubjectPage() {
 	const { data, isLoading, isError } = useGetAllSubjects();
-
 	// ✅ Make sure the path matches your API response
 	const statusesData: StudentSemwise[] = data?.data?.data ?? [];
-
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});

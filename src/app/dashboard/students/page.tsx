@@ -17,7 +17,6 @@ import { useGetAllStudentsSemwise } from "@/services/queries/student/student";
 
 export default function Page() {
 	const { data, isLoading, isError } = useGetAllStudentsSemwise();
-
 	// ✅ Make sure the path matches your API response
 	const statusesData: StudentSemwise[] = data?.data?.data ?? [];
 
