@@ -42,6 +42,7 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 	const [pageSize, setPageSize] = React.useState(500);
 	const [exportFileName, setExportFileName] = React.useState("student_data");
 	const [batchFilter, setBatchFilter] = React.useState<string | null>(null);
+	const [showTable, setShowTable] = React.useState(false);
 
 	// Utility to get timestamp string for export filename
 	const getTimeStamp = () => {
@@ -204,18 +205,58 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			</div>
 
 			{/* Filters */}
+			<div className="flex justify-start gap-x-5 items-start">
+				<div className="flex justify-start border gap-x-5 bg-slate-50 p-4 rounded-2xl items-center">
+					<div>
+						<h2 className="font-semibold">Select Batch: </h2>
+					</div>
+					<div>
+						<select
+							className="border rounded-md px-3 py-2"
+							value={batchFilter ?? ""}
+							// onChange={(e) => setBatchFilter(e.target.value || null)}
+							onChange={(e) => {
+								const val = e.target.value || null;
+								setBatchFilter(val === "" ? null : val);
+								setShowTable(true); // 👈 show table only if branch selected
+							}}
+						>
+							<option value="">All Batches</option>
+
+							{[...new Set(data.map((d) => d.batch).filter(Boolean))].map((batch) => (
+								<option key={batch} value={batch}>
+									{batch}
+								</option>
+							))}
+						</select>
+					</div>
+				</div>
+				<div className="flex justify-start border p-4 gap-x-5 bg-slate-50 rounded-2xl items-center">
+					<div>
+						<h2 className="font-semibold">Select Sem: </h2>
+					</div>
+					<div>
+						<select
+							className="border rounded-md px-3 py-2"
+							value={semesterFilter ?? ""}
+							onChange={(e) => {
+								const val = e.target.value;
+								setSemesterFilter(val === "" ? null : val);
+							}}
+						>
+							<option value="">All Semesters.</option>
+							{Array.from({ length: 8 }, (_, i) => (
+								<option key={i + 1} value={(i + 1).toString()}>
+									{i + 1} Semester
+								</option>
+							))}
+						</select>
+					</div>
+				</div>
+			</div>
 			<div className="flex flex-wrap items-center gap-4 rounded-xl bg-slate-50 border p-4 my-5">
 				<div className="grid grid-cols-2 lg:grid-cols-8 gap-5">
 					<Input placeholder="Search by name or USN..." value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="max-w-sm" />
-					<select className="border rounded-md px-3 py-2" value={batchFilter ?? ""} onChange={(e) => setBatchFilter(e.target.value || null)}>
-						<option value="">All Batches</option>
-
-						{[...new Set(data.map((d) => d.batch).filter(Boolean))].map((batch) => (
-							<option key={batch} value={batch}>
-								{batch}
-							</option>
-						))}
-					</select>
 
 					<select className="border rounded-md px-3 py-2" value={categoryFilter ?? ""} onChange={(e) => setCategoryFilter(e.target.value || null)}>
 						<option value="">All Categories</option>
@@ -231,22 +272,6 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 						{[...new Set(data.map((d) => d.branch))].map((branch) => (
 							<option key={branch} value={branch}>
 								{branch}
-							</option>
-						))}
-					</select>
-
-					<select
-						className="border rounded-md px-3 py-2"
-						value={semesterFilter ?? ""}
-						onChange={(e) => {
-							const val = e.target.value;
-							setSemesterFilter(val === "" ? null : val);
-						}}
-					>
-						<option value="">All Semesters.</option>
-						{Array.from({ length: 8 }, (_, i) => (
-							<option key={i + 1} value={(i + 1).toString()}>
-								{i + 1} Semester
 							</option>
 						))}
 					</select>
@@ -288,63 +313,67 @@ export const StudentDataTable: React.FC<DataTableProps> = ({ data, isLoading, is
 			</div>
 
 			{/* Table */}
-			<div className="overflow-hidden rounded-md border">
-				<Table>
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<TableHead key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
+			{showTable && (
+				<>
+					<div className="overflow-hidden rounded-md border">
+						<Table>
+							<TableHeader>
+								{table.getHeaderGroups().map((headerGroup) => (
+									<TableRow key={headerGroup.id}>
+										{headerGroup.headers.map((header) => (
+											<TableHead key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
+										))}
+									</TableRow>
 								))}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{isLoading ? (
-							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
-									Loading...
-								</TableCell>
-							</TableRow>
-						) : isError ? (
-							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center text-red-500">
-									Error loading data.
-								</TableCell>
-							</TableRow>
-						) : table.getRowModel().rows.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</div>
+							</TableHeader>
+							<TableBody>
+								{isLoading ? (
+									<TableRow>
+										<TableCell colSpan={columns.length} className="h-24 text-center">
+											Loading...
+										</TableCell>
+									</TableRow>
+								) : isError ? (
+									<TableRow>
+										<TableCell colSpan={columns.length} className="h-24 text-center text-red-500">
+											Error loading data.
+										</TableCell>
+									</TableRow>
+								) : table.getRowModel().rows.length ? (
+									table.getRowModel().rows.map((row) => (
+										<TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+											{row.getVisibleCells().map((cell) => (
+												<TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+											))}
+										</TableRow>
+									))
+								) : (
+									<TableRow>
+										<TableCell colSpan={columns.length} className="h-24 text-center">
+											No results.
+										</TableCell>
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+					</div>
 
-			{/* Pagination */}
-			<div className="flex items-center justify-end space-x-2 py-4">
-				<div className="text-muted-foreground flex-1 text-sm">
-					{table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
-				</div>
-				<div className="space-x-2">
-					<Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-						Previous
-					</Button>
-					<Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-						Next
-					</Button>
-				</div>
-			</div>
+					{/* Pagination */}
+					<div className="flex items-center justify-end space-x-2 py-4">
+						<div className="text-muted-foreground flex-1 text-sm">
+							{table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
+						</div>
+						<div className="space-x-2">
+							<Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+								Previous
+							</Button>
+							<Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+								Next
+							</Button>
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };
