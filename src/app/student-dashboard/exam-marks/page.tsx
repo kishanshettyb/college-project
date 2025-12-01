@@ -215,9 +215,9 @@ function Page() {
 							total: computed.totalMarks,
 							percentage: computed.percentage,
 							grade: computed.grade,
-							result: computed.result,
+							resultstatus: computed.result,
 							semister: `sem${selectedSem}`,
-							students: studentDocumentId
+							student: studentDocumentId
 						}
 					};
 

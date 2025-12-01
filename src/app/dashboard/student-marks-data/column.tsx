@@ -180,7 +180,7 @@ export const columns: ColumnDef<Student>[] = [
 	},
 
 	{
-		accessorKey: "result",
+		accessorKey: "resultstatus",
 		header: "Result",
 		cell: ({ getValue }) => {
 			const result = String(getValue() ?? "").toLowerCase();

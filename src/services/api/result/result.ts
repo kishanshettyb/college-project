@@ -35,11 +35,11 @@ export const createResult = async (data: Result) => {
 	return response.data;
 };
 
-// export const updateMarks = async (data: Marks, documentId: string) => {
-// 	return await axiosInstance.put(`marks/${documentId}`, {
-// 		data
-// 	});
-// };
+export const updateResult = async (data: Result, documentId: string) => {
+	return await axiosInstance.put(`results/${documentId}`, {
+		data
+	});
+};
 
 // // Add bulk create/update function
 // export const createOrUpdateBulkMarks = async (marks: Marks[], studentId: string, semester: string) => {
