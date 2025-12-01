@@ -125,14 +125,21 @@ export const columns: ColumnDef<Student>[] = [
 			const student = row.original;
 
 			// match keys like bec601_internal, bec601_external, bec601_total
-			const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z]{2,6}[0-9]{2,5}_(internal|external|total)$/i.test(key));
+			// const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z]{2,6}[0-9]{2,5}_(internal|external|total)$/i.test(key));
+			const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z0-9]+_(internal|external|total)$/i.test(key));
 
 			// group by subject code
 			const groupedSubjects: Record<string, any> = {};
+			// subjectEntries.forEach(([key, value]) => {
+			// 	const [code, type] = key.split("_");
+			// 	if (!groupedSubjects[code]) groupedSubjects[code] = {};
+			// 	groupedSubjects[code][type] = value;
+			// });
 			subjectEntries.forEach(([key, value]) => {
 				const [code, type] = key.split("_");
+				const normalizedType = type.toLowerCase(); // FIX HERE
 				if (!groupedSubjects[code]) groupedSubjects[code] = {};
-				groupedSubjects[code][type] = value;
+				groupedSubjects[code][normalizedType] = value;
 			});
 
 			const [open, setOpen] = useState(false);
