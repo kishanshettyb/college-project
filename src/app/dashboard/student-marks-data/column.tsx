@@ -29,19 +29,14 @@ export type Student = {
 	gender: string;
 	category: string;
 	sem: number;
-	grade: string;
+	grade: string; // ✔ Grade only (first class, pass, fail)
 	branch: string;
 	batch: string;
-	bec601: number;
-	bec602: number;
-	bec685: number;
-	becl606: number;
-	bnsk658: number;
-	biks609: number;
-	bec613b: number;
-	bis654c: number;
-	becl657d: number;
-	result: string;
+
+	// subject totals generated dynamically
+	[key: string]: any;
+
+	result: string; // ✔ PASS / FAIL only
 	percentage: number;
 	SGPA: number;
 	CGPA: number;
@@ -102,15 +97,12 @@ function DeleteButton({ id }: { id: string }) {
 		</AlertDialog>
 	);
 }
-
 export const columns: ColumnDef<Student>[] = [
 	{
 		id: "slno",
 		header: "Sl No",
 		cell: ({ row }) => row.index + 1
 	},
-	// { accessorKey: "id", header: "ID" },
-	// { accessorKey: "documentId", header: "Document ID" },
 	{ accessorKey: "name", header: "Name" },
 	{ accessorKey: "usn", header: "USN" },
 	{ accessorKey: "gender", header: "Gender" },
@@ -118,26 +110,20 @@ export const columns: ColumnDef<Student>[] = [
 	{ accessorKey: "sem", header: "Semester" },
 	{ accessorKey: "branch", header: "Branch" },
 	{ accessorKey: "batch", header: "Batch" },
+
+	// ===================== SUBJECT LIST ======================
 	{
 		id: "subjects",
 		header: "Subjects",
 		cell: ({ row }) => {
 			const student = row.original;
 
-			// match keys like bec601_internal, bec601_external, bec601_total
-			// const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z]{2,6}[0-9]{2,5}_(internal|external|total)$/i.test(key));
 			const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z0-9]+_(internal|external|total)$/i.test(key));
 
-			// group by subject code
 			const groupedSubjects: Record<string, any> = {};
-			// subjectEntries.forEach(([key, value]) => {
-			// 	const [code, type] = key.split("_");
-			// 	if (!groupedSubjects[code]) groupedSubjects[code] = {};
-			// 	groupedSubjects[code][type] = value;
-			// });
 			subjectEntries.forEach(([key, value]) => {
 				const [code, type] = key.split("_");
-				const normalizedType = type.toLowerCase(); // FIX HERE
+				const normalizedType = type.toLowerCase();
 				if (!groupedSubjects[code]) groupedSubjects[code] = {};
 				groupedSubjects[code][normalizedType] = value;
 			});
@@ -179,8 +165,9 @@ export const columns: ColumnDef<Student>[] = [
 		}
 	},
 
+	// ===================== RESULT FIELD ======================
 	{
-		accessorKey: "resultstatus",
+		accessorKey: "result", // ✔ FIXED: correct field
 		header: "Result",
 		cell: ({ getValue }) => {
 			const result = String(getValue() ?? "").toLowerCase();
@@ -191,10 +178,16 @@ export const columns: ColumnDef<Student>[] = [
 			return <div className={`border text-center rounded-xl px-2 py-1 text-sm ${bgColor} ${textColor} ${borderColor}`}>{result.toUpperCase()}</div>;
 		}
 	},
-	{ accessorKey: "grade", header: "grade" },
+
+	// ===================== GRADE FIELD ======================
+	{
+		accessorKey: "grade",
+		header: "Grade"
+	},
 	{ accessorKey: "percentage", header: "Percentage" },
 	{ accessorKey: "SGPA", header: "SGPA" },
-	// { accessorKey: "CGPA", header: "CGPA" }
+
+	// ===================== ACTIONS ======================
 	{
 		id: "actions",
 		header: "Actions",
@@ -227,3 +220,128 @@ export const columns: ColumnDef<Student>[] = [
 		}
 	}
 ];
+
+// export const columns: ColumnDef<Student>[] = [
+// 	{
+// 		id: "slno",
+// 		header: "Sl No",
+// 		cell: ({ row }) => row.index + 1
+// 	},
+// 	// { accessorKey: "id", header: "ID" },
+// 	// { accessorKey: "documentId", header: "Document ID" },
+// 	{ accessorKey: "name", header: "Name" },
+// 	{ accessorKey: "usn", header: "USN" },
+// 	{ accessorKey: "gender", header: "Gender" },
+// 	{ accessorKey: "category", header: "Category" },
+// 	{ accessorKey: "sem", header: "Semester" },
+// 	{ accessorKey: "branch", header: "Branch" },
+// 	{ accessorKey: "batch", header: "Batch" },
+// 	{
+// 		id: "subjects",
+// 		header: "Subjects",
+// 		cell: ({ row }) => {
+// 			const student = row.original;
+
+// 			// match keys like bec601_internal, bec601_external, bec601_total
+// 			// const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z]{2,6}[0-9]{2,5}_(internal|external|total)$/i.test(key));
+// 			const subjectEntries = Object.entries(student).filter(([key]) => /^[a-z0-9]+_(internal|external|total)$/i.test(key));
+
+// 			// group by subject code
+// 			const groupedSubjects: Record<string, any> = {};
+// 			// subjectEntries.forEach(([key, value]) => {
+// 			// 	const [code, type] = key.split("_");
+// 			// 	if (!groupedSubjects[code]) groupedSubjects[code] = {};
+// 			// 	groupedSubjects[code][type] = value;
+// 			// });
+// 			subjectEntries.forEach(([key, value]) => {
+// 				const [code, type] = key.split("_");
+// 				const normalizedType = type.toLowerCase(); // FIX HERE
+// 				if (!groupedSubjects[code]) groupedSubjects[code] = {};
+// 				groupedSubjects[code][normalizedType] = value;
+// 			});
+
+// 			const [open, setOpen] = useState(false);
+
+// 			return (
+// 				<div className="text-xs">
+// 					<button onClick={() => setOpen(!open)} className="px-2 py-1 text-white bg-slate-900 rounded-md text-xs">
+// 						{open ? (
+// 							<div className="flex items-center">
+// 								<MinusIcon size={15} /> Hide Subjects
+// 							</div>
+// 						) : (
+// 							<div className="flex items-center">
+// 								<PlusIcon size={15} /> View Subjects ({Object.keys(groupedSubjects).length})
+// 							</div>
+// 						)}
+// 					</button>
+
+// 					{open && (
+// 						<div className="mt-2 p-2 border rounded-md bg-slate-50 max-h-48 overflow-y-auto">
+// 							{Object.entries(groupedSubjects).map(([code, marks]: any) => (
+// 								<div key={code} className="border bg-white rounded-xl p-2 mb-2">
+// 									<div className="font-bold text-sm mb-1">{code.toUpperCase()}</div>
+// 									<div className="flex justify-between text-xs">
+// 										<span>Internal: {marks.internal ?? "-"}</span>
+// 										<span>External: {marks.external ?? "-"}</span>
+// 										<span>
+// 											Total: <b>{marks.total ?? "-"}</b>
+// 										</span>
+// 									</div>
+// 								</div>
+// 							))}
+// 						</div>
+// 					)}
+// 				</div>
+// 			);
+// 		}
+// 	},
+
+// 	{
+// 		accessorKey: "resultstatus",
+// 		header: "Result",
+// 		cell: ({ getValue }) => {
+// 			const result = String(getValue() ?? "").toLowerCase();
+// 			const borderColor = result === "pass" ? "border-green-200" : "border-red-200";
+// 			const bgColor = result === "pass" ? "bg-green-50" : "bg-red-50";
+// 			const textColor = result === "pass" ? "text-green-500" : "text-red-500";
+
+// 			return <div className={`border text-center rounded-xl px-2 py-1 text-sm ${bgColor} ${textColor} ${borderColor}`}>{result.toUpperCase()}</div>;
+// 		}
+// 	},
+// 	{ accessorKey: "grade", header: "grade" },
+// 	{ accessorKey: "percentage", header: "Percentage" },
+// 	{ accessorKey: "SGPA", header: "SGPA" },
+// 	// { accessorKey: "CGPA", header: "CGPA" }
+// 	{
+// 		id: "actions",
+// 		header: "Actions",
+// 		cell: ({ row }) => {
+// 			const username = Cookies.get("username")?.replace(/"/g, "");
+// 			const student = row.original.documentId;
+// 			const usn = row.original.usn;
+// 			const sem = "sem" + row.original.sem;
+
+// 			return (
+// 				<>
+// 					{username == "superadmin" ? (
+// 						<Dialog>
+// 							<DialogTrigger asChild>
+// 								<Button variant="outline" size="sm">
+// 									<Edit className="w-4 h-4 mr-2" />
+// 									Edit
+// 								</Button>
+// 							</DialogTrigger>
+
+// 							<DialogContent className="max-w-xl">
+// 								<EditStudent studentId={student} semister={sem} usn={usn} />
+// 							</DialogContent>
+// 						</Dialog>
+// 					) : (
+// 						" "
+// 					)}
+// 				</>
+// 			);
+// 		}
+// 	}
+// ];

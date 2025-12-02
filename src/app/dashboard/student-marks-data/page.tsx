@@ -142,21 +142,33 @@ export default function Page() {
 			}
 
 			return {
-				id: `${student.id}-${sem}`, // unique row id
+				id: `${student.id}-${sem}`,
 				documentId: student.documentId,
 				name: student.name,
 				usn: student.usn,
 				sem: Number(sem.replace("sem", "")),
+
 				SGPA,
 				CGPA,
-				percentage, // number
+				percentage,
+
 				category: student.category,
 				gender: student.gender,
-				resultstatus, // matches your column accessorKey "resultstatus"
+
+				// ✔ FIXED:
+				// "result" should be pass/fail
+				result: resultstatus,
+
+				// ✔ FIXED:
+				// "grade" should be: first class, distinction, fail etc.
 				grade,
+
 				branch: student.branch?.branch_name || "",
 				batch: student.batch || "",
-				total: totalMarks, // optional: available if you want to show it later
+
+				total: totalMarks, // total of sem marks
+
+				// subject marks
 				...subjectMarkMap
 			};
 		});
