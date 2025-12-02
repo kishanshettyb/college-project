@@ -35,12 +35,10 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 	};
 
 	return (
-		<div className="grid items-center grid-cols-1 lg:grid-cols-2">
-			<div>
-				<Image alt="" src="/images/college.jpg" width="1000" height="1000" className="w-full h-[20vh] lg:h-[100vh] object-cover" />
-			</div>
+		<div className="grid items-center  ">
+			<div>{/* <Image alt="" src="/images/college.jpg" width="1000" height="1000" className="w-full h-[20vh] lg:h-[100vh] object-cover" /> */}</div>
 			<div className={cn("flex p-4 mb-40 lg:mb-0 justify-center items-center flex-col gap-6", className)} {...props}>
-				<div className="w-full lg:w-1/2">
+				<div className="w-full  ">
 					<Image
 						width="1024"
 						height="1024"
