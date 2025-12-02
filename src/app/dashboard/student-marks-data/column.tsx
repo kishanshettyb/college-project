@@ -181,9 +181,16 @@ export const columns: ColumnDef<Student>[] = [
 
 	// ===================== GRADE FIELD ======================
 	{
-		accessorKey: "grade",
-		header: "Grade"
+		id: "grade",
+		header: "Grade",
+		cell: ({ row }) => {
+			const res = row.original.grade;
+			return <>{res == "fail" ? <p className="text-red-600 px-5 p-2 rounded-xl bg-red-50 border border-red-200 max-w-min">{res}</p> : <p>{res}</p>}</>;
+		}
 	},
+	// 	accessorKey: "grade",
+	// 	header: "Grade"
+	// },
 	{ accessorKey: "percentage", header: "Percentage" },
 	{ accessorKey: "SGPA", header: "SGPA" },
 
