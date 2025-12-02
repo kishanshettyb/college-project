@@ -185,7 +185,15 @@ export const columns: ColumnDef<Student>[] = [
 		header: "Grade",
 		cell: ({ row }) => {
 			const res = row.original.grade;
-			return <>{res == "fail" ? <p className="text-red-600 px-5 p-2 rounded-xl bg-red-50 border border-red-200 max-w-min">{res}</p> : <p>{res}</p>}</>;
+			return (
+				<>
+					{res == "fail" ? (
+						<p className="text-red-600 px-5 p-2 rounded-xl bg-red-50 border border-red-200 max-w-min">{res}</p>
+					) : (
+						<p className="text-green-600 px-5 p-2 rounded-xl bg-green-50 border border-green-200 max-w-min">{res}</p>
+					)}
+				</>
+			);
 		}
 	},
 	// 	accessorKey: "grade",
