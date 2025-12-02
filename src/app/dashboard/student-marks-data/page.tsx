@@ -101,7 +101,17 @@ export default function Page() {
 
 			// Try to find a matching sem result from student.results (if backend provides it)
 			const semKey = sem; // 'sem1', 'sem2', ...
-			const semResult = Array.isArray(student.results) ? student.results.find((r: any) => String(r.semister || "").toLowerCase() === semKey) : undefined;
+			// const semResult = Array.isArray(student.results) ? student.results.find((r: any) => String(r.semister || "").toLowerCase() === semKey) : undefined;
+			let semResult = undefined;
+
+			if (Array.isArray(student.results)) {
+				const resultsForSem = student.results.filter((r: any) => String(r.semister || "").toLowerCase() === semKey);
+
+				// pick latest updated result
+				resultsForSem.sort((a: any, b: any) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+
+				semResult = resultsForSem[0];
+			}
 
 			// If semResult exists use it, otherwise compute from marks
 			const semTotalFromMarks = semMarks.reduce((s, m) => s + Number(m.internal_mark || 0) + Number(m.external_mark || 0), 0);
