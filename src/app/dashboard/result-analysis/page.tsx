@@ -72,10 +72,10 @@ function page() {
 	// }
 	function transformStudentsData(students: any[], marks: any[]) {
 		return students.map((student) => {
-			// ✔ pick latest result (last entry)
+			// Choose latest semester result
 			const latestResult = Array.isArray(student.results) && student.results.length > 0 ? student.results[student.results.length - 1] : null;
 
-			// ✔ all marks belonging to student
+			// All marks for this student
 			const stuMarks = marks.filter((m) => m.student.id === student.id);
 
 			const subjectMarkMap: Record<string, string> = {};
@@ -93,13 +93,19 @@ function page() {
 				name: student.name,
 				usn: student.usn,
 
-				// ✔ fixed: use latestResult, not student.result
+				// ✔ Correct: semester
 				sem: latestResult?.semister?.replace("sem", "") ?? "",
+
+				// ✔ Correct: SGPA/CGPA
 				SGPA: latestResult?.SGPA ?? "",
 				CGPA: latestResult?.CGPA ?? "",
 				percentage: latestResult?.percentage ?? "",
-				resultstatus: latestResult?.resultstatus ?? latestResult?.result ?? "",
+
+				// ✔ Correct: academic grade (not pass/fail)
 				grade: latestResult?.grade ?? "",
+
+				// ✔ Correct: result = pass/fail
+				result: latestResult?.resultstatus ?? "",
 
 				category: student.category,
 				gender: student.gender,
@@ -108,7 +114,6 @@ function page() {
 				updatedAt: student.updatedAt,
 				publishedAt: student.publishedAt,
 
-				// ✔ spread subject marks
 				...subjectMarkMap
 			};
 		});
