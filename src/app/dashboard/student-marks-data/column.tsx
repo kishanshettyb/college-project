@@ -166,18 +166,18 @@ export const columns: ColumnDef<Student>[] = [
 	},
 
 	// ===================== RESULT FIELD ======================
-	{
-		accessorKey: "result", // ✔ FIXED: correct field
-		header: "Result",
-		cell: ({ getValue }) => {
-			const result = String(getValue() ?? "").toLowerCase();
-			const borderColor = result === "pass" ? "border-green-200" : "border-red-200";
-			const bgColor = result === "pass" ? "bg-green-50" : "bg-red-50";
-			const textColor = result === "pass" ? "text-green-500" : "text-red-500";
+	// {
+	// 	accessorKey: "result", // ✔ FIXED: correct field
+	// 	header: "Result",
+	// 	cell: ({ getValue }) => {
+	// 		const result = String(getValue() ?? "").toLowerCase();
+	// 		const borderColor = result === "pass" ? "border-green-200" : "border-red-200";
+	// 		const bgColor = result === "pass" ? "bg-green-50" : "bg-red-50";
+	// 		const textColor = result === "pass" ? "text-green-500" : "text-red-500";
 
-			return <div className={`border text-center rounded-xl px-2 py-1 text-sm ${bgColor} ${textColor} ${borderColor}`}>{result.toUpperCase()}</div>;
-		}
-	},
+	// 		return <div className={`border text-center rounded-xl px-2 py-1 text-sm ${bgColor} ${textColor} ${borderColor}`}>{result.toUpperCase()}</div>;
+	// 	}
+	// },
 
 	// ===================== GRADE FIELD ======================
 	{
