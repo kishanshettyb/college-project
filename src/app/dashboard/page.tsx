@@ -1,10 +1,6 @@
 "use client";
 
 import * as React from "react";
-
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import Result from "@/components/reports";
 import { useGetAllStudentsFull } from "@/services/queries/student/student";
 import { Loader2 } from "lucide-react";
@@ -42,13 +38,48 @@ export default function Page() {
 	// --------------------------------------------------------
 	// 🔥 Transform into your desired final structure
 	// --------------------------------------------------------
+	// function transformStudentsData(students: any[], marks: any[]) {
+	// 	return students.map((student) => {
+	// 		const stuMarks = marks.filter((m) => m.student.id === student.id);
+	// 		const subjectMarkMap: Record<string, string> = {};
+
+	// 		stuMarks.forEach((m) => {
+	// 			const code = m.subject.sub_code.toLowerCase(); // ecs001 etc.
+	// 			const total = Number(m.internal_mark || 0) + Number(m.external_mark || 0);
+	// 			subjectMarkMap[code] = total.toString();
+	// 		});
+
+	// 		return {
+	// 			id: student.id,
+	// 			documentId: student.documentId,
+	// 			name: student.name,
+	// 			usn: student.usn,
+	// 			sem: student.result?.semister?.replace("sem", "") || "",
+	// 			SGPA: student.result?.SGPA || "",
+	// 			CGPA: student.result?.CGPA || "",
+	// 			percentage: student.result?.percentage || "",
+	// 			category: student.category,
+	// 			gender: student.gender,
+	// 			result: student.result?.result || "",
+	// 			grade: student.result?.grade || "",
+	// 			branch: student.branch?.branch_name || "",
+	// 			createdAt: student.createdAt,
+	// 			updatedAt: student.updatedAt,
+	// 			publishedAt: student.publishedAt,
+	// 			...subjectMarkMap
+	// 		};
+	// 	});
+	// }
 	function transformStudentsData(students: any[], marks: any[]) {
 		return students.map((student) => {
-			const stuMarks = marks.filter((m) => m.student.id === student.id);
-			const subjectMarkMap: Record<string, string> = {};
+			// pick latest semester result OR first one
+			const latestResult = student.results?.length ? student.results[student.results.length - 1] : null;
 
+			const stuMarks = marks.filter((m) => m.student.id === student.id);
+
+			const subjectMarkMap: Record<string, string> = {};
 			stuMarks.forEach((m) => {
-				const code = m.subject.sub_code.toLowerCase(); // ecs001 etc.
+				const code = m.subject.sub_code.toLowerCase();
 				const total = Number(m.internal_mark || 0) + Number(m.external_mark || 0);
 				subjectMarkMap[code] = total.toString();
 			});
@@ -58,18 +89,23 @@ export default function Page() {
 				documentId: student.documentId,
 				name: student.name,
 				usn: student.usn,
-				sem: student.result?.semister?.replace("sem", "") || "",
-				SGPA: student.result?.SGPA || "",
-				CGPA: student.result?.CGPA || "",
-				percentage: student.result?.percentage || "",
+
+				// ✔️ safely extract from latestResult
+				sem: latestResult?.semister?.replace("sem", "") ?? "",
+				SGPA: latestResult?.SGPA ?? "",
+				CGPA: latestResult?.CGPA ?? "",
+				percentage: latestResult?.percentage ?? "",
+				result: latestResult?.resultstatus ?? "",
+				grade: latestResult?.grade ?? "",
+
 				category: student.category,
 				gender: student.gender,
-				result: student.result?.result || "",
-				grade: student.result?.grade || "",
-				branch: student.branch?.branch_name || "",
+				branch: student.branch?.branch_name ?? "",
+
 				createdAt: student.createdAt,
 				updatedAt: student.updatedAt,
 				publishedAt: student.publishedAt,
+
 				...subjectMarkMap
 			};
 		});
