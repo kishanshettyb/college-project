@@ -119,7 +119,26 @@ function page() {
 		});
 	}
 
+	// const finalData = transformStudentsData(students, marks);
 	const finalData = transformStudentsData(students, marks);
+
+	// ⭐ Sort for Top 5 ranking
+	finalData.sort((a: any, b: any) => {
+		const p1 = Number(a.percentage) || 0;
+		const p2 = Number(b.percentage) || 0;
+
+		if (p2 !== p1) return p2 - p1;
+
+		const s1 = Number(a.SGPA) || 0;
+		const s2 = Number(b.SGPA) || 0;
+
+		if (s2 !== s1) return s2 - s1;
+
+		const c1 = Number(a.CGPA) || 0;
+		const c2 = Number(b.CGPA) || 0;
+
+		return c2 - c1;
+	});
 
 	const formatted = {
 		data: finalData,
