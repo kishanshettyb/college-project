@@ -38,14 +38,52 @@ function page() {
 	// --------------------------------------------------------
 	// 🔥 Transform into your desired final structure
 	// --------------------------------------------------------
+	// function transformStudentsData(students: any[], marks: any[]) {
+	// 	return students.map((student) => {
+	// 		const stuMarks = marks.filter((m) => m.student.id === student.id);
+	// 		const subjectMarkMap: Record<string, string> = {};
+
+	// 		stuMarks.forEach((m) => {
+	// 			const code = m.subject.sub_code.toLowerCase(); // ecs001 etc.
+	// 			const total = Number(m.internal_mark || 0) + Number(m.external_mark || 0);
+	// 			subjectMarkMap[code] = total.toString();
+	// 		});
+
+	// 		return {
+	// 			id: student.id,
+	// 			documentId: student.documentId,
+	// 			name: student.name,
+	// 			usn: student.usn,
+	// 			sem: student.result?.semister?.replace("sem", "") || "",
+	// 			SGPA: student.result?.SGPA || "",
+	// 			CGPA: student.result?.CGPA || "",
+	// 			percentage: student.result?.percentage || "",
+	// 			category: student.category,
+	// 			gender: student.gender,
+	// 			result: student.result?.result || "",
+	// 			grade: student.result?.grade || "",
+	// 			branch: student.branch?.branch_name || "",
+	// 			createdAt: student.createdAt,
+	// 			updatedAt: student.updatedAt,
+	// 			publishedAt: student.publishedAt,
+	// 			...subjectMarkMap
+	// 		};
+	// 	});
+	// }
 	function transformStudentsData(students: any[], marks: any[]) {
 		return students.map((student) => {
+			// ✔ pick latest result (last entry)
+			const latestResult = Array.isArray(student.results) && student.results.length > 0 ? student.results[student.results.length - 1] : null;
+
+			// ✔ all marks belonging to student
 			const stuMarks = marks.filter((m) => m.student.id === student.id);
+
 			const subjectMarkMap: Record<string, string> = {};
 
 			stuMarks.forEach((m) => {
-				const code = m.subject.sub_code.toLowerCase(); // ecs001 etc.
+				const code = m.subject?.sub_code?.toLowerCase() || "";
 				const total = Number(m.internal_mark || 0) + Number(m.external_mark || 0);
+
 				subjectMarkMap[code] = total.toString();
 			});
 
@@ -54,18 +92,23 @@ function page() {
 				documentId: student.documentId,
 				name: student.name,
 				usn: student.usn,
-				sem: student.result?.semister?.replace("sem", "") || "",
-				SGPA: student.result?.SGPA || "",
-				CGPA: student.result?.CGPA || "",
-				percentage: student.result?.percentage || "",
+
+				// ✔ fixed: use latestResult, not student.result
+				sem: latestResult?.semister?.replace("sem", "") ?? "",
+				SGPA: latestResult?.SGPA ?? "",
+				CGPA: latestResult?.CGPA ?? "",
+				percentage: latestResult?.percentage ?? "",
+				resultstatus: latestResult?.resultstatus ?? latestResult?.result ?? "",
+				grade: latestResult?.grade ?? "",
+
 				category: student.category,
 				gender: student.gender,
-				result: student.result?.result || "",
-				grade: student.result?.grade || "",
-				branch: student.branch?.branch_name || "",
+				branch: student.branch?.branch_name,
 				createdAt: student.createdAt,
 				updatedAt: student.updatedAt,
 				publishedAt: student.publishedAt,
+
+				// ✔ spread subject marks
 				...subjectMarkMap
 			};
 		});
