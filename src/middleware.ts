@@ -108,7 +108,7 @@ export async function middleware(request: NextRequest) {
 			}
 		}
 		// For non-student users or no username header, redirect to regular dashboard
-		else {
+		else if (webviewUsername && webviewUsername.startsWith("faculty")) {
 			if (url.pathname === "/" || !url.pathname.startsWith("/dashboard")) {
 				url.pathname = "/dashboard";
 				return NextResponse.redirect(url);
