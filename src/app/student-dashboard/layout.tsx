@@ -50,11 +50,17 @@ function layout({ children }: { children: React.ReactNode }) {
 									<p className="font-semibold">Add Marks</p>
 								</Link>
 							</div>
-							<div>
+							<div className="hidden lg:block">
 								<div onClick={handleLogout} className="text-center flex justify-center items-center flex-col">
 									<LogOut />
 									<p className="font-semibold">Logout</p>
 								</div>
+							</div>
+							<div className=" lg:hidden">
+								<Link href="/" className="text-center flex justify-center items-center flex-col">
+									<LogOut />
+									<p className="font-semibold">Logout</p>
+								</Link>
 							</div>
 						</div>
 					</footer>

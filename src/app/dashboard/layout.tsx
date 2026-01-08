@@ -97,8 +97,14 @@ export default function Page({ children }: { children: React.ReactNode }) {
 												<BookA size={20} />
 												<p className="font-semibold">Subjects</p>
 											</Link>
-											<Link className="text-center flex flex-row justify-center p-2 text-xs items-center " href="/dashboard/excel">
+											<div className="text-center hidden lg:flex flex-row justify-center p-2 text-xs items-center">
 												<div onClick={handleLogout} className="text-center flex justify-center items-center gap-x-3 flex-row">
+													<LogOut size={20} />
+													<p className="font-semibold">Logout</p>
+												</div>
+											</div>
+											<Link href="/" className="text-center flex lg:hidden flex-row justify-center p-2 text-xs items-center">
+												<div className="text-center flex justify-center items-center gap-x-3 flex-row">
 													<LogOut size={20} />
 													<p className="font-semibold">Logout</p>
 												</div>
