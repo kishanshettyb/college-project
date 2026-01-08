@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
 	const url = request.nextUrl.clone();
+
+	// ✅ 1. DETECT EXPO WEBVIEW (ADD THIS AT TOP)
+	const userAgent = request.headers.get("user-agent") || "";
+	const isExpoWebView = userAgent.includes("Expo") || userAgent.includes("ReactNative") || userAgent.includes("wv");
+
+	// ✅ 2. SKIP MIDDLEWARE FOR EXPO
+	if (isExpoWebView) {
+		return NextResponse.next();
+	}
+
 	const token = request.cookies.get("admin_token")?.value;
 	const usernameCookie = request.cookies.get("username")?.value;
 
