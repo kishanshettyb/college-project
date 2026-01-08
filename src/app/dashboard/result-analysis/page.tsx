@@ -585,7 +585,7 @@ function Page() {
 			</div>
 
 			{/* Summary Cards */}
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+			{/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 				<div className="bg-white rounded-xl shadow p-6">
 					<h3 className="text-gray-500 text-sm font-medium mb-2">Total Students</h3>
 					<p className="text-3xl font-bold text-gray-800">{overallStats.totalStudents}</p>
@@ -619,7 +619,7 @@ function Page() {
 					</p>
 					<div className="mt-2 text-sm text-gray-600">Based on latest semester results</div>
 				</div>
-			</div>
+			</div> */}
 
 			{/* Main Analysis Component */}
 			<div className="bg-white rounded-xl shadow p-6">
@@ -714,17 +714,17 @@ function Page() {
 			</div>
 
 			{/* Insights Section */}
-			<div className="bg-white rounded-xl shadow p-6 mt-6 mb-8">
-				<h2 className="text-xl font-bold text-gray-800 mb-4">Key Insights</h2>
-				<div className="space-y-3">
-					{insights.map((insight, index) => (
-						<div key={index} className="flex items-start">
-							<div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
-							<p className="text-gray-700">{insight}</p>
-						</div>
-					))}
-				</div>
-			</div>
+			// <div className="bg-white rounded-xl shadow p-6 mt-6 mb-8">
+			// 	<h2 className="text-xl font-bold text-gray-800 mb-4">Key Insights</h2>
+			// 	<div className="space-y-3">
+			// 		{insights.map((insight, index) => (
+			// 			<div key={index} className="flex items-start">
+			// 				<div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
+			// 				<p className="text-gray-700">{insight}</p>
+			// 			</div>
+			// 		))}
+			// 	</div>
+			// </div>
 		</div>
 	);
 }
