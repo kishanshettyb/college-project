@@ -283,7 +283,7 @@ export default function Result({ data }: any) {
 											<th className="border px-2 py-1">Sem</th>
 											<th className="border px-2 py-1">SGPA</th>
 											<th className="border px-2 py-1">CGPA</th>
-											<th className="border px-2 py-1">Result</th>
+											{/* <th className="border px-2 py-1">Result</th> */}
 										</tr>
 									</thead>
 									<tbody>
@@ -293,7 +293,7 @@ export default function Result({ data }: any) {
 												<td className="border px-2 py-1">{s.sem}</td>
 												<td className="border px-2 py-1">{s.SGPA}</td>
 												<td className="border px-2 py-1">{s.CGPA}</td>
-												<td className="border px-2 py-1">{s.result}</td>
+												{/* <td className="border px-2 py-1">{s.result}</td> */}
 											</tr>
 										))}
 									</tbody>
@@ -313,7 +313,7 @@ export default function Result({ data }: any) {
 											<th className="border px-2 py-1">Sem</th>
 											<th className="border px-2 py-1">SGPA</th>
 											<th className="border px-2 py-1">CGPA</th>
-											<th className="border px-2 py-1">Result</th>
+											{/* <th className="border px-2 py-1">Result</th> */}
 										</tr>
 									</thead>
 									<tbody>
@@ -323,7 +323,7 @@ export default function Result({ data }: any) {
 												<td className="border px-2 py-1">{s.sem}</td>
 												<td className="border px-2 py-1">{s.SGPA}</td>
 												<td className="border px-2 py-1">{s.CGPA}</td>
-												<td className="border px-2 py-1">{s.result}</td>
+												{/* <td className="border px-2 py-1">{s.result}</td> */}
 											</tr>
 										))}
 									</tbody>

@@ -621,19 +621,6 @@ function Page() {
 				</div>
 			</div>
 
-			{/* Insights Section */}
-			<div className="bg-white rounded-xl shadow p-6 mb-8">
-				<h2 className="text-xl font-bold text-gray-800 mb-4">Key Insights</h2>
-				<div className="space-y-3">
-					{insights.map((insight, index) => (
-						<div key={index} className="flex items-start">
-							<div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
-							<p className="text-gray-700">{insight}</p>
-						</div>
-					))}
-				</div>
-			</div>
-
 			{/* Main Analysis Component */}
 			<div className="bg-white rounded-xl shadow p-6">
 				<ResultAdvanced data={formatted} />
@@ -723,6 +710,19 @@ function Page() {
 							})}
 						</tbody>
 					</table>
+				</div>
+			</div>
+
+			{/* Insights Section */}
+			<div className="bg-white rounded-xl shadow p-6 mt-6 mb-8">
+				<h2 className="text-xl font-bold text-gray-800 mb-4">Key Insights</h2>
+				<div className="space-y-3">
+					{insights.map((insight, index) => (
+						<div key={index} className="flex items-start">
+							<div className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
+							<p className="text-gray-700">{insight}</p>
+						</div>
+					))}
 				</div>
 			</div>
 		</div>
