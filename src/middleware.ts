@@ -101,12 +101,12 @@ export async function middleware(request: NextRequest) {
 	// ✅ 2. HANDLE EXPO WEBVIEW REDIRECTION BASED ON USERNAME
 	if (isExpoWebView || webviewAuth === "true") {
 		// Normalize username
-		const username = webviewUsername?.toLowerCase() || "";
+		const username = webviewUsername;
 
 		/* ----------------------------------
 	   STUDENT (starts with 4GE)
 	---------------------------------- */
-		if (username.startsWith("4ge")) {
+		if (username.startsWith("4GE")) {
 			if (!url.pathname.startsWith("/student-dashboard")) {
 				url.pathname = "/student-dashboard";
 				return NextResponse.redirect(url);
