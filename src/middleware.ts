@@ -220,18 +220,15 @@ export async function middleware(request: NextRequest) {
 
 	// ✅ 2. HANDLE EXPO WEBVIEW REDIRECTION BASED ON USERNAME
 	if (isExpoWebView || webviewAuth === "true") {
-		// Normalize username - trim whitespace and convert to uppercase for consistent checking
+		// Normalize username - trim whitespace
 		const username = (webviewUsername || "").trim();
 
-		console.log("WEBVIEW DEBUG:", {
-			userAgent,
-			isExpoWebView,
-			webviewAuth,
-			webviewUsername,
-			normalizedUsername: username,
-			pathname: url.pathname,
-			startsWith4GE: username.startsWith("4GE")
-		});
+		console.log("🚀 WEBVIEW DEBUG 🚀");
+		console.log("Username from header:", webviewUsername);
+		console.log("Normalized username:", username);
+		console.log("Pathname:", url.pathname);
+		console.log("username.startsWith('4GE'):", username.startsWith("4GE"));
+		console.log("username.toUpperCase().startsWith('4GE'):", username.toUpperCase().startsWith("4GE"));
 
 		// Public routes for WebView (including root and logout)
 		if (
@@ -245,14 +242,15 @@ export async function middleware(request: NextRequest) {
 			url.pathname.startsWith("/favicon") ||
 			url.pathname.startsWith("/api")
 		) {
+			console.log("✅ Allowed public route:", url.pathname);
 			return NextResponse.next();
 		}
 
 		/* ----------------------------------
-	   STUDENT (starts with 4GE)
+	   STUDENT (starts with 4GE) - CASE INSENSITIVE
 	---------------------------------- */
-		if (username.startsWith("4GE")) {
-			console.log("Redirecting STUDENT to student-dashboard");
+		if (username.toUpperCase().startsWith("4GE")) {
+			console.log("🎓 Redirecting STUDENT to student-dashboard");
 			// If trying to access regular dashboard, redirect to student dashboard
 			if (url.pathname.startsWith("/dashboard")) {
 				url.pathname = "/student-dashboard";
@@ -272,7 +270,7 @@ export async function middleware(request: NextRequest) {
 	---------------------------------- */
 		// If username exists and is NOT a student
 		if (username && username.length > 0) {
-			console.log("Redirecting FACULTY to dashboard");
+			console.log("👨‍🏫 Redirecting FACULTY to dashboard");
 			// If trying to access student dashboard, redirect to regular dashboard
 			if (url.pathname.startsWith("/student-dashboard")) {
 				url.pathname = "/dashboard";
@@ -288,7 +286,7 @@ export async function middleware(request: NextRequest) {
 		}
 
 		// No username - stay on current page (could be login page)
-		console.log("No username, allowing access");
+		console.log("❓ No username, allowing access");
 		return NextResponse.next();
 	}
 
@@ -329,7 +327,7 @@ export async function middleware(request: NextRequest) {
 	// Ensure username is a string
 	username = String(username || "");
 
-	const isStudent = username.startsWith("4GE");
+	const isStudent = username.toUpperCase().startsWith("4GE");
 
 	// -----------------------------------------
 	// ✅ STUDENT LOGIN (username starts with 4GE)
