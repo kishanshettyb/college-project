@@ -100,20 +100,34 @@ export async function middleware(request: NextRequest) {
 
 	// ✅ 2. HANDLE EXPO WEBVIEW REDIRECTION BASED ON USERNAME
 	if (isExpoWebView || webviewAuth === "true") {
-		// If username header is provided and starts with 4GE, redirect to student dashboard
-		if (webviewUsername && webviewUsername.startsWith("4GE")) {
-			if (url.pathname === "/" || !url.pathname.startsWith("/student-dashboard")) {
+		// Normalize username
+		const username = webviewUsername?.toLowerCase() || "";
+
+		/* ----------------------------------
+	   STUDENT (starts with 4GE)
+	---------------------------------- */
+		if (username.startsWith("4ge")) {
+			if (!url.pathname.startsWith("/student-dashboard")) {
 				url.pathname = "/student-dashboard";
 				return NextResponse.redirect(url);
 			}
+			return NextResponse.next();
 		}
-		// For non-student users or no username header, redirect to regular dashboard
-		else if (webviewUsername && webviewUsername.startsWith("faculty")) {
-			if (url.pathname === "/" || !url.pathname.startsWith("/dashboard")) {
+
+		/* ----------------------------------
+	   FACULTY OR ANY OTHER USER
+	---------------------------------- */
+		if (
+			username.includes("faculty") || // faculty user
+			username.length > 0 // any other username
+		) {
+			if (!url.pathname.startsWith("/dashboard")) {
 				url.pathname = "/dashboard";
 				return NextResponse.redirect(url);
 			}
+			return NextResponse.next();
 		}
+
 		return NextResponse.next();
 	}
 
