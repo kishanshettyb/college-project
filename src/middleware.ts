@@ -221,7 +221,7 @@ export async function middleware(request: NextRequest) {
 	// ✅ 2. HANDLE EXPO WEBVIEW REDIRECTION BASED ON USERNAME
 	if (isExpoWebView || webviewAuth === "true") {
 		// Normalize username - trim whitespace and convert to uppercase for consistent checking
-		const username = (webviewUsername || "").trim().toUpperCase();
+		const username = (webviewUsername || "").trim();
 
 		console.log("WEBVIEW DEBUG:", {
 			userAgent,
