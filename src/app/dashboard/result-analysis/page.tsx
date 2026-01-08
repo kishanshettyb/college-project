@@ -584,80 +584,12 @@ function Page() {
 				</p>
 			</div>
 
-			{/* Summary Cards */}
-			{/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-				<div className="bg-white rounded-xl shadow p-6">
-					<h3 className="text-gray-500 text-sm font-medium mb-2">Total Students</h3>
-					<p className="text-3xl font-bold text-gray-800">{overallStats.totalStudents}</p>
-					<div className="mt-2 flex items-center text-sm text-green-600">
-						<span>Complete dataset</span>
-					</div>
-				</div>
-
-				<div className="bg-white rounded-xl shadow p-6">
-					<h3 className="text-gray-500 text-sm font-medium mb-2">Pass Rate</h3>
-					<p className="text-3xl font-bold text-blue-600">{overallStats.overallPassRate}%</p>
-					<div className="mt-2 flex items-center text-sm">
-						<span>
-							{overallStats.passingStudents} passed, {overallStats.failingStudents} failed
-						</span>
-					</div>
-				</div>
-
-				<div className="bg-white rounded-xl shadow p-6">
-					<h3 className="text-gray-500 text-sm font-medium mb-2">Average Percentage</h3>
-					<p className="text-3xl font-bold text-purple-600">{overallStats.overallAveragePercentage}%</p>
-					<div className="mt-2 text-sm text-gray-600">
-						Highest: {overallStats.highestPercentage}%, Lowest: {overallStats.lowestPercentage}%
-					</div>
-				</div>
-
-				<div className="bg-white rounded-xl shadow p-6">
-					<h3 className="text-gray-500 text-sm font-medium mb-2">Average SGPA/CGPA</h3>
-					<p className="text-3xl font-bold text-teal-600">
-						{overallStats.overallAverageSGPA}/{overallStats.overallAverageCGPA}
-					</p>
-					<div className="mt-2 text-sm text-gray-600">Based on latest semester results</div>
-				</div>
-			</div> */}
-
 			{/* Main Analysis Component */}
 			<div className="bg-white rounded-xl shadow p-6">
 				<ResultAdvanced data={formatted} />
 			</div>
 
 			{/* Data Summary */}
-			<div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-				<div className="bg-white rounded-xl shadow p-6">
-					<h3 className="text-lg font-semibold mb-4">Branch Performance Summary</h3>
-					<div className="space-y-3">
-						{chartData.branchPerformance.map((branch, index) => (
-							<div key={index} className="flex justify-between items-center border-b pb-2">
-								<span className="font-medium">{branch.branch}</span>
-								<div className="text-right">
-									<div className="font-semibold">{branch.averagePercentage}% avg</div>
-									<div className="text-sm text-gray-500">{branch.passRate}% pass rate</div>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-
-				<div className="bg-white rounded-xl shadow p-6">
-					<h3 className="text-lg font-semibold mb-4">Category Performance Summary</h3>
-					<div className="space-y-3">
-						{chartData.categoryPerformance.map((category, index) => (
-							<div key={index} className="flex justify-between items-center border-b pb-2">
-								<span className="font-medium">{category.category}</span>
-								<div className="text-right">
-									<div className="font-semibold">{category.averagePercentage}% avg</div>
-									<div className="text-sm text-gray-500">{category.passRate}% pass rate</div>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-			</div>
 
 			{/* Top Performers */}
 			<div className="mt-8 bg-white rounded-xl shadow p-6">
