@@ -220,13 +220,14 @@ export async function middleware(request: NextRequest) {
 
 	// ✅ 2. HANDLE EXPO WEBVIEW REDIRECTION BASED ON USERNAME
 	if (isExpoWebView || webviewAuth === "true") {
-		// Normalize username
-		const username = webviewUsername || "";
+		// Normalize username - trim whitespace
+		const username = (webviewUsername || "").trim();
 
 		// Public routes for WebView (including root and logout)
 		if (
 			url.pathname === "/" ||
 			url.pathname === "/logout" ||
+			url.pathname === "/register" ||
 			url.pathname.startsWith("/students/login") ||
 			url.pathname.startsWith("/students/register") ||
 			url.pathname.startsWith("/images") ||
@@ -241,6 +242,13 @@ export async function middleware(request: NextRequest) {
 	   STUDENT (starts with 4GE)
 	---------------------------------- */
 		if (username.startsWith("4GE")) {
+			// If trying to access regular dashboard, redirect to student dashboard
+			if (url.pathname.startsWith("/dashboard")) {
+				url.pathname = "/student-dashboard";
+				return NextResponse.redirect(url);
+			}
+
+			// If not on student dashboard, redirect there
 			if (!url.pathname.startsWith("/student-dashboard")) {
 				url.pathname = "/student-dashboard";
 				return NextResponse.redirect(url);
@@ -249,10 +257,17 @@ export async function middleware(request: NextRequest) {
 		}
 
 		/* ----------------------------------
-	   FACULTY OR ANY OTHER USER
+	   FACULTY OR ANY OTHER USER (non-student)
 	---------------------------------- */
-		// If username exists but is not a student (faculty or any other user)
-		if (username.length > 0) {
+		// If username exists and is NOT a student
+		if (username && username.length > 0) {
+			// If trying to access student dashboard, redirect to regular dashboard
+			if (url.pathname.startsWith("/student-dashboard")) {
+				url.pathname = "/dashboard";
+				return NextResponse.redirect(url);
+			}
+
+			// If not on regular dashboard, redirect there
 			if (!url.pathname.startsWith("/dashboard")) {
 				url.pathname = "/dashboard";
 				return NextResponse.redirect(url);
@@ -297,6 +312,9 @@ export async function middleware(request: NextRequest) {
 		url.pathname = "/";
 		return NextResponse.redirect(url);
 	}
+
+	// Ensure username is a string
+	username = String(username || "");
 
 	const isStudent = username.startsWith("4GE");
 
