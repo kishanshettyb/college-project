@@ -101,7 +101,7 @@ export async function middleware(request: NextRequest) {
 	// ✅ 2. HANDLE EXPO WEBVIEW REDIRECTION BASED ON USERNAME
 	if (isExpoWebView || webviewAuth === "true") {
 		// Normalize username
-		const username = webviewUsername;
+		const username = webviewUsername || "";
 
 		/* ----------------------------------
 	   STUDENT (starts with 4GE)
